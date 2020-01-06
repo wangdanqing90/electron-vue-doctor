@@ -1,0 +1,68 @@
+.clearfix{
+
+  &::after{
+    display: block;
+    height: 0;
+    content: ".";
+    clear: both;
+    visibility: hidden;
+  }
+}
+
+.float-left{
+  float: left;
+}
+
+.float-right{
+  float: right;
+}
+
+.align-left{
+  text-align: left;
+}
+
+.align-right{
+  text-align: right;
+}
+
+.small-size{
+  font-size: 12px!important;
+}
+
+.large-size{
+  font-size: 16px!important;
+}
+ .New-elFrom {
+   padding: 10px;
+   background: #fff;
+   .el-form-item {
+     margin-bottom: 0;
+   }
+   .el-form-item__label {
+     padding: 0;
+     line-height: 30px;
+     font-size: 12px;
+     color: #7F8FA4;
+
+   }
+
+   .el-form-item__content-btn {
+     text-align: center;
+     padding: 20px 0 10px;
+   }
+
+   .el-select {
+     display: block;
+   }
+
+   .el-date-editor.el-input, .el-input-number--medium {
+     width: 100%;
+   }
+ }
+.el-radio-group{
+  display: flex;
+  display: -webkit-flex;
+}
+.el-radio-group .el-radio-button{
+  flex: 1;
+}
