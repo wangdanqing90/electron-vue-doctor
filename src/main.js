@@ -10,9 +10,11 @@ import './assets/styles/variable.scss';
 import './assets/styles/base.scss';
 import './assets/styles/common.scss';
 import './assets/styles/iconfont.css';
-import './assets/js/common.js';
+import common from './assets/js/common.js';
 
-Vue.config.productionTip = false
+
+Vue.config.productionTip = false;
+Vue.prototype.common = common;
 Vue.use(ElementUI);
 
 

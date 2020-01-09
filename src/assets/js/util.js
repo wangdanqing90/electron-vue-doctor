@@ -1,6 +1,6 @@
 let util = {
   debounceIdentify: 0,
-  bounce (func, delay) {
+  bounce(func, delay) {
     this.debounceIdentify && clearTimeout(this.debounceIdentify);
     this.debounceIdentify = setTimeout(() => {
       func.apply(this, arguments);
@@ -8,17 +8,17 @@ let util = {
   }
 };
 
-export function setTitle (title) {
+export function setTitle(title) {
   title = title || '营销管理平台';
   window.document.title = title;
 }
 
-export function setMenu (routers, code) {
+export function setMenu(routers, code) {
   /*
-  *  @routers  redux管理的 appRouter和otherRouter 的路由表
-  *  @code  用户类型   user.codetype 字段  值为 1，2，3，4
-  *
-  * */
+   *  @routers  redux管理的 appRouter和otherRouter 的路由表
+   *  @code  用户类型   user.codetype 字段  值为 1，2，3，4
+   *
+   * */
   let menu = [];
   routers.forEach(router => {
     const INDEX = router.children[0];
@@ -36,7 +36,7 @@ export function setMenu (routers, code) {
 }
 
 
-export function getCurrentPath (vm, router) {
+export function getCurrentPath(vm, router) {
   // console.log(router);
   // const routers = vm.$store.state.routers;
   // console.log(routers);
@@ -71,7 +71,7 @@ export function getCurrentPath (vm, router) {
   return currentPathArr;
 }
 
-export function mergeBarData (target, data) {
+export function mergeBarData(target, data) {
   console.log(target);
   console.log(data);
   if (target.legend && target.legend.data.length) {
@@ -116,5 +116,8 @@ export function mergeBarData (target, data) {
   }
   return target;
 }
+
+
+
 
 export default util;

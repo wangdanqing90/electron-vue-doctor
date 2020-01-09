@@ -2,22 +2,35 @@
   <div class="container">
     <Header :leftImg="leftImg" :title="title">
       <template v-slot:right>
-        <div class="header-right-div display_flex justify-content_flex-center align-items_center"></div>
+        <div class="header-right-div display_flex justify-content_flex-center align-items_center">
+          <img src="@/../images/back.png" @click="backClick" />
+        </div>
       </template>
     </Header>
     <el-row>
-      <el-col :span="24">
+      <el-col :span="24" class="margin-top-100">
         <div class="form-container">
           <el-form :model="formLabelAlign">
-            <el-form-item label="手机号" label-width="84px">
-              <el-input placeholder="请输入手机号" v-model="formLabelAlign.name"></el-input>
-              <el-link :underline="false">发送验证码</el-link>
-            </el-form-item>
-            <el-form-item label="验证码" label-width="84px">
-              <el-input placeholder="请输入验证码" v-model="formLabelAlign.password" show-password></el-input>
-            </el-form-item>
+            <div v-if="step == 1">
+              <el-form-item label="手机号：" label-width="84px">
+                <el-input placeholder="请输入手机号" v-model="formLabelAlign.phone"></el-input>
+                <el-link :underline="false">发送验证码</el-link>
+              </el-form-item>
+              <el-form-item label="验证码：" label-width="84px">
+                <el-input placeholder="请输入验证码" v-model="formLabelAlign.verificationCode"></el-input>
+              </el-form-item>
+            </div>
+            <div v-else-if="step == 2">
+              <el-form-item label="新密码：" label-width="84px">
+                <el-input placeholder="请输入新密码" v-model="formLabelAlign.newPassword"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码：" label-width="84px">
+                <el-input placeholder="请确认密码" v-model="formLabelAlign.confirmPassword"></el-input>
+              </el-form-item>
+            </div>
+
             <el-form-item class="margin-top-50">
-              <el-button>下一步</el-button>
+              <el-button @click="nextClick()">下一步</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -41,14 +54,54 @@ export default {
       leftImg: "",
       step: "",
       formLabelAlign: {
-        name: "",
-        password: ""
+        phone: "",
+        verificationCode: "",
+        newPassword: "",
+        confirmPassword: ""
       }
     };
   },
   created() {
     this.leftImg = require("../../../images/logo.png");
-    this.step = this.$route.params.step;
+    this.step = this.$route.query.step;
+    console.log("step == " + this.step);
+  },
+  methods: {
+    nextClick() {
+      if (this.step == 1) {
+        this.step = 2;
+      } else {
+        if (false) {
+          this.$router.push({
+            path: "/result",
+            name: "result",
+            query: { type: "success", message: "重设成功！" }
+          });
+        } else {
+          this.$router.push({
+            path: "/result",
+            name: "result",
+            query: { type: "fail", message: "重设失败！", failReason: "xxxxx" }
+          });
+        }
+      }
+    },
+    backClick() {
+      if (this.step == 2) {
+        this.step = 1;
+      } else {
+        this.$router.go(-1); //返回上一层
+      }
+    }
+  },
+  watch: {
+    step(newVal, oldVal) {
+      if (newVal == 1) {
+        this.title = "用户密码找回";
+      } else if (newVal == 2) {
+        this.title = "用户密码重置";
+      }
+    }
   }
 };
 </script>
@@ -58,9 +111,14 @@ export default {
   color: $purpleFontColor;
 }
 
+.header-right-div {
+  img {
+    width: 60px;
+  }
+}
+
 .form-container {
   width: 800px;
-  height: 800px;
   margin: 0 auto;
   .el-form {
     width: 400px;

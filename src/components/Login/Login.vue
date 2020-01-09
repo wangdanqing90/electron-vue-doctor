@@ -60,7 +60,11 @@ export default {
   methods: {
     //跳转忘记密码
     jumpForgetPassword() {
-      this.$router.push({ name: "forgetPassword", params: { step: 1 } });
+      this.$router.push({
+        path: "/forgetPassword",
+        name: "forgetPassword",
+        query: { step: 1 }
+      });
     }
   }
 };
@@ -71,7 +75,7 @@ export default {
 .form-container {
   width: 800px;
   height: 800px;
-  margin: 0 auto;
+  margin: 30px auto 0 auto;
   .el-card,
   .el-message {
     border-radius: 10px;

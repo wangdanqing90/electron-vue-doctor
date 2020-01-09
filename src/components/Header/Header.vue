@@ -24,7 +24,7 @@ export default {
       type: String,
       default: "../../../images/logo.png"
     },
-    title: String
+    title: { String, default: "" }
   },
 
   data() {
@@ -57,5 +57,9 @@ export default {
   .header-right {
     height: 100%;
   }
+}
+
+::v-deep .header-right-div {
+  height: 100%;
 }
 </style>
