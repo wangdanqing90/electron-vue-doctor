@@ -73,18 +73,29 @@
   flex: 1;
 }
 
-.el-button,
-.el-button:active,
-.el-button:focus,
-.el-button:hover {
+
+
+.el-button.purple,
+.el-button.purple:active,
+.el-button.purple:focus,
+.el-button.purple:hover {
   color: white;
   background-color: #8c69e7;
   border: none;
   box-shadow: 0 2px 12px 0 rgba(240, 240, 240, 0.1)
 }
 
+
+
 .el-dialog {
   border-radius: 10px;
+
+  .el-dialog__body {
+    .purple {
+      color: $purpleFontColor;
+      font-size: 20px;
+    }
+  }
 }
 
 .el-form-item__label {

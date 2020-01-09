@@ -47,7 +47,7 @@
     "rules": {
       "no-console": "off",
       "no-debugger": "off",
-      "no-unused-vars": 0,
+      "no-unused-vars": "off",
       "no-alert": "off",
       "no-constant-condition": "off"
     },

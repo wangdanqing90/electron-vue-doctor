@@ -16,7 +16,7 @@
                 <el-input placeholder="密码" v-model="formLabelAlign.password" show-password></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button>登录</el-button>
+                <el-button class="purple">登录</el-button>
               </el-form-item>
               <el-form-item>
                 <div

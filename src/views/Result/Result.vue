@@ -14,7 +14,7 @@
         <div class="timer">页面将在{{count}}秒后跳转回登录页面</div>
       </el-col>
       <el-col :span="24" class="margin-top-80 confirm-button">
-        <el-button @click="backClick">确认</el-button>
+        <el-button class="purple" @click="backClick">确认</el-button>
       </el-col>
     </el-row>
   </div>
@@ -73,8 +73,8 @@ export default {
       this.timer = null;
 
       this.$router.push({
-        path: "/",
-        name: "home"
+        path: "/login",
+        name: "login"
       });
     }
   },

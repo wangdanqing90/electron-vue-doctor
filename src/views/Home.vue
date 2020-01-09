@@ -1,86 +1,338 @@
 <template>
   <div class="container">
-    <Header :leftImg="leftImg" :title="title">
+    <HeaderDoctor :leftImg="leftImg" :title="title">
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
-          <el-link :underline="false" @click="setClick">设置</el-link>
-          <span class="vertaicl-line"></span>
-          <el-link :underline="false" @click="aboutClick">关于我们</el-link>
+          <el-button class="purple" @click="addClick()">添加患者</el-button>
+          <img src="@/../images/back.png" @click="backClick" />
         </div>
       </template>
-    </Header>
-    <Login />
+    </HeaderDoctor>
+
+    <el-row>
+      <el-col :span="24">
+        <div class="search">
+          <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search"></el-button>
+          </el-input>
+        </div>
+      </el-col>
+    </el-row>
+    <!-- table表格 -->
+    <el-row class="tableContainer">
+      <el-col :span="24">
+        <el-table :data="tableData" stripe max-height="700" style="width: 100%;">
+          <el-table-column prop="state" label="状态"></el-table-column>
+          <el-table-column prop="number" label="序号">
+            <template slot-scope="scope">
+              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.number}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="ID" label="ID">
+            <template slot-scope="scope">
+              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.ID}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="姓名">
+            <template slot-scope="scope">
+              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.name}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="sex" label="性别">
+            <template slot-scope="scope">
+              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.sex}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="age" label="年龄">
+            <template slot-scope="scope">
+              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.age}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="illness" label="病症">
+            <template slot-scope="scope">
+              <span
+                :class="scope.row.state? 'purpleFontColor':'pinkFontColor'"
+              >{{scope.row.illness}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="添加日期">
+            <template slot-scope="scope">
+              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.date}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="inform" label="患者信息">
+            <template slot-scope="scope">
+              <span v-if="!scope.row.inform" class="pinkFontColor">
+                <el-button @click="examineClick(scope.$index, scope.row)">审核</el-button>
+              </span>
+              <span v-else class="purpleFontColor">
+                <el-button @click="checkClick(scope.$index, scope.row)">查看</el-button>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="plan" label="计划">
+            <template slot-scope="scope">
+              <span class="purpleFontColor">
+                <el-button
+                  @click="changeClick(scope.$index, scope.row)"
+                >{{scope.row.plan?"制定":"修改"}}</el-button>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="message" label="消息">
+            <template slot-scope="scope">
+              <i :class="scope.row.message ? 'el-icon-message pinkFontColor' : ''"></i>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+
+    <!-- 翻页 -->
+    <el-row class="paginationContainer">
+      <el-pagination
+        layout=" prev, pager, next"
+        :total="totalSize"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+      ></el-pagination>
+    </el-row>
 
     <!-- 弹窗 -->
-    <el-dialog title="设置" :visible.sync="setDialogVisible" width="600px" center class="setDialog">
-      <div class="setDialogBody">
-        <div class="display_flex justify-content_flex-around align-items_center">
-          <div>前超声波</div>
-          <el-switch
-            v-model="frontUltrasonic"
-            active-color="#8ba0f1"
-            inactive-color="#dcdcdc"
-            :width="50"
-          ></el-switch>
-        </div>
-        <div class="display_flex justify-content_flex-around align-items_center">
-          <div>后超声波</div>
-          <el-switch
-            v-model="backUltrasonic"
-            active-color="#8ba0f1"
-            inactive-color="#dcdcdc"
-            :width="50"
-          ></el-switch>
-        </div>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      title="关于我们"
-      :visible.sync="aboutDialogVisible"
-      width="600px"
-      center
-      class="aboutDialog"
-    >
-      <div class="aboutDialogBody">
-        <img src="../../images/logo.png" />
-        <div>版本信息：IREGO 2.2.1</div>
-        <div>上海机器人产业研究院</div>
-      </div>
+    <el-dialog title :visible.sync="leaveDialogVisible" width="30%">
+      <span class="purple">您是否确认退出？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="leaveDialogVisible = false">取 消</el-button>
+        <el-button class="purple" @click="confirmClick">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
-</template>
+</template> 
 
 <script>
-import Header from "@/components/Header/Header.vue";
-import Login from "@/components/Login/Login.vue";
+import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 
 export default {
   name: "home",
   components: {
-    Header,
-    Login
+    HeaderDoctor
   },
 
   data() {
     return {
       leftImg: "",
-      title: "医生管理平台",
-      aboutDialogVisible: false,
-      setDialogVisible: false,
-      frontUltrasonic: false,
-      backUltrasonic: false
+      title: "康复训练工作台",
+      leaveDialogVisible: false,
+      search: "",
+      currentPage: 1,
+      pageSize: 10,
+      totalSize: 100,
+      tableData: [
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: false,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: false,
+          plan: false,
+          message: false
+        },
+        {
+          state: false,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        },
+        {
+          state: true,
+          number: "11",
+          ID: "100",
+          name: "王小虎",
+          sex: "男",
+          age: 10,
+          illness: "右侧偏瘫",
+          date: "2016-05-03",
+          inform: true,
+          plan: true,
+          message: true
+        }
+      ]
     };
   },
   created() {
     this.leftImg = require("../../images/logo.png");
   },
   methods: {
-    aboutClick() {
-      this.aboutDialogVisible = true;
+    backClick() {
+      this.leaveDialogVisible = true;
     },
-    setClick() {
-      this.setDialogVisible = true;
+    confirmClick() {
+      this.leaveDialogVisible = false;
+    },
+    //翻页
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+    //检查
+    examineClick(index, row) {
+      console.log(index, row);
+    },
+    //检查
+    checkClick(index, row) {
+      console.log(index, row);
+    },
+    //修改、制定
+    changeClick(index, row) {
+      console.log(index, row);
+    },
+    addClick() {
+      this.$router.push({
+        path: "/detailInform",
+        name: "detailInform",
+        query: { type: "patient" }
+      });
     }
   }
 };
@@ -88,56 +340,43 @@ export default {
 
 <style scoped lang="scss">
 .header {
-  .vertaicl-line {
-    display: inline-block;
-    width: 1px;
-    height: 15px;
-    background: #000;
-  }
-  .header-right-div {
-    height: 100%;
-    a {
-      height: 30px;
-      line-height: 30px;
-      padding: 5px 10px;
-      font-size: 14px;
-      color: #101012;
-      text-decoration: underline;
+  .header-right {
+    img {
+      width: 50px;
+      margin-left: 20px;
     }
   }
 }
-.aboutDialogBody {
-  text-align: center;
-  :nth-child(1) {
-    width: 120px;
+
+.search {
+  margin-top: 15px;
+  width: 200px;
+}
+
+.tableContainer {
+  margin-top: 20px;
+  .purpleFontColor {
+    color: $purpleFontColor;
   }
-  :nth-child(2) {
-    margin-top: 20px;
-    font-size: 20px;
+  .pinkFontColor {
+    color: $pinkFontColor;
   }
-  :nth-child(3) {
-    font-size: 12px;
-    margin-top: 50px;
+
+  .purpleFontColor .el-button--text {
+    color: $purpleFontColor;
   }
+
+  .pinkFontColor .el-button--text {
+    color: $pinkFontColor;
+  }
+}
+
+.paginationContainer {
+  margin-top: 30px;
+  padding-bottom: 30px;
 }
 </style>
 
 <style lang="scss">
-.aboutDialog,
-.setDialog {
-  .el-dialog__header {
-    padding-top: 40px;
-    .el-dialog__title {
-      font-size: 25px;
-    }
-  }
-}
-.setDialog {
-  .setDialogBody > div {
-    width: 200px;
-    margin: 20px auto;
-    font-size: 20px;
-  }
-}
 </style>
 

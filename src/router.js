@@ -17,6 +17,14 @@ export default new Router({
       name: 'home',
       component: Home,
       meta: {
+        title: '首页',
+        keepAlive: false
+      }
+    }, {
+      path: '/login',
+      name: 'login',
+      component: () => import('./views/Login/Login.vue'),
+      meta: {
         title: '登录',
         keepAlive: false
       }
@@ -44,6 +52,14 @@ export default new Router({
       component: () => import('./views/Register/Register.vue'),
       meta: {
         title: '注册',
+        keepAlive: false
+      }
+    }, {
+      path: '/detailInform',
+      name: 'detailInform',
+      component: () => import('./views/DetailInform/DetailInform.vue'),
+      meta: {
+        title: '基本信息',
         keepAlive: false
       }
     }

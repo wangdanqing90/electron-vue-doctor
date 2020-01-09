@@ -60,7 +60,7 @@
               </div>
 
               <el-form-item class="margin-top-50">
-                <el-button @click="nextClick()">{{buttonTxt}}</el-button>
+                <el-button class="purple" @click="nextClick()">{{buttonTxt}}</el-button>
               </el-form-item>
             </el-form>
           </el-card>
