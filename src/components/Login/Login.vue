@@ -24,7 +24,7 @@
                 >
                   <el-link :underline="false" @click="jumpForgetPassword">忘记密码</el-link>
                   <span class="vertaicl-line"></span>
-                  <el-link :underline="false">用户注册</el-link>
+                  <el-link :underline="false" @click="jumpRegister">用户注册</el-link>
                 </div>
               </el-form-item>
             </el-form>
@@ -63,6 +63,13 @@ export default {
       this.$router.push({
         path: "/forgetPassword",
         name: "forgetPassword",
+        query: { step: 1 }
+      });
+    },
+    jumpRegister() {
+      this.$router.push({
+        path: "/register",
+        name: "register",
         query: { step: 1 }
       });
     }

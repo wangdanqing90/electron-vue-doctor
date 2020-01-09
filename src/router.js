@@ -38,6 +38,14 @@ export default new Router({
         title: '忘记密码',
         keepAlive: false
       }
+    }, {
+      path: '/register',
+      name: 'register',
+      component: () => import('./views/Register/Register.vue'),
+      meta: {
+        title: '注册',
+        keepAlive: false
+      }
     }
   ]
 })
