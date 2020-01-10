@@ -36,6 +36,7 @@
       <el-col :span="18">
         <div class="right">
           <el-form
+            :disabled=" type=='examine'"
             label-position="top"
             :inline="true"
             :model="formLabelAlign"
@@ -104,44 +105,52 @@
               <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
             </el-form-item>
 
-            <el-form-item label="所属医生" prop="doctor" v-if="type=='patientModify'||type=='patient'">
+            <el-form-item
+              label="所属医生"
+              prop="doctor"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
+            >
               <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"></el-input>
             </el-form-item>
             <el-form-item
               label="身高（cm）"
               prop="height"
-              v-if="type=='patientModify'||type=='patient'"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
             >
               <el-input v-model="formLabelAlign.height" placeholder="请输入身高"></el-input>
             </el-form-item>
             <el-form-item
               label="体重（kg）"
               prop="weight"
-              v-if="type=='patientModify'||type=='patient'"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
             >
               <el-input v-model="formLabelAlign.height" placeholder="请输入体重"></el-input>
             </el-form-item>
-            <el-form-item label="联系信息" prop="inform" v-if="type=='patientModify'||type=='patient'">
+            <el-form-item
+              label="联系信息"
+              prop="inform"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
+            >
               <el-input v-model="formLabelAlign.inform" placeholder="请输入联系信息"></el-input>
             </el-form-item>
             <el-form-item
               label="骨盆高度（cm）"
               prop="PelvicHeight"
-              v-if="type=='patientModify'||type=='patient'"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
             >
               <el-input v-model="formLabelAlign.PelvicHeight" placeholder="请输入骨盆高度"></el-input>
             </el-form-item>
             <el-form-item
               label="减重值（kg）"
               prop="lossWeight"
-              v-if="type=='patientModify'||type=='patient'"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
             >
               <el-input v-model="formLabelAlign.lossWeight" placeholder="请输入减重值"></el-input>
             </el-form-item>
             <el-form-item
               label="偏瘫侧"
               prop="hemiplegiaSide"
-              v-if="type=='patientModify'||type=='patient'"
+              v-if="type=='patientModify'||type=='patient'||type=='examine'"
             >
               <el-radio-group v-model="formLabelAlign.hemiplegiaSide">
                 <el-radio label="左" value="左"></el-radio>
@@ -169,7 +178,7 @@ export default {
       leftImg: "",
       title: "",
       titleName: "",
-      type: "",
+      type: "", // doctor：医生，patientModify：患者修改，patient：患者新增，examine:患者审核
       imgsrc: require("@/../images/doctor.png"),
       hosipitalsData: [
         {
@@ -292,50 +301,69 @@ export default {
           });
         });
     },
-    onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          if (this.type == "doctor") {
-            this.$confirm("您是否确认修改？", "", {
-              confirmButtonText: "确定",
-              cancelButtonText: "取消",
-              confirmButtonClass: "el-button purple"
-            })
-              .then(() => {
-                this.$router.push({
-                  path: "/",
-                  name: "home",
-                  query: {}
-                });
-              })
-              .catch(() => {});
-          } else if (this.type == "patient") {
-            this.$confirm("您是否添加该患者？", "", {
-              confirmButtonText: "确认添加",
-              cancelButtonText: "暂不添加",
-              confirmButtonClass: "el-button purple"
-            })
-              .then(() => {
-                this.showResult();
-              })
-              .catch(() => {});
-          } else if (this.type == "patientModify") {
-            this.$confirm("您是否确认修改？", "", {
-              confirmButtonText: "确定",
-              cancelButtonText: "取消",
-              confirmButtonClass: "el-button purple"
-            })
-              .then(() => {
-                this.$router.push({
-                  path: "/",
-                  name: "home",
-                  query: {}
-                });
-              })
-              .catch(() => {});
-          }
-        }
+    examine() {
+      this.$router.push({
+        path: "/",
+        name: "home",
+        query: {}
       });
+    },
+    onSubmit(formName) {
+      if (this.type == "examine") {
+        this.$confirm("您是否确认审核通过？", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          confirmButtonClass: "el-button purple"
+        })
+          .then(() => {
+            this.examine();
+          })
+          .catch(() => {});
+      } else {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            if (this.type == "doctor") {
+              this.$confirm("您是否确认修改？", "", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                confirmButtonClass: "el-button purple"
+              })
+                .then(() => {
+                  this.$router.push({
+                    path: "/",
+                    name: "home",
+                    query: {}
+                  });
+                })
+                .catch(() => {});
+            } else if (this.type == "patient") {
+              this.$confirm("您是否添加该患者？", "", {
+                confirmButtonText: "确认添加",
+                cancelButtonText: "暂不添加",
+                confirmButtonClass: "el-button purple"
+              })
+                .then(() => {
+                  this.showResult();
+                })
+                .catch(() => {});
+            } else if (this.type == "patientModify") {
+              this.$confirm("您是否确认修改？", "", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                confirmButtonClass: "el-button purple"
+              })
+                .then(() => {
+                  this.$router.push({
+                    path: "/",
+                    name: "home",
+                    query: {}
+                  });
+                })
+                .catch(() => {});
+            }
+          }
+        });
+      }
     }
   },
   watch: {

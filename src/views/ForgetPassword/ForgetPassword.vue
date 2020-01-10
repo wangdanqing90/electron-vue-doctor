@@ -13,35 +13,23 @@
           <el-card class="box-card">
             <el-form :model="formLabelAlign" ref="formLabelAlign" status-icon :rules="rules">
               <div v-if="step == 1">
-                <el-form-item label="手机号：" label-width="100px">
-                  <el-input placeholder="请输入手机号" v-model="formLabelAlign.phone" prop="phone"></el-input>
+                <el-form-item label="手机号：" label-width="100px" prop="phone">
+                  <el-input placeholder="请输入手机号" v-model="formLabelAlign.phone"></el-input>
                   <el-link :underline="false" v-show="verShow" @click="handleClick()">发送验证码</el-link>
                   <el-link :underline="false" v-show="!verShow">
                     <span>{{timer}}</span>秒后重新获取
                   </el-link>
                 </el-form-item>
-                <el-form-item label="验证码：" label-width="100px">
-                  <el-input
-                    placeholder="请输入验证码"
-                    v-model="formLabelAlign.verificationCode"
-                    prop="verificationCode"
-                  ></el-input>
+                <el-form-item label="验证码：" label-width="100px" prop="verificationCode">
+                  <el-input placeholder="请输入验证码" v-model="formLabelAlign.verificationCode"></el-input>
                 </el-form-item>
               </div>
               <div v-else-if="step == 2">
-                <el-form-item label="新密码：" label-width="100px">
-                  <el-input
-                    placeholder="请输入新密码"
-                    v-model="formLabelAlign.newPassword"
-                    prop="newPassword"
-                  ></el-input>
+                <el-form-item label="新密码：" label-width="100px" prop="newPassword">
+                  <el-input placeholder="请输入新密码" v-model="formLabelAlign.newPassword"></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码：" label-width="100px">
-                  <el-input
-                    placeholder="请确认密码"
-                    v-model="formLabelAlign.confirmPassword"
-                    prop="newPassword"
-                  ></el-input>
+                <el-form-item label="确认密码：" label-width="100px" prop="confirmPassword">
+                  <el-input placeholder="请确认密码" v-model="formLabelAlign.confirmPassword"></el-input>
                 </el-form-item>
               </div>
 
@@ -115,23 +103,35 @@ export default {
 
     nextClick() {
       if (this.step == 1) {
-        this.step = 2;
-        this.verShow = true;
-        clearInterval(this.auth_timer);
+        this.$refs["formLabelAlign"].validate(valid => {
+          if (valid) {
+            this.step = 2;
+            this.verShow = true;
+            clearInterval(this.auth_timer);
+          }
+        });
       } else {
-        if (false) {
-          this.$router.push({
-            path: "/result",
-            name: "result",
-            query: { type: "success", message: "重设成功！" }
-          });
-        } else {
-          this.$router.push({
-            path: "/result",
-            name: "result",
-            query: { type: "fail", message: "重设失败！", failReason: "xxxxx" }
-          });
-        }
+        this.$refs["formLabelAlign"].validate(valid => {
+          if (valid) {
+            if (false) {
+              this.$router.push({
+                path: "/result",
+                name: "result",
+                query: { type: "success", message: "重设成功！" }
+              });
+            } else {
+              this.$router.push({
+                path: "/result",
+                name: "result",
+                query: {
+                  type: "fail",
+                  message: "重设失败！",
+                  failReason: "xxxxx"
+                }
+              });
+            }
+          }
+        });
       }
     },
     backClick() {

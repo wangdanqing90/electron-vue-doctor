@@ -62,6 +62,14 @@ export default new Router({
         title: '基本信息',
         keepAlive: false
       }
+    }, {
+      path: '/trainingList',
+      name: 'trainingList',
+      component: () => import('./views/TrainingList/TrainingList.vue'),
+      meta: {
+        title: '训练列表',
+        keepAlive: false
+      }
     }
   ]
 })

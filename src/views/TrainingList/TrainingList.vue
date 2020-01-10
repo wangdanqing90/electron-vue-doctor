@@ -3,7 +3,6 @@
     <HeaderDoctor :leftImg="leftImg" :title="title">
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
-          <el-button class="purple" @click="addClick()">添加患者</el-button>
           <img src="@/../images/back.png" @click="backClick" />
         </div>
       </template>
@@ -95,15 +94,6 @@
         :page-size="pageSize"
       ></el-pagination>
     </el-row>
-
-    <!-- 弹窗 -->
-    <el-dialog title :visible.sync="leaveDialogVisible" width="30%">
-      <span class="purple">您是否确认退出？</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="leaveDialogVisible = false">取 消</el-button>
-        <el-button class="purple" @click="confirmClick">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template> 
 
@@ -111,7 +101,7 @@
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 
 export default {
-  name: "home",
+  name: "trainingList",
   components: {
     HeaderDoctor
   },
@@ -119,7 +109,7 @@ export default {
   data() {
     return {
       leftImg: "",
-      title: "康复训练工作台",
+      title: "刘邦的训练信息",
       leaveDialogVisible: false,
       search: "",
       currentPage: 1,
@@ -299,15 +289,11 @@ export default {
     };
   },
   created() {
-    this.leftImg = require("../../images/logo.png");
+    this.leftImg = require("../../../images/logo.png");
   },
   methods: {
-    backClick() {
-      this.leaveDialogVisible = true;
-    },
-    confirmClick() {
-      this.leaveDialogVisible = false;
-    },
+    backClick() {},
+    confirmClick() {},
     //翻页
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
