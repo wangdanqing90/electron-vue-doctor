@@ -4,6 +4,7 @@
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
           <img src="@/../images/certain.png" @click="onSubmit('formLabelAlign')" />
+          <img v-if="type == 'patientModify'" src="@/../images/close.png" @click="deleteClick" />
           <img src="@/../images/back.png" @click="backClick" />
         </div>
       </template>
@@ -21,6 +22,10 @@
           <div class="gou">
             修改完成请点击
             <img src="@/../images/certain.png" />键。
+          </div>
+          <div class="gou">
+            删除患者信息请点击
+            <img src="@/../images/close.png" />键。
           </div>
           <div class="back">
             返回请点击
@@ -43,8 +48,8 @@
             </el-form-item>
             <el-form-item label="性别" prop="sex">
               <el-radio-group v-model="formLabelAlign.sex">
-                <el-radio label="男"></el-radio>
-                <el-radio label="女"></el-radio>
+                <el-radio label="男" value="男"></el-radio>
+                <el-radio label="女" value="女"></el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="年龄" prop="age">
@@ -79,7 +84,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="工号" prop="jobNumber">
+            <el-form-item label="工号" prop="jobNumber" v-if="type=='doctor'">
               <el-select v-model="formLabelAlign.jobNumber" placeholder="请选择工号">
                 <el-option
                   v-for="item in jobNumbersData"
@@ -89,28 +94,64 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="办公电话" prop="officePhone">
+            <el-form-item label="办公电话" prop="officePhone" v-if="type=='doctor'">
               <el-input v-model="formLabelAlign.officePhone" placeholder="请输入办公电话"></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="phone">
+            <el-form-item label="手机号" prop="phone" v-if="type=='doctor'">
               <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号"></el-input>
             </el-form-item>
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item label="邮箱" prop="email" v-if="type=='doctor'">
               <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
+            </el-form-item>
+
+            <el-form-item label="所属医生" prop="doctor" v-if="type=='patientModify'||type=='patient'">
+              <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="身高（cm）"
+              prop="height"
+              v-if="type=='patientModify'||type=='patient'"
+            >
+              <el-input v-model="formLabelAlign.height" placeholder="请输入身高"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="体重（kg）"
+              prop="weight"
+              v-if="type=='patientModify'||type=='patient'"
+            >
+              <el-input v-model="formLabelAlign.height" placeholder="请输入体重"></el-input>
+            </el-form-item>
+            <el-form-item label="联系信息" prop="inform" v-if="type=='patientModify'||type=='patient'">
+              <el-input v-model="formLabelAlign.inform" placeholder="请输入联系信息"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="骨盆高度（cm）"
+              prop="PelvicHeight"
+              v-if="type=='patientModify'||type=='patient'"
+            >
+              <el-input v-model="formLabelAlign.PelvicHeight" placeholder="请输入骨盆高度"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="减重值（kg）"
+              prop="lossWeight"
+              v-if="type=='patientModify'||type=='patient'"
+            >
+              <el-input v-model="formLabelAlign.lossWeight" placeholder="请输入减重值"></el-input>
+            </el-form-item>
+            <el-form-item
+              label="偏瘫侧"
+              prop="hemiplegiaSide"
+              v-if="type=='patientModify'||type=='patient'"
+            >
+              <el-radio-group v-model="formLabelAlign.hemiplegiaSide">
+                <el-radio label="左" value="左"></el-radio>
+                <el-radio label="右" value="右"></el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-form>
         </div>
       </el-col>
     </el-row>
-
-    <!-- 弹窗 -->
-    <el-dialog title :visible.sync="okDialogVisible" width="30%">
-      <span class="purple">您是否确认修改？</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="leaveDialogVisible = false">取 消</el-button>
-        <el-button class="purple" @click="confirmClick">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template> 
 
@@ -129,7 +170,6 @@ export default {
       title: "",
       titleName: "",
       type: "",
-      okDialogVisible: false,
       imgsrc: require("@/../images/doctor.png"),
       hosipitalsData: [
         {
@@ -173,7 +213,14 @@ export default {
         jobNumber: "",
         officePhone: "",
         phone: "",
-        email: ""
+        email: "",
+        doctor: "",
+        height: "",
+        weight: "",
+        inform: "",
+        PelvicHeight: "",
+        lossWeight: "",
+        hemiplegiaSide: ""
       },
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
@@ -193,11 +240,7 @@ export default {
         jobNumber: [
           { required: true, message: "请选择工号", trigger: "change" }
         ],
-        officePhone: [
-          { required: true, message: "请输入办公电话", trigger: "blur" }
-        ],
-        phone: [{ required: true, message: "请输入ID", trigger: "blur" }],
-        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }]
+        doctor: [{ required: true, message: "请输入所属医生", trigger: "blur" }]
       }
     };
   },
@@ -206,38 +249,90 @@ export default {
     this.type = this.$route.query.type;
     console.log(this.type);
     if (this.type == "doctor") {
+      //医生
       this.title = "编辑我的基本信息";
     } else if (this.type == "patient") {
+      //新建病人
       this.title = "请您填写患者信息";
       this.titleName = "您好，";
+    } else if (this.type == "patientModify") {
+      //修改病人
+      this.title = "的基本信息";
+      this.titleName = "刘邦";
     }
   },
   methods: {
+    //删除患者信息
+    deleteClick() {},
     backClick() {
-      this.okDialogVisible = true;
+      this.$router.push({
+        path: "/",
+        name: "home",
+        query: {}
+      });
     },
-    okClick() {},
-    confirmClick() {
-      this.okDialogVisible = false;
+    showResult() {
+      this.$confirm("您已成功添加该患者？", "", {
+        confirmButtonText: "回工作台",
+        cancelButtonText: "制定计划",
+        confirmButtonClass: "el-button purple"
+      })
+        .then(() => {
+          this.$router.push({
+            path: "/",
+            name: "home",
+            query: {}
+          });
+        })
+        .catch(() => {
+          this.$router.push({
+            path: "/",
+            name: "home",
+            query: {}
+          });
+        });
     },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
           if (this.type == "doctor") {
-            this.$router.push({
-              path: "/",
-              name: "home",
-              query: {}
-            });
-          } else {
-            this.$router.push({
-              path: "/",
-              name: "home",
-              query: {}
-            });
+            this.$confirm("您是否确认修改？", "", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              confirmButtonClass: "el-button purple"
+            })
+              .then(() => {
+                this.$router.push({
+                  path: "/",
+                  name: "home",
+                  query: {}
+                });
+              })
+              .catch(() => {});
+          } else if (this.type == "patient") {
+            this.$confirm("您是否添加该患者？", "", {
+              confirmButtonText: "确认添加",
+              cancelButtonText: "暂不添加",
+              confirmButtonClass: "el-button purple"
+            })
+              .then(() => {
+                this.showResult();
+              })
+              .catch(() => {});
+          } else if (this.type == "patientModify") {
+            this.$confirm("您是否确认修改？", "", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              confirmButtonClass: "el-button purple"
+            })
+              .then(() => {
+                this.$router.push({
+                  path: "/",
+                  name: "home",
+                  query: {}
+                });
+              })
+              .catch(() => {});
           }
         }
       });

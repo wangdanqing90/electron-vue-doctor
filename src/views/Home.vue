@@ -315,13 +315,18 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
-    //检查
+    //审核
     examineClick(index, row) {
       console.log(index, row);
     },
-    //检查
+    //查看
     checkClick(index, row) {
       console.log(index, row);
+      this.$router.push({
+        path: "/detailInform",
+        name: "detailInform",
+        query: { type: "patientModify" }
+      });
     },
     //修改、制定
     changeClick(index, row) {
