@@ -28,49 +28,49 @@
               <img v-else src="@/../images/touxiang_03.png" class="stateImg" />
             </template>
           </el-table-column>
-          <el-table-column prop="number" label="序号">
+          <el-table-column prop="number" label="序号" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.number}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="ID" label="ID">
+          <el-table-column prop="ID" label="ID" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.ID}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="姓名">
+          <el-table-column prop="name" label="姓名" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.name}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="sex" label="性别">
+          <el-table-column prop="sex" label="性别" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.sex}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="age" label="年龄">
+          <el-table-column prop="age" label="年龄" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.age}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="illness" label="病症">
+          <el-table-column prop="illness" label="病症" align="center">
             <template slot-scope="scope">
               <span
                 :class="scope.row.state? 'purpleFontColor':'pinkFontColor'"
               >{{scope.row.illness}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="date" label="添加日期">
+          <el-table-column prop="date" label="添加日期" align="center">
             <template slot-scope="scope">
               <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.date}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="inform" label="患者信息">
+          <el-table-column prop="inform" label="患者信息" align="center">
             <template slot-scope="scope">
               <span v-if="!scope.row.inform" class="pinkFontColor">
                 <el-button @click="examineClick(scope.$index, scope.row)">审核</el-button>
               </span>
-              <span v-else class="purpleFontColor">
+              <span v-else class="purpleFontColor" align="center">
                 <el-button @click="checkClick(scope.$index, scope.row)">查看</el-button>
               </span>
             </template>
@@ -323,7 +323,10 @@ export default {
     },
     //查看
     checkClick(index, row) {
-      console.log(index, row);
+      this.$router.push({
+        path: "/trainingList",
+        name: "trainingList"
+      });
     },
 
     addClick() {

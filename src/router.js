@@ -70,6 +70,14 @@ export default new Router({
         title: '训练列表',
         keepAlive: false
       }
+    }, {
+      path: '/trainingPlan',
+      name: 'trainingPlan',
+      component: () => import('./views/TrainingPlan/TrainingPlan.vue'),
+      meta: {
+        title: '本次训练计划',
+        keepAlive: false
+      }
     }
   ]
 })
