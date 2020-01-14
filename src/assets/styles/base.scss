@@ -612,9 +612,9 @@ body {
   display: flex;
 }
 
-.display_flex>* {
-  display: block;
-}
+// .display_flex>* {
+//   display: block;
+// }
 
 .display_inline-flex {
   display: -webkit-inline-box;
@@ -623,9 +623,9 @@ body {
   display: inline-flex;
 }
 
-.display_inline-flex>* {
-  display: block;
-}
+// .display_inline-flex>* {
+//   display: block;
+// }
 
 /*伸缩流方向*/
 .flex-direction_column {
