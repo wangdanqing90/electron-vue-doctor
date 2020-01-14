@@ -104,8 +104,8 @@ export default {
   },
   created() {
     this.leftImg = require("../../../images/logo.png");
-    this.title = "的本次训练计划（2019.7.16）";
-    this.titleName = "患者刘邦";
+    this.title = "的训练模式选择";
+    this.titleName = "刘邦";
   },
   computed: {
     walkValue: function() {

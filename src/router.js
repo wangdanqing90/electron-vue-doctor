@@ -86,6 +86,14 @@ export default new Router({
         title: '训练模式选择',
         keepAlive: false
       }
+    }, {
+      path: '/trainingAdjust',
+      name: 'trainingAdjust',
+      component: () => import('./views/TrainingAdjust/TrainingAdjust.vue'),
+      meta: {
+        title: '训练控件数字调节',
+        keepAlive: false
+      }
     }
   ]
 })
