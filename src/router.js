@@ -78,6 +78,14 @@ export default new Router({
         title: '本次训练计划',
         keepAlive: false
       }
+    }, {
+      path: '/trainingSlider',
+      name: 'trainingSlider',
+      component: () => import('./views/TrainingSlider/TrainingSlider.vue'),
+      meta: {
+        title: '训练模式选择',
+        keepAlive: false
+      }
     }
   ]
 })
