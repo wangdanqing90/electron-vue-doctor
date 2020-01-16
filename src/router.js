@@ -94,6 +94,22 @@ export default new Router({
         title: '训练控件数字调节',
         keepAlive: false
       }
+    }, {
+      path: '/appointment',
+      name: 'appointment',
+      component: () => import('./views/Appointment/Appointment.vue'),
+      meta: {
+        title: '时间预约',
+        keepAlive: false
+      }
+    }, {
+      path: '/applicationDetails',
+      name: 'applicationDetails',
+      component: () => import('./views/ApplicationDetails/ApplicationDetails.vue'),
+      meta: {
+        title: '时间预约',
+        keepAlive: false
+      }
     }
   ]
 })
