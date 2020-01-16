@@ -11,7 +11,7 @@
     </div>
 
     <!-- 下面的加减按钮 -->
-    <div class="bottom">
+    <div class="bottom" v-if="type!=6&&type!=7">
       <Adjust
         v-for="(item,index) in config.adjusts"
         :key="index"
@@ -19,6 +19,33 @@
         :adjust="config.adjusts[index]"
         :fontColor="config.fontColor"
       ></Adjust>
+      <div class="switch-continar" v-if="type==2">
+        <div>
+          <span>方向限定</span>
+          <el-switch v-model="config.switch" active-color="#8da1f2">></el-switch>
+        </div>
+        <div class="direction">
+          <span
+            :style="{color:(config.tabActive == 1) ? '#8da1f2':'black'}"
+            @click="config.tabActive = 1"
+          >直行</span>
+          <span
+            :style="{color:(config.tabActive == 2) ? '#8da1f2':'black'}"
+            @click="config.tabActive = 2"
+          >全向</span>
+          <span
+            :style="{color:(config.tabActive == 3) ? '#8da1f2':'black'}"
+            @click="config.tabActive = 3"
+          >直行+后退</span>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <el-radio-group v-model="config.radio">
+        <el-radio :label="1" text-color="#E6A23C" fill="#E6A23C">难</el-radio>
+        <el-radio :label="2">中</el-radio>
+        <el-radio :label="3">易</el-radio>
+      </el-radio-group>
     </div>
   </div>
 </template>
@@ -92,6 +119,8 @@ export default {
           imgsrcGray: require("@/../images/activemode_2.png"),
           width: "120px",
           fontColor: "purpleFontColor",
+          switch: true, //方向限定
+          tabActive: 1, //方向
           adjusts: [
             {
               name: "减重",
@@ -185,6 +214,22 @@ export default {
             }
           ]
         };
+      } else if (this.type === 6) {
+        this.config = {
+          title: "七巧板",
+          imgsrc: require("@/../images/Tangram_1.png"),
+          imgsrcGray: require("@/../images/Tangram_2.png"),
+          fontColor: "pinkFontColor",
+          radio: 1
+        };
+      } else if (this.type === 7) {
+        this.config = {
+          title: "太空飞行",
+          imgsrc: require("@/../images/Spaceflight_1.png"),
+          imgsrcGray: require("@/../images/Spaceflight_2.png"),
+          fontColor: "greenFontColor",
+          radio: 1
+        };
       } else if (this.type === 8) {
         this.config = {
           title: "左脚站立",
@@ -264,6 +309,25 @@ export default {
     font-size: 20px;
     img {
       width: 80px;
+      height: 80px;
+    }
+  }
+  .bottom {
+    position: relative;
+  }
+
+  .switch-continar {
+    position: absolute;
+    bottom: -35px;
+    left: 0;
+    color: black;
+    font-size: 12px;
+    .direction {
+      margin-top: 10px;
+      span {
+        cursor: pointer;
+        margin: 0 10px;
+      }
     }
   }
 }
@@ -280,6 +344,36 @@ export default {
       height: 50px;
     }
   }
+}
+</style>
+
+<style  lang="scss">
+.adjust-container {
+  .el-radio__label {
+    position: absolute;
+    left: 0;
+    top: -20px;
+    padding-left: 0;
+  }
+  .el-radio-group {
+    margin-top: 50px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  // .el-radio__input.is-checked .el-radio__inner {
+  //   border-color: $pinkFontColor;
+  //   background: $pinkFontColor;
+  // }
 }
 </style>
           

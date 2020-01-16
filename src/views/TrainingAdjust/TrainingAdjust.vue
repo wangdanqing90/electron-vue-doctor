@@ -3,6 +3,7 @@
     <HeaderDoctor :leftImg="leftImg" :title="title" :titleName="titleName">
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
+          <img src="@/../images/certain.png" @click="okClick()" />
           <img src="@/../images/back.png" @click="backClick" />
         </div>
       </template>
@@ -10,6 +11,8 @@
 
     <div class="inform-container">
       <div class="inform-inner display_flex justify-content_flex-justify align-items_center">
+        <!-- 下一步 -->
+        <div v-if="this.activeClass<3" class="next purpleFontColor" @click="nextClick()">下一步</div>
         <!-- 左边tab -->
         <div
           class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center"
@@ -60,7 +63,7 @@
           ></AdjustContiner>
         </div>
 
-        <!-- 坐站训练训练右边 -->
+        <!-- 坐站训练右边 -->
         <div
           v-show="this.activeClass == 1"
           class="right display_flex justify-content_flex-start align-items_center"
@@ -76,6 +79,27 @@
             ref="type5"
             :type="5"
             :disable="active2Right!=5"
+            @selectRightClick="selectRightClick"
+            class="large"
+          ></AdjustContiner>
+        </div>
+
+        <!-- 游戏训练右边 -->
+        <div
+          v-show="this.activeClass == 2"
+          class="right display_flex justify-content_flex-start align-items_center"
+        >
+          <AdjustContiner
+            ref="type6"
+            :type="6"
+            :disable="active3Right!=6"
+            @selectRightClick="selectRightClick"
+            class="large"
+          ></AdjustContiner>
+          <AdjustContiner
+            ref="type7"
+            :type="7"
+            :disable="active3Right!=7"
             @selectRightClick="selectRightClick"
             class="large"
           ></AdjustContiner>
@@ -180,8 +204,79 @@ export default {
     this.titleName = "刘邦";
   },
   methods: {
+    okClick() {
+      this.$confirm("您是否确认信息？", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        confirmButtonClass: "el-button purple"
+      })
+        .then(() => {
+          this.okNextClick();
+        })
+        .catch(() => {});
+    },
+    okNextClick() {
+      this.$refs.type1.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      this.$refs.type2.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+
+      console.log("方向限定" + this.$refs.type2.config.switch);
+      console.log("方向" + this.$refs.type2.config.tabActive);
+
+      this.$refs.type3.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      this.$refs.type4.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      this.$refs.type5.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      console.log("七巧板" + this.$refs.type6.config.radio);
+      console.log("太空飞行" + this.$refs.type7.config.radio);
+      this.$refs.type8.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      this.$refs.type9.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      this.$refs.type10.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+      this.$refs.type11.config.adjusts.forEach((item, index) => {
+        console.log(index + item.name + item.total);
+      });
+
+      this.$confirm("您是否需要继续添加患者？", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        confirmButtonClass: "el-button purple"
+      })
+        .then(() => {
+          this.$router.push({
+            path: "/",
+            name: "home",
+            query: {}
+          });
+        })
+        .catch(() => {
+          this.$router.push({
+            path: "/",
+            name: "home",
+            query: {}
+          });
+        });
+    },
     backClick() {
       this.$router.go(-1);
+    },
+    nextClick() {
+      if (this.activeClass < 3) {
+        this.activeClass++;
+      }
     },
     getItem(index) {
       this.activeClass = index; // 把当前点击元素的index，赋值给activeClass
@@ -209,6 +304,15 @@ export default {
         this.$refs.type5.config.adjusts.forEach((item, index) => {
           this.vm.$set(item, "total", 0);
         });
+      } else if (this.activeClass == 2) {
+        //第三行
+        this.active3Right = index;
+        // this.$refs.type4.config.adjusts.forEach((item, index) => {
+        //   this.vm.$set(item, "total", 0);
+        // });
+        // this.$refs.type5.config.adjusts.forEach((item, index) => {
+        //   this.vm.$set(item, "total", 0);
+        // });
       } else if (this.activeClass == 3) {
         //第四行
         this.active4Right = index;
@@ -248,6 +352,15 @@ export default {
   border-radius: 10px;
   border: 1px solid #e7e7e7;
   width: 820px;
+  position: relative;
+  .next {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 14px;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 
   .inform-inner {
     box-sizing: border-box;
