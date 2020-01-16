@@ -10,7 +10,6 @@
 
     <div class="inform-container">
       <div class="inform-inner display_flex justify-content_flex-justify align-items_center">
-        <!-- 左边tab -->
         <div
           class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center"
         >
@@ -32,88 +31,10 @@
             </div>
           </div>
         </div>
-        <!-- 行走训练右边 -->
-        <div
-          v-show="this.activeClass == 0"
-          class="right display_flex justify-content_flex-start align-items_center"
-        >
-          <AdjustContiner
-            ref="type1"
-            :type="1"
-            :disable="active1Right!=1"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type2"
-            :type="2"
-            :disable="active1Right!=2"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type3"
-            :type="3"
-            :disable="active1Right!=3"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-        </div>
-
-        <!-- 坐站训练训练右边 -->
-        <div
-          v-show="this.activeClass == 1"
-          class="right display_flex justify-content_flex-start align-items_center"
-        >
-          <AdjustContiner
-            ref="type4"
-            :type="4"
-            :disable="active2Right!=4"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type5"
-            :type="5"
-            :disable="active2Right!=5"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-        </div>
-
-        <!-- 平衡测定右边 -->
-        <div
-          v-show="this.activeClass == 3"
-          class="right display_flex justify-content_flex-justify align-items_center"
-        >
-          <AdjustContiner
-            ref="type8"
-            :type="8"
-            :disable="active4Right!=8"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type9"
-            :type="9"
-            :disable="active4Right!=9"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type10"
-            :type="10"
-            :disable="active4Right!=10"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type11"
-            :type="11"
-            :disable="active4Right!=11"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
+        <div class="right display_flex justify-content_flex-justify align-items_center">
+          <AdjustContiner :type="1" :disable="activeRight!=1" @selectRightClick="selectRightClick"></AdjustContiner>
+          <AdjustContiner :type="2" :disable="activeRight!=2" @selectRightClick="selectRightClick"></AdjustContiner>
+          <AdjustContiner :type="3" :disable="activeRight!=3" @selectRightClick="selectRightClick"></AdjustContiner>
         </div>
       </div>
     </div>
@@ -121,7 +42,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import AdjustContiner from "@/components/Adjust/AdjustContiner.vue";
 
@@ -134,13 +54,9 @@ export default {
 
   data() {
     return {
-      vm: "",
       leftImg: "",
       activeClass: 0,
-      active1Right: 1,
-      active2Right: 4,
-      active3Right: 6,
-      active4Right: 8,
+      activeRight: 1,
       tagList: [
         {
           name: "行走",
@@ -174,7 +90,6 @@ export default {
     };
   },
   created() {
-    this.vm = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练控件数字调节";
     this.titleName = "刘邦";
@@ -187,44 +102,7 @@ export default {
       this.activeClass = index; // 把当前点击元素的index，赋值给activeClass
     },
     selectRightClick(index) {
-      console.log(index);
-      if (this.activeClass == 0) {
-        //第一行
-        this.active1Right = index;
-        this.$refs.type1.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-        this.$refs.type2.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-        this.$refs.type3.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-      } else if (this.activeClass == 1) {
-        //第二行
-        this.active2Right = index;
-        this.$refs.type4.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-        this.$refs.type5.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-      } else if (this.activeClass == 3) {
-        //第四行
-        this.active4Right = index;
-        this.$refs.type8.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-        this.$refs.type9.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-        this.$refs.type10.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-        this.$refs.type11.config.adjusts.forEach((item, index) => {
-          this.vm.$set(item, "total", 0);
-        });
-      }
+      this.activeRight = index;
     }
   },
   watch: {}

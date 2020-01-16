@@ -18,7 +18,7 @@ Vue.prototype.common = common;
 Vue.use(ElementUI);
 
 
-new Vue({
+var vm = new Vue({
   router,
   store,
   render: h => h(App)
