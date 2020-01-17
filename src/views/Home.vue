@@ -8,93 +8,96 @@
         </div>
       </template>
     </HeaderDoctor>
+    <el-card class="box-card">
+      <el-row>
+        <el-col :span="24">
+          <div class="search">
+            <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search"></el-button>
+            </el-input>
+          </div>
+        </el-col>
+      </el-row>
+      <!-- table表格 -->
+      <el-row class="tableContainer">
+        <el-col :span="24">
+          <el-table :data="tableData" stripe max-height="700" style="width: 100%;">
+            <el-table-column prop="state" label="状态">
+              <template slot-scope="scope">
+                <img v-if="scope.row.state" src="@/../images/touxiang_01.png" class="stateImg" />
+                <img v-else src="@/../images/touxiang_03.png" class="stateImg" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="number" label="序号" align="center">
+              <template slot-scope="scope">
+                <span
+                  :class="scope.row.state? 'purpleFontColor':'pinkFontColor'"
+                >{{scope.row.number}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="ID" label="ID" align="center">
+              <template slot-scope="scope">
+                <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.ID}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="姓名" align="center">
+              <template slot-scope="scope">
+                <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.name}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="sex" label="性别" align="center">
+              <template slot-scope="scope">
+                <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.sex}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="age" label="年龄" align="center">
+              <template slot-scope="scope">
+                <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.age}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="illness" label="病症" align="center">
+              <template slot-scope="scope">
+                <span
+                  :class="scope.row.state? 'purpleFontColor':'pinkFontColor'"
+                >{{scope.row.illness}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="date" label="添加日期" align="center">
+              <template slot-scope="scope">
+                <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.date}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="inform" label="患者信息" align="center">
+              <template slot-scope="scope">
+                <span v-if="!scope.row.inform" class="pinkFontColor">
+                  <el-button @click="examineClick(scope.$index, scope.row)">审核</el-button>
+                </span>
+                <span v-else class="purpleFontColor" align="center">
+                  <el-button @click="checkClick(scope.$index, scope.row)">查看</el-button>
+                </span>
+              </template>
+            </el-table-column>
 
-    <el-row>
-      <el-col :span="24">
-        <div class="search">
-          <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </div>
-      </el-col>
-    </el-row>
-    <!-- table表格 -->
-    <el-row class="tableContainer">
-      <el-col :span="24">
-        <el-table :data="tableData" stripe max-height="700" style="width: 100%;">
-          <el-table-column prop="state" label="状态">
-            <template slot-scope="scope">
-              <img v-if="scope.row.state" src="@/../images/touxiang_01.png" class="stateImg" />
-              <img v-else src="@/../images/touxiang_03.png" class="stateImg" />
-            </template>
-          </el-table-column>
-          <el-table-column prop="number" label="序号" align="center">
-            <template slot-scope="scope">
-              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.number}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="ID" label="ID" align="center">
-            <template slot-scope="scope">
-              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.ID}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" align="center">
-            <template slot-scope="scope">
-              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.name}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="sex" label="性别" align="center">
-            <template slot-scope="scope">
-              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.sex}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="age" label="年龄" align="center">
-            <template slot-scope="scope">
-              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.age}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="illness" label="病症" align="center">
-            <template slot-scope="scope">
-              <span
-                :class="scope.row.state? 'purpleFontColor':'pinkFontColor'"
-              >{{scope.row.illness}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="date" label="添加日期" align="center">
-            <template slot-scope="scope">
-              <span :class="scope.row.state? 'purpleFontColor':'pinkFontColor'">{{scope.row.date}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="inform" label="患者信息" align="center">
-            <template slot-scope="scope">
-              <span v-if="!scope.row.inform" class="pinkFontColor">
-                <el-button @click="examineClick(scope.$index, scope.row)">审核</el-button>
-              </span>
-              <span v-else class="purpleFontColor" align="center">
-                <el-button @click="checkClick(scope.$index, scope.row)">查看</el-button>
-              </span>
-            </template>
-          </el-table-column>
+            <el-table-column prop="message" label="消息">
+              <template slot-scope="scope">
+                <img v-if="scope.row.state" src="@/../images/xinxi.png" class="meaasgeImg" />
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
 
-          <el-table-column prop="message" label="消息">
-            <template slot-scope="scope">
-              <img v-if="scope.row.state" src="@/../images/xinxi.png" class="meaasgeImg" />
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
-
-    <!-- 翻页 -->
-    <el-row class="paginationContainer">
-      <el-pagination
-        layout=" prev, pager, next"
-        :total="totalSize"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size="pageSize"
-      ></el-pagination>
-    </el-row>
+      <!-- 翻页 -->
+      <el-row class="paginationContainer">
+        <el-pagination
+          layout=" prev, pager, next"
+          :total="totalSize"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size="pageSize"
+        ></el-pagination>
+      </el-row>
+    </el-card>
 
     <!-- 弹窗 -->
     <el-dialog title :visible.sync="leaveDialogVisible" width="30%">
@@ -353,6 +356,10 @@ export default {
 .search {
   margin-top: 15px;
   width: 200px;
+}
+
+.el-card {
+  margin-bottom: 30px;
 }
 
 .tableContainer {

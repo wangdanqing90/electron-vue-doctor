@@ -3,7 +3,7 @@
     <HeaderDoctor :leftImg="leftImg" :title="title" :titleName="titleName">
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
-          <img src="@/../images/certain.png" @click="okClick()" />
+          <!-- <img src="@/../images/certain.png" @click="okClick()" /> -->
           <img src="@/../images/back.png" @click="backClick" />
         </div>
       </template>
@@ -19,6 +19,16 @@
             >{{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? '✔️' : ''}}</p>
           </template>
         </el-calendar>
+        <div class="top">
+          <div>
+            <span></span>
+            <span>不可预约</span>
+            <span></span>
+            <span>可预约</span>
+          </div>
+
+          <div>设备使用情况：可预约/总设备数</div>
+        </div>
       </div>
       <div class="right">
         <div
@@ -63,13 +73,13 @@
               <div>{{tableData[0].data}}</div>
             </div>
           </div>
-          <div>
+          <div style="border-right: 1px solid #ebeef5;">
             <div class="title cell">
               <div>Saturday</div>
               <div>{{tableData[0].data}}</div>
             </div>
           </div>
-          <div style="width:10px;height:100%"></div>
+          <div style="width:9px;height:100%"></div>
         </div>
         <div class="right-table display_flex justify-content_flex-justify align-items_flex-start">
           <div id="time">
@@ -94,37 +104,44 @@
           </div>
           <div id="Sunday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Monday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Tuesday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Wednesday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Thursday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Friday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Saturday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all">{{item.able}}/{{item.all}}</div>
+              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+              <div v-else class="pinkBackColor"></div>
             </div>
           </div>
         </div>
@@ -256,22 +273,38 @@ export default {
     this.titleName = "刘邦";
   },
   methods: {
-    okClick() {
-      this.$confirm("您是否确认信息？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          this.okNextClick();
-        })
-        .catch(() => {});
-    },
+    // okClick() {
+    //   this.$confirm("您是否确认信息？", "", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     confirmButtonClass: "el-button purple"
+    //   })
+    //     .then(() => {
+    //       this.okNextClick();
+    //     })
+    //     .catch(() => {});
+    // },
     backClick() {
       this.$router.go(-1);
     },
     calendarSelect(data) {
       console.log(data.day);
+    },
+    cellClick(item) {
+      console.log(item);
+      this.$confirm("您是否确认预约该时间？", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        confirmButtonClass: "el-button purple"
+      })
+        .then(() => {
+          this.$router.push({
+            path: "/trainingSlider",
+            name: "trainingSlider",
+            query: {}
+          });
+        })
+        .catch(() => {});
     }
   },
 
@@ -291,42 +324,99 @@ export default {
 
 .inform-container {
   box-sizing: border-box;
-  margin: 50px auto;
+  margin: 0 auto;
   font-size: 12px;
   border-radius: 10px;
   border: 1px solid #e7e7e7;
   width: 100%;
   position: relative;
+  padding: 10px;
+  .top {
+    background: #ededed;
+    display: inline-block;
+    padding: 10px 20px;
+    width: 220px;
+    margin: 10px auto;
+    span {
+      display: inline-block;
+    }
+    span:nth-child(1) {
+      width: 30px;
+      height: 30px;
+      background: $pinkFontColor;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    span:nth-child(2),
+    span:nth-child(4) {
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    span:nth-child(3) {
+      width: 30px;
+      height: 30px;
+      background: white;
+      margin-left: 20px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    div:nth-child(2) {
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+      vertical-align: middle;
+    }
+  }
   .left {
     float: left;
     width: 300px;
+    position: absolute;
+    border: 1px solid #e7e7e7;
     .el-calendar-table .el-calendar-day {
       height: 40px;
     }
   }
+  #Saturday {
+    border-right: 1px solid #ebeef5;
+  }
   .right {
     float: right;
-    width: 890px;
+    width: 866px;
+
+    .right-table-title {
+      .cell {
+        height: 60px;
+        line-height: 60px;
+        background: #ededed;
+      }
+      .title {
+        div {
+          height: 30px;
+          line-height: 30px;
+        }
+      }
+    }
     .right-table {
-      height: 500px;
+      height: 600px;
       overflow: scroll;
+    }
+    .right-table > div .cell:nth-last-child(1) {
+      border-bottom: 1px solid #ebeef5;
     }
     .cell {
       font-size: 14px;
-      width: 108px;
-      height: 50px;
-      line-height: 50px;
-      border: 1px solid #ebeef5;
-    }
-    .title {
-      div:nth-child(1) {
-        height: 20px;
-        line-height: 20px;
-      }
-
-      div:nth-child(2) {
-        height: 30px;
-        line-height: 30px;
+      width: 105px;
+      height: 40px;
+      line-height: 40px;
+      border-left: 1px solid #ebeef5;
+      border-top: 1px solid #ebeef5;
+      cursor: pointer;
+      .pinkBackColor {
+        width: 100%;
+        height: 100%;
+        cursor: default;
       }
     }
   }

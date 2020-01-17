@@ -31,7 +31,7 @@ export default {
   created() {
     this.vm = this;
     this.leftImg = require("../../../images/logo.png");
-    this.title = "的申请详情";
+    this.title = "的训练信息";
     this.titleName = "刘邦";
   },
   methods: {

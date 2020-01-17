@@ -10,49 +10,51 @@
       </template>
     </HeaderDoctor>
 
-    <div class="inform-container">
-      <div class="title">手动选择</div>
-      <div class="tips display_flex justify-content_flex-around align-items_center">
-        <div class="display_flex justify-content_flex-start align-items_center">
-          <div class="tip1"></div>
-          <div class="tipName">行走训练</div>
+    <el-card class="box-card">
+      <div class="inform-container">
+        <div class="title">手动选择</div>
+        <div class="tips display_flex justify-content_flex-around align-items_center">
+          <div class="display_flex justify-content_flex-start align-items_center">
+            <div class="tip1"></div>
+            <div class="tipName">行走训练</div>
+          </div>
+          <div class="display_flex justify-content_flex-start align-items_center">
+            <div class="tip2"></div>
+            <div class="tipName">坐站训练</div>
+          </div>
+          <div class="display_flex justify-content_flex-start align-items_center">
+            <div class="tip3"></div>
+            <div class="tipName">游戏训练</div>
+          </div>
+          <div class="display_flex justify-content_flex-start align-items_center">
+            <div class="tip4"></div>
+            <div class="tipName">平衡测定</div>
+          </div>
         </div>
-        <div class="display_flex justify-content_flex-start align-items_center">
-          <div class="tip2"></div>
-          <div class="tipName">坐站训练</div>
-        </div>
-        <div class="display_flex justify-content_flex-start align-items_center">
-          <div class="tip3"></div>
-          <div class="tipName">游戏训练</div>
-        </div>
-        <div class="display_flex justify-content_flex-start align-items_center">
-          <div class="tip4"></div>
-          <div class="tipName">平衡测定</div>
-        </div>
-      </div>
-      <vue-slider
-        v-model="value"
-        tooltip="none"
-        :process="process"
-        :min-range="0"
-        :contained="true"
-        :enable-cross="false"
-        :height="100"
-        :dot-options="dotOptions"
-      >
-        <template v-slot:process="{ start, end, style, index }">
-          <div class="vue-slider-process" :style="style">
-            <div
-              :class="[
+        <vue-slider
+          v-model="value"
+          tooltip="none"
+          :process="process"
+          :min-range="0"
+          :contained="true"
+          :enable-cross="false"
+          :height="100"
+          :dot-options="dotOptions"
+        >
+          <template v-slot:process="{ start, end, style, index }">
+            <div class="vue-slider-process" :style="style">
+              <div
+                :class="[
               'merge-tooltip',
               'vue-slider-dot-tooltip-inner',
               'vue-slider-dot-tooltip-inner-top'
             ]"
-            >{{ value[index + 1]-value[index] }}%</div>
-          </div>
-        </template>
-      </vue-slider>
-    </div>
+              >{{ value[index + 1]-value[index] }}%</div>
+            </div>
+          </template>
+        </vue-slider>
+      </div>
+    </el-card>
     <span class="demoSpan1"></span>
 
     <el-row>
@@ -127,6 +129,12 @@ export default {
       console.log(this.sitValue);
       console.log(this.gameValue);
       console.log(this.balanceValue);
+
+      this.$router.push({
+        path: "/trainingAdjust",
+        name: "trainingAdjust",
+        query: {}
+      });
     },
     backClick() {
       this.$router.go(-1);
@@ -136,7 +144,7 @@ export default {
 };
 </script>
 
-<style  lang="scss">
+<style scoped lang="scss">
 .header {
   .header-right {
     img {
@@ -147,7 +155,7 @@ export default {
 }
 .inform-container {
   padding: 0 250px;
-  margin: 50px auto 50px auto;
+  margin: 100px auto 100px auto;
   font-size: 12px;
   .title {
     font-size: 24px;
@@ -182,7 +190,9 @@ export default {
     }
   }
 }
+</style>
 
+<style  lang="scss">
 .merge-tooltip {
   position: absolute;
   left: 50%;

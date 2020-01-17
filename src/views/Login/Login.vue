@@ -3,8 +3,8 @@
     <Header :leftImg="leftImg" :title="title">
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
-          <el-link :underline="false" @click="setClick">设置</el-link>
-          <span class="vertaicl-line"></span>
+          <!-- <el-link :underline="false" @click="setClick">设置</el-link>
+          <span class="vertaicl-line"></span>-->
           <el-link :underline="false" @click="aboutClick">关于我们</el-link>
         </div>
       </template>

@@ -102,6 +102,13 @@
   color: $purpleFontColor;
 }
 
+.el-table th>.cell {
+  color: #606266;
+  font-size: 14px;
+  font-weight: 500;
+
+}
+
 .el-message-box .el-message-box__content {
   color: $purpleFontColor;
   font-size: 20px;
@@ -123,4 +130,8 @@
 
 .yellowFontColor {
   color: $yellowFontColor;
+}
+
+.pinkBackColor {
+  background-color: $pinkFontColor;
 }

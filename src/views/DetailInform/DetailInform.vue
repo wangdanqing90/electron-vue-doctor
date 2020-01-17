@@ -9,158 +9,159 @@
         </div>
       </template>
     </HeaderDoctor>
+    <el-card class="box-card">
+      <el-row class="body-container" :gutter="40">
+        <el-col :span="6">
+          <div class="left">
+            <img class="head" :src="imgsrc" />
+            <div>注：</div>
+            <div>
+              标注
+              <i>*</i>号的为必填项，其他为选填项，您可以在此进行修改与完善。
+            </div>
+            <div class="gou">
+              修改完成请点击
+              <img src="@/../images/certain.png" />键。
+            </div>
+            <div class="gou">
+              删除患者信息请点击
+              <img src="@/../images/close.png" />键。
+            </div>
+            <div class="back">
+              返回请点击
+              <img src="@/../images/back.png" />键。
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="18">
+          <div class="right">
+            <el-form
+              :disabled=" type=='examine'"
+              label-position="top"
+              :inline="true"
+              :model="formLabelAlign"
+              :rules="rules"
+              ref="formLabelAlign"
+              class="demo-form-inline text-left"
+            >
+              <el-form-item label="姓名" prop="name">
+                <el-input v-model="formLabelAlign.name" placeholder="请输入姓名"></el-input>
+              </el-form-item>
+              <el-form-item label="性别" prop="sex">
+                <el-radio-group v-model="formLabelAlign.sex">
+                  <el-radio label="男" value="男"></el-radio>
+                  <el-radio label="女" value="女"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="年龄" prop="age">
+                <el-input v-model="formLabelAlign.age" placeholder="请输入年龄"></el-input>
+              </el-form-item>
+              <el-form-item label="ID" prop="ID">
+                <el-input v-model="formLabelAlign.ID" placeholder="请输入ID"></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input v-model="formLabelAlign.password" placeholder="请输入密码"></el-input>
+              </el-form-item>
+              <el-form-item label="身份证号" prop="IDNumber">
+                <el-input v-model="formLabelAlign.IDNumber" placeholder="请输入身份证号"></el-input>
+              </el-form-item>
+              <el-form-item label="所属医院" prop="hosipital">
+                <el-select v-model="formLabelAlign.hosipital" placeholder="请选择所属医院">
+                  <el-option
+                    v-for="item in hosipitalsData"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="所属科室" prop="department">
+                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室">
+                  <el-option
+                    v-for="item in departmentsData"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="工号" prop="jobNumber" v-if="type=='doctor'">
+                <el-select v-model="formLabelAlign.jobNumber" placeholder="请选择工号">
+                  <el-option
+                    v-for="item in jobNumbersData"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="办公电话" prop="officePhone" v-if="type=='doctor'">
+                <el-input v-model="formLabelAlign.officePhone" placeholder="请输入办公电话"></el-input>
+              </el-form-item>
+              <el-form-item label="手机号" prop="phone" v-if="type=='doctor'">
+                <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号"></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email" v-if="type=='doctor'">
+                <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
+              </el-form-item>
 
-    <el-row class="body-container" :gutter="40">
-      <el-col :span="6">
-        <div class="left">
-          <img class="head" :src="imgsrc" />
-          <div>注：</div>
-          <div>
-            标注
-            <i>*</i>号的为必填项，其他为选填项，您可以在此进行修改与完善。
+              <el-form-item
+                label="所属医生"
+                prop="doctor"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="身高（cm）"
+                prop="height"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-input v-model="formLabelAlign.height" placeholder="请输入身高"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="体重（kg）"
+                prop="weight"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-input v-model="formLabelAlign.height" placeholder="请输入体重"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="联系信息"
+                prop="inform"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-input v-model="formLabelAlign.inform" placeholder="请输入联系信息"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="骨盆高度（cm）"
+                prop="PelvicHeight"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-input v-model="formLabelAlign.PelvicHeight" placeholder="请输入骨盆高度"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="减重值（kg）"
+                prop="lossWeight"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-input v-model="formLabelAlign.lossWeight" placeholder="请输入减重值"></el-input>
+              </el-form-item>
+              <el-form-item
+                label="偏瘫侧"
+                prop="hemiplegiaSide"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+              >
+                <el-radio-group v-model="formLabelAlign.hemiplegiaSide">
+                  <el-radio label="左" value="左"></el-radio>
+                  <el-radio label="右" value="右"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-form>
           </div>
-          <div class="gou">
-            修改完成请点击
-            <img src="@/../images/certain.png" />键。
-          </div>
-          <div class="gou">
-            删除患者信息请点击
-            <img src="@/../images/close.png" />键。
-          </div>
-          <div class="back">
-            返回请点击
-            <img src="@/../images/back.png" />键。
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="18">
-        <div class="right">
-          <el-form
-            :disabled=" type=='examine'"
-            label-position="top"
-            :inline="true"
-            :model="formLabelAlign"
-            :rules="rules"
-            ref="formLabelAlign"
-            class="demo-form-inline text-left"
-          >
-            <el-form-item label="姓名" prop="name">
-              <el-input v-model="formLabelAlign.name" placeholder="请输入姓名"></el-input>
-            </el-form-item>
-            <el-form-item label="性别" prop="sex">
-              <el-radio-group v-model="formLabelAlign.sex">
-                <el-radio label="男" value="男"></el-radio>
-                <el-radio label="女" value="女"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="年龄" prop="age">
-              <el-input v-model="formLabelAlign.age" placeholder="请输入年龄"></el-input>
-            </el-form-item>
-            <el-form-item label="ID" prop="ID">
-              <el-input v-model="formLabelAlign.ID" placeholder="请输入ID"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="formLabelAlign.password" placeholder="请输入密码"></el-input>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="IDNumber">
-              <el-input v-model="formLabelAlign.IDNumber" placeholder="请输入身份证号"></el-input>
-            </el-form-item>
-            <el-form-item label="所属医院" prop="hosipital">
-              <el-select v-model="formLabelAlign.hosipital" placeholder="请选择所属医院">
-                <el-option
-                  v-for="item in hosipitalsData"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="所属科室" prop="department">
-              <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室">
-                <el-option
-                  v-for="item in departmentsData"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="工号" prop="jobNumber" v-if="type=='doctor'">
-              <el-select v-model="formLabelAlign.jobNumber" placeholder="请选择工号">
-                <el-option
-                  v-for="item in jobNumbersData"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="办公电话" prop="officePhone" v-if="type=='doctor'">
-              <el-input v-model="formLabelAlign.officePhone" placeholder="请输入办公电话"></el-input>
-            </el-form-item>
-            <el-form-item label="手机号" prop="phone" v-if="type=='doctor'">
-              <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号"></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱" prop="email" v-if="type=='doctor'">
-              <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
-            </el-form-item>
-
-            <el-form-item
-              label="所属医生"
-              prop="doctor"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="身高（cm）"
-              prop="height"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-input v-model="formLabelAlign.height" placeholder="请输入身高"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="体重（kg）"
-              prop="weight"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-input v-model="formLabelAlign.height" placeholder="请输入体重"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="联系信息"
-              prop="inform"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-input v-model="formLabelAlign.inform" placeholder="请输入联系信息"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="骨盆高度（cm）"
-              prop="PelvicHeight"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-input v-model="formLabelAlign.PelvicHeight" placeholder="请输入骨盆高度"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="减重值（kg）"
-              prop="lossWeight"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-input v-model="formLabelAlign.lossWeight" placeholder="请输入减重值"></el-input>
-            </el-form-item>
-            <el-form-item
-              label="偏瘫侧"
-              prop="hemiplegiaSide"
-              v-if="type=='patientModify'||type=='patient'||type=='examine'"
-            >
-              <el-radio-group v-model="formLabelAlign.hemiplegiaSide">
-                <el-radio label="左" value="左"></el-radio>
-                <el-radio label="右" value="右"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template> 
 
@@ -385,7 +386,7 @@ export default {
 }
 
 .body-container {
-  padding: 100px 150px;
+  padding: 100px 110px;
   .left {
     text-align: left;
     .head {

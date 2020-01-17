@@ -1,21 +1,23 @@
 <template>
   <div class="container">
     <Header :leftImg="leftImg"></Header>
-    <el-row>
-      <el-col :span="24" class="inform-container">
-        <div v-if="type=='success'">
-          <div class="informSuccess">{{message}}</div>
-        </div>
-        <div v-else-if="type=='fail'">
-          <div class="informFail">{{message}}</div>
-          <div class="failReason">原因：{{failReason}}</div>
-        </div>
+    <el-row class="inform-container">
+      <el-card class="box-card">
+        <el-col :span="24">
+          <div v-if="type=='success'">
+            <div class="informSuccess">{{message}}</div>
+          </div>
+          <div v-else-if="type=='fail'">
+            <div class="informFail">{{message}}</div>
+            <div class="failReason">原因：{{failReason}}</div>
+          </div>
 
-        <div class="timer">页面将在{{count}}秒后跳转回登录页面</div>
-      </el-col>
-      <el-col :span="24" class="margin-top-80 confirm-button">
-        <el-button class="purple" @click="backClick">确认</el-button>
-      </el-col>
+          <div class="timer">页面将在{{count}}秒后跳转回登录页面</div>
+        </el-col>
+        <el-col :span="24" class="margin-top-80 margin-bottom-50 confirm-button">
+          <el-button class="purple" @click="backClick">确认</el-button>
+        </el-col>
+      </el-card>
     </el-row>
   </div>
 </template>
@@ -71,7 +73,6 @@ export default {
     backClick() {
       clearInterval(this.timer);
       this.timer = null;
-
       this.$router.push({
         path: "/login",
         name: "login"
@@ -83,6 +84,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.inform-container {
+  width: 800px;
+  margin: 30px auto 30px auto;
+}
 .inform-container {
   margin: 100px auto 50px auto;
   .informSuccess {

@@ -9,138 +9,140 @@
       </template>
     </HeaderDoctor>
 
-    <div class="inform-container">
-      <div class="inform-inner display_flex justify-content_flex-justify align-items_center">
-        <!-- 下一步 -->
-        <div v-if="this.activeClass<3" class="next purpleFontColor" @click="nextClick()">下一步</div>
-        <!-- 左边tab -->
-        <div
-          class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center"
-        >
+    <el-card class="box-card">
+      <div class="inform-container">
+        <div class="inform-inner display_flex justify-content_flex-justify align-items_center">
+          <!-- 下一步 -->
+          <div v-if="this.activeClass<3" class="next purpleFontColor" @click="nextClick()">下一步</div>
+          <!-- 左边tab -->
           <div
-            class="left-inner"
-            :class="activeClass == index ? 'active':''"
-            v-for="(item,index) in tagList"
-            :key="index"
-            @click="getItem(index)"
+            class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center"
           >
             <div
-              class="left-inner-inner display_flex justify-content_flex-around align-items_center"
+              class="left-inner"
+              :class="activeClass == index ? 'active':''"
+              v-for="(item,index) in tagList"
+              :key="index"
+              @click="getItem(index)"
             >
-              <img :src="item.imgsrc" />
-              <div :class="item.colorClass">
-                <div>{{item.name}}</div>
-                <div>{{item.namebottom}}</div>
+              <div
+                class="left-inner-inner display_flex justify-content_flex-around align-items_center"
+              >
+                <img :src="item.imgsrc" />
+                <div :class="item.colorClass">
+                  <div>{{item.name}}</div>
+                  <div>{{item.namebottom}}</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- 行走训练右边 -->
-        <div
-          v-show="this.activeClass == 0"
-          class="right display_flex justify-content_flex-start align-items_center"
-        >
-          <AdjustContiner
-            ref="type1"
-            :type="1"
-            :disable="active1Right!=1"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type2"
-            :type="2"
-            :disable="active1Right!=2"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type3"
-            :type="3"
-            :disable="active1Right!=3"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-        </div>
+          <!-- 行走训练右边 -->
+          <div
+            v-show="this.activeClass == 0"
+            class="right display_flex justify-content_flex-start align-items_center"
+          >
+            <AdjustContiner
+              ref="type1"
+              :type="1"
+              :disable="active1Right!=1"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type2"
+              :type="2"
+              :disable="active1Right!=2"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type3"
+              :type="3"
+              :disable="active1Right!=3"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+          </div>
 
-        <!-- 坐站训练右边 -->
-        <div
-          v-show="this.activeClass == 1"
-          class="right display_flex justify-content_flex-start align-items_center"
-        >
-          <AdjustContiner
-            ref="type4"
-            :type="4"
-            :disable="active2Right!=4"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type5"
-            :type="5"
-            :disable="active2Right!=5"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-        </div>
+          <!-- 坐站训练右边 -->
+          <div
+            v-show="this.activeClass == 1"
+            class="right display_flex justify-content_flex-start align-items_center"
+          >
+            <AdjustContiner
+              ref="type4"
+              :type="4"
+              :disable="active2Right!=4"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type5"
+              :type="5"
+              :disable="active2Right!=5"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+          </div>
 
-        <!-- 游戏训练右边 -->
-        <div
-          v-show="this.activeClass == 2"
-          class="right display_flex justify-content_flex-start align-items_center"
-        >
-          <AdjustContiner
-            ref="type6"
-            :type="6"
-            :disable="active3Right!=6"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type7"
-            :type="7"
-            :disable="active3Right!=7"
-            @selectRightClick="selectRightClick"
-            class="large"
-          ></AdjustContiner>
-        </div>
+          <!-- 游戏训练右边 -->
+          <div
+            v-show="this.activeClass == 2"
+            class="right display_flex justify-content_flex-start align-items_center"
+          >
+            <AdjustContiner
+              ref="type6"
+              :type="6"
+              :disable="active3Right!=6"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type7"
+              :type="7"
+              :disable="active3Right!=7"
+              @selectRightClick="selectRightClick"
+              class="large"
+            ></AdjustContiner>
+          </div>
 
-        <!-- 平衡测定右边 -->
-        <div
-          v-show="this.activeClass == 3"
-          class="right display_flex justify-content_flex-justify align-items_center"
-        >
-          <AdjustContiner
-            ref="type8"
-            :type="8"
-            :disable="active4Right!=8"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type9"
-            :type="9"
-            :disable="active4Right!=9"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type10"
-            :type="10"
-            :disable="active4Right!=10"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
-          <AdjustContiner
-            ref="type11"
-            :type="11"
-            :disable="active4Right!=11"
-            @selectRightClick="selectRightClick"
-            class="small"
-          ></AdjustContiner>
+          <!-- 平衡测定右边 -->
+          <div
+            v-show="this.activeClass == 3"
+            class="right display_flex justify-content_flex-justify align-items_center"
+          >
+            <AdjustContiner
+              ref="type8"
+              :type="8"
+              :disable="active4Right!=8"
+              @selectRightClick="selectRightClick"
+              class="small"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type9"
+              :type="9"
+              :disable="active4Right!=9"
+              @selectRightClick="selectRightClick"
+              class="small"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type10"
+              :type="10"
+              :disable="active4Right!=10"
+              @selectRightClick="selectRightClick"
+              class="small"
+            ></AdjustContiner>
+            <AdjustContiner
+              ref="type11"
+              :type="11"
+              :disable="active4Right!=11"
+              @selectRightClick="selectRightClick"
+              class="small"
+            ></AdjustContiner>
+          </div>
         </div>
       </div>
-    </div>
+    </el-card>
   </div>
 </template>
 
@@ -205,17 +207,6 @@ export default {
   },
   methods: {
     okClick() {
-      this.$confirm("您是否确认信息？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          this.okNextClick();
-        })
-        .catch(() => {});
-    },
-    okNextClick() {
       this.$refs.type1.config.adjusts.forEach((item, index) => {
         console.log(index + item.name + item.total);
       });
@@ -250,25 +241,11 @@ export default {
         console.log(index + item.name + item.total);
       });
 
-      this.$confirm("您是否需要继续添加患者？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          this.$router.push({
-            path: "/",
-            name: "home",
-            query: {}
-          });
-        })
-        .catch(() => {
-          this.$router.push({
-            path: "/",
-            name: "home",
-            query: {}
-          });
-        });
+      this.$router.push({
+        path: "/trainingPlan",
+        name: "trainingPlan",
+        query: {}
+      });
     },
     backClick() {
       this.$router.go(-1);

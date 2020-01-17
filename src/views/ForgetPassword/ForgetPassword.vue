@@ -55,7 +55,7 @@ export default {
 
   data() {
     return {
-      title: "用户密码找回",
+      title: "用户密码重置",
       leftImg: "",
       step: "",
       timer: 60,
@@ -144,11 +144,11 @@ export default {
   },
   watch: {
     step(newVal, oldVal) {
-      if (newVal == 1) {
-        this.title = "用户密码找回";
-      } else if (newVal == 2) {
-        this.title = "用户密码重置";
-      }
+      // if (newVal == 1) {
+      //   this.title = "用户密码找回";
+      // } else if (newVal == 2) {
+      //   this.title = "用户密码重置";
+      // }
     }
   }
 };

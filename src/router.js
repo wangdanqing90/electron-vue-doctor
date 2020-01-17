@@ -110,6 +110,14 @@ export default new Router({
         title: '时间预约',
         keepAlive: false
       }
+    }, {
+      path: '/patientApplication',
+      name: 'patientApplication',
+      component: () => import('./views/PatientApplication/PatientApplication.vue'),
+      meta: {
+        title: '病人申请详情',
+        keepAlive: false
+      }
     }
   ]
 })
