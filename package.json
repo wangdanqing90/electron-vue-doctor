@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "axios": "^0.19.2",
     "bindings": "^1.5.0",
     "core-js": "^2.6.5",
     "element-ui": "^2.13.0",
@@ -20,7 +21,8 @@
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vue-slider-component": "^3.1.0",
-    "vuex": "^3.0.1"
+    "vuex": "^3.1.2",
+    "vuex-persistedstate": "^2.7.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
@@ -64,5 +66,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "__npminstall_done": false
 }

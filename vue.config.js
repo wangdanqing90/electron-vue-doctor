@@ -13,11 +13,11 @@ module.exports = {
     },
     devServer: {
         proxy: {
-            '^/myApi': {
-                target: 'http://testapi.gvrbox.com',
+            '/api': {
+                target: 'https://tcc.taobao.com',
                 changeOrigin: true, // 是否跨域
                 pathRewrite: {
-                    '^/myApi': '' // 规定请求地址以什么作为开头
+                    '/api': '' // 规定请求地址以什么作为开头
                 }
             }
         }

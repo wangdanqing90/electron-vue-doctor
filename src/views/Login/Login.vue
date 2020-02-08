@@ -54,6 +54,7 @@
 <script>
 import Header from "@/components/Header/Header.vue";
 import Login from "@/components/Login/Login.vue";
+import { apiAddress,apiget } from '@/request/api.js';
 
 export default {
   name: "login",
@@ -74,8 +75,20 @@ export default {
   },
   created() {
     this.leftImg = require("../../../images/logo.png");
+
+    //测试接口
+    this.onLoad();
   },
   methods: {
+     onLoad() {              
+            apiget().then(res => {
+                // 获取数据成功后的其他操作
+               alert("111")             
+            })       
+        
+       
+    },      
+
     aboutClick() {
       this.aboutDialogVisible = true;
     },

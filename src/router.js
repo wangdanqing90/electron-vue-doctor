@@ -118,6 +118,12 @@ export default new Router({
         title: '病人申请详情',
         keepAlive: false
       }
-    }
+    }, {
+      path: '/componentsA',
+      name: 'componentsA',
+      component: () => import('./components/componentsA.vue'),
+  }
+  
+  
   ]
 })
