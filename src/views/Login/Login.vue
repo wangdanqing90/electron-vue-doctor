@@ -80,7 +80,9 @@ export default {
     this.onLoad();
   },
   methods: {
-     onLoad() {              
+     onLoad() {
+       
+        this.$store.commit('saveToken',"55555")
             apiget().then(res => {
                 // 获取数据成功后的其他操作
                alert("111")             

@@ -302,7 +302,10 @@ export default {
     };
   },
   created() {
+     window.vue = this;
     this.leftImg = require("../../images/logo.png");
+
+    alert(this.$store.state.token);
   },
   methods: {
     backClick() {

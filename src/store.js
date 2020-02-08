@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
+    token:'',
     count: 0,
     show: ''
   },
@@ -16,6 +17,12 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    saveToken: (state,token) => {
+      state.token=token;
+    },
+    clearToken: (state) => {
+      state.token='';
+    },
     increment: (state) => {
       state.count++
     },
