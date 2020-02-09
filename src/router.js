@@ -119,11 +119,28 @@ export default new Router({
         keepAlive: false
       }
     }, {
+      path: '/chat',
+      name: 'chat',
+      component: () => import('./views/chat/chat.vue'),
+      meta: {
+        title: '聊天',
+        keepAlive: false
+      }
+    }, {
+      path: '/friend',
+      name: 'friend',
+      component: () => import('./views/friend/friend.vue'),
+      meta: {
+        title: '聊天',
+        keepAlive: false
+      }
+    }, {
       path: '/componentsA',
       name: 'componentsA',
       component: () => import('./components/componentsA.vue'),
   }
   
   
-  ]
+  ],
+  linkActiveClass: 'active'
 })
