@@ -1,4 +1,3 @@
-1
 export default {
     login: function () {
         console.log("1111");
@@ -18,5 +17,36 @@ export default {
         oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
         iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)
         return iDays
+    },
+
+    getUserInfo:function(){
+        //ws start
+        const WS =new WebSocket({
+            url:'wss://www.irego.cn:8080',
+            reconnectTimes:60
+        })
+        WS.onopen((event)=>{
+            this.$store.commit('SET_WS',WS)
+            
+            var authMSG={
+                type:'sigin',
+                utype:'user',
+                uid:"111",
+                key:"key"
+            }
+            WS.send(authMSG)
+            WS.onheartbeat()
+        })
+
+        WS.onmessage((data)=>{
+           var timestamp=new Date().getTime();
+           var msg={
+               data:data,
+               time:timestamp
+           }
+           this.$store.commit('SET_WS_MSG',msg)
+        })
+
+   
     }
 }

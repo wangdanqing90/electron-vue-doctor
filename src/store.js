@@ -8,8 +8,8 @@ const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     token:'',
-    count: 0,
-    show: ''
+    WS:'',
+    WS_MSG:''
   },
   getters: {
     counts: (state) => {
@@ -17,21 +17,19 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    saveToken: (state,token) => {
-      state.token=token;
+    saveToken: (state,payload) => {
+      state.token=payload;
     },
     clearToken: (state) => {
       state.token='';
     },
-    increment: (state) => {
-      state.count++
+    SET_WS: (state,payload) => {
+      state.WS=payload;
     },
-    decrement: (state) => {
-      state.count--
+    SET_WS_MSG: (state,payload) => {
+      state.WS_MSG=payload;
     },
-    changTxt: (state, v) => {
-      state.show = v
-    }
+    
   }
 })
 
