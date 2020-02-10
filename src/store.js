@@ -263,6 +263,9 @@ const store = new Vuex.Store({
     clearToken: (state) => {
       state.token='';
     },
+    saveUserInfo: (state,payload) => {
+        state.userInfo=payload;
+    },
     SET_WS: (state,payload) => {
       state.WS=payload;
     },

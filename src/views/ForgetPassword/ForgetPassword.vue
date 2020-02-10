@@ -26,10 +26,10 @@
               </div>
               <div v-else-if="step == 2">
                 <el-form-item label="新密码：" label-width="100px" prop="newPassword">
-                  <el-input placeholder="请输入新密码" v-model="formLabelAlign.newPassword"></el-input>
+                  <el-input placeholder="请输入新密码" show-password v-model="formLabelAlign.newPassword"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码：" label-width="100px" prop="confirmPassword">
-                  <el-input placeholder="请确认密码" v-model="formLabelAlign.confirmPassword"></el-input>
+                  <el-input placeholder="请确认密码" show-password v-model="formLabelAlign.confirmPassword"></el-input>
                 </el-form-item>
               </div>
 
@@ -46,6 +46,7 @@
 
 <script>
 import Header from "@/components/Header/Header.vue";
+import { apiPhoneCode,apiVerifyCode,apiModifypassword } from '@/request/api.js';
 
 export default {
   name: "forgetPassword",
@@ -72,12 +73,35 @@ export default {
         verificationCode: [
           { required: true, message: "请输入验证码", trigger: "blur" }
         ],
-        newPassword: [
-          { required: true, message: "请输入新密码", trigger: "blur" }
-        ],
-        confirmPassword: [
-          { required: true, message: "请输入确认密码", trigger: "blur" }
-        ]
+        // newPassword: [
+        //   { required: true, message: "请输入新密码", trigger: "blur" }
+        // ],
+        // confirmPassword: [
+        //   { required: true, message: "请输入确认密码", trigger: "blur" }
+        // ],
+        newPassword: [{
+        required: true,
+        message: '请输入密码',
+        trigger: 'blur'
+    }, {
+        min: 8,
+        max: 16,
+        message: '长度在 8 到 16 个字符'
+    }, {
+        pattern: /^(\w){8,16}$/,
+        message: '只能输入8-16个字母、数字、下划线'
+    }],confirmPassword: [{
+        required: true,
+        message: '请输入密码',
+        trigger: 'blur'
+    }, {
+        min: 8,
+        max: 16,
+        message: '长度在 8 到 16 个字符'
+    }, {
+        pattern: /^(\w){8,16}$/,
+        message: '只能输入8-16个字母、数字、下划线'
+    }]
       }
     };
   },
@@ -89,7 +113,24 @@ export default {
   methods: {
     //点击获取短信验证码
     handleClick() {
-      this.verShow = false;
+      var params={
+          'phone':this.formLabelAlign.phone.trim()
+        }
+        //获取短信验证码
+      apiPhoneCode(params).then(res => {   
+        if(res.data.status =='T'){ 
+          this.handleClickCallback();     
+        }else{
+          this.$message({
+          message: res.data.msg,
+          type: 'warning'
+        });
+        }
+        })       
+    },
+
+    handleClickCallback(){
+       this.verShow = false;
       this.timer = 60;
       clearInterval(this.auth_timer);
       this.auth_timer = setInterval(() => {
@@ -99,20 +140,69 @@ export default {
           clearInterval(this.auth_timer);
         }
       }, 1000);
+
     },
 
     nextClick() {
-      if (this.step == 1) {
+      if (this.step == 1) {       
         this.$refs["formLabelAlign"].validate(valid => {
           if (valid) {
-            this.step = 2;
-            this.verShow = true;
-            clearInterval(this.auth_timer);
+            //验证短信验证码
+            var params={
+          'phone':this.formLabelAlign.phone.trim(),
+          'code':this.formLabelAlign.verificationCode.trim()
+        }
+             apiVerifyCode(params).then(res => {    
+               if(res.data.status =='T'){
+                  this.nextClickCallback(); 
+               } else{
+                  this.$message({
+                     message: res.data.msg,
+                     type: 'warning'
+                  });
+
+               }             
+        })   
           }
         });
       } else {
         this.$refs["formLabelAlign"].validate(valid => {
           if (valid) {
+            if(this.formLabelAlign.newPassword == this.formLabelAlign.confirmPassword){
+                             //修改密码
+             var params={
+          'phone':this.formLabelAlign.phone.trim(),
+          'code':this.formLabelAlign.verificationCode.trim(),
+           'newPassword':this.formLabelAlign.newPassword.trim()
+        }
+              apiModifypassword(params).then(res => {    
+               if(res.data.status =='T'){
+                  this.nextClickCallback(); 
+               } else{
+                  this.$message({
+                     message: res.data.msg,
+                     type: 'warning'
+                  });
+
+               }             
+        })  
+            }else{
+                this.$message({
+                     message: '密码输入不一致',
+                     type: 'warning'
+                  });
+            }
+
+          }
+        });
+      }
+    },
+    nextClickCallback(){
+      this.step = 2;
+      this.verShow = true;
+      clearInterval(this.auth_timer);
+    },
+    nextPage(){
             if (false) {
               this.$router.push({
                 path: "/result",
@@ -130,10 +220,8 @@ export default {
                 }
               });
             }
-          }
-        });
-      }
     },
+
     backClick() {
       if (this.step == 2) {
         this.step = 1;

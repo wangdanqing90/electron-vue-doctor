@@ -66,22 +66,24 @@
                 <el-input v-model="formLabelAlign.IDNumber" placeholder="请输入身份证号"></el-input>
               </el-form-item>
               <el-form-item label="所属医院" prop="hosipital">
-                <el-select v-model="formLabelAlign.hosipital" placeholder="请选择所属医院">
+                <el-select v-model="formLabelAlign.hosipital" placeholder="请选择所属医院"  @change="initdepartment($event)">
                   <el-option
                     v-for="item in hosipitalsData"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.name"
+                    :id="item.id"
                   ></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="所属科室" prop="department">
-                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室">
+                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" >
                   <el-option
                     v-for="item in departmentsData"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.name"
+                    :id="item.id"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -167,6 +169,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
+import { apiHospitallist,apiDepartment } from '@/request/api.js';
 
 export default {
   name: "home",
@@ -181,26 +184,8 @@ export default {
       titleName: "",
       type: "", // doctor：医生，patientModify：患者修改，patient：患者新增，examine:患者审核
       imgsrc: require("@/../images/doctor.png"),
-      hosipitalsData: [
-        {
-          value: "医院1",
-          name: "医院1"
-        },
-        {
-          value: "医院2",
-          name: "医院2"
-        }
-      ],
-      departmentsData: [
-        {
-          value: "科室1",
-          name: "科室1"
-        },
-        {
-          value: "科室2",
-          name: "科室2"
-        }
-      ],
+      hosipitalsData: [],
+      departmentsData: [],
       jobNumbersData: [
         {
           value: "工号1",
@@ -255,6 +240,7 @@ export default {
     };
   },
   created() {
+    window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.type = this.$route.query.type;
     console.log(this.type);
@@ -270,6 +256,8 @@ export default {
       this.title = "的基本信息";
       this.titleName = "刘邦";
     }
+
+    this.initHosipital();
   },
   methods: {
     //删除患者信息
@@ -280,6 +268,22 @@ export default {
         name: "home",
         query: {}
       });
+    },
+    initHosipital(){
+      apiHospitallist().then(res => {   
+        this.hosipitalsData  =res.data;              
+      })      
+    },
+    initdepartment(value){
+      this.formLabelAlign.department = '';
+      var id = this.common.getSelectID(value,this.hosipitalsData)
+      var params={
+        'hospitalid':id
+      }
+      apiDepartment(params).then(res => {   
+        this.departmentsData =   res.data          
+      }) 
+    
     },
     showResult() {
       this.$confirm("您已成功添加该患者？", "", {

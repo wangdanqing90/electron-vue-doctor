@@ -107,12 +107,13 @@ export default {
         password: ""
       },
        rules: {
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        password: [{ required: true, message: "请选择密码", trigger: "blur" }]
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       }
     };
   },
   created() {
+    window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     //测试接口
     this.onLoad();
@@ -148,21 +149,20 @@ export default {
           if (valid) {
              //12000000001 123456
        var params={
-          'account':this.formLabelAlign.name,
-          'password':this.formLabelAlign.password
+          'account':this.formLabelAlign.name.trim(),
+          'password':this.formLabelAlign.password.trim()
         }
-        apiLogin(params).then(res => {               
+        apiLogin(params).then(res => {      
             this.$store.commit('saveToken',res.data.token);
             this.getUserInfo();      
         })       
           }})
     },
     getUserInfo(){
-      apigetUserInfo().then(res => {               
-            this.$store.commit('userInfo',res.data);
-            
-        })       
-
+      apigetUserInfo(this.$store.state.token).then(res => {               
+            this.$store.commit('saveUserInfo',res.data);
+            this.loginSuccess();        
+        })        
     },
     loginSuccess(){
       if(this.$route.query.redirect){
