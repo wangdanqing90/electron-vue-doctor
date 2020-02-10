@@ -11,6 +11,7 @@ const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     token:'',
+    userInfo:'',
     WS:'',
     WS_MSG:'',
     // 输入的搜索值

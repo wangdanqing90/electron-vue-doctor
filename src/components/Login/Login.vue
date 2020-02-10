@@ -55,9 +55,12 @@ export default {
   created() {},
   beforeDestroy() {},
   beforeMount() {},
-  mounted() {},
+  mounted() {
+    
+  },
   destroyed() {},
   methods: {
+    
     //跳转忘记密码
     jumpForgetPassword() {
       this.$router.push({

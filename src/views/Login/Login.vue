@@ -9,7 +9,39 @@
         </div>
       </template>
     </Header>
-    <Login />
+       <!-- form表单 -->
+    <el-row>
+      <el-col :span="24">
+        <div class="form-container">
+          <el-card class="box-card">
+            <el-form :model="formLabelAlign" :rules="rules"
+              ref="formLabelAlign">
+              <el-form-item>
+                <div class="title">账号登录</div>
+              </el-form-item>
+              <el-form-item prop="name">
+                <el-input placeholder="账号" v-model="formLabelAlign.name"></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input placeholder="密码" v-model="formLabelAlign.password" show-password></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button class="purple" @click="loginClick('formLabelAlign')">登录</el-button>
+              </el-form-item>
+              <el-form-item>
+                <div
+                  class="header-right-div display_flex justify-content_flex-center align-items_center"
+                >
+                  <el-link :underline="false" @click="jumpForgetPassword">忘记密码</el-link>
+                  <span class="vertaicl-line"></span>
+                  <el-link :underline="false" @click="jumpRegister">用户注册</el-link>
+                </div>
+              </el-form-item>
+            </el-form>
+          </el-card>
+        </div>
+      </el-col>
+    </el-row>
 
     <!-- 弹窗 -->
     <el-dialog title="设置" :visible.sync="setDialogVisible" width="600px" center class="setDialog">
@@ -54,13 +86,12 @@
 <script>
 import Header from "@/components/Header/Header.vue";
 import Login from "@/components/Login/Login.vue";
-import { apiAddress,apiget } from '@/request/api.js';
+import { apiLogin,apigetUserInfo } from '@/request/api.js';
 
 export default {
   name: "login",
   components: {
-    Header,
-    Login
+    Header
   },
 
   data() {
@@ -70,32 +101,82 @@ export default {
       aboutDialogVisible: false,
       setDialogVisible: false,
       frontUltrasonic: false,
-      backUltrasonic: false
+      backUltrasonic: false,
+       formLabelAlign: {
+        name: "",
+        password: ""
+      },
+       rules: {
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        password: [{ required: true, message: "请选择密码", trigger: "blur" }]
+      }
     };
   },
   created() {
     this.leftImg = require("../../../images/logo.png");
-
     //测试接口
     this.onLoad();
+   
   },
   methods: {
-     onLoad() {
-       
-        this.$store.commit('saveToken',"55555")
-            apiget().then(res => {
-                // 获取数据成功后的其他操作
-               alert("111")             
-            })       
-        
-       
+     onLoad() {     
     },      
-
+    
     aboutClick() {
       this.aboutDialogVisible = true;
     },
     setClick() {
       this.setDialogVisible = true;
+    },
+        //跳转忘记密码
+    jumpForgetPassword() {
+      this.$router.push({
+        path: "/forgetPassword",
+        name: "forgetPassword",
+        query: { step: 1 }
+      });
+    },
+    jumpRegister() {
+      this.$router.push({
+        path: "/register",
+        name: "register",
+        query: { step: 1 }
+      });
+    },
+    loginClick(formName){
+      this.$refs[formName].validate(valid => {
+          if (valid) {
+             //12000000001 123456
+       var params={
+          'account':this.formLabelAlign.name,
+          'password':this.formLabelAlign.password
+        }
+        apiLogin(params).then(res => {               
+            this.$store.commit('saveToken',res.data.token);
+            this.getUserInfo();      
+        })       
+          }})
+    },
+    getUserInfo(){
+      apigetUserInfo().then(res => {               
+            this.$store.commit('userInfo',res.data);
+            
+        })       
+
+    },
+    loginSuccess(){
+      if(this.$route.query.redirect){
+       this.$router.push({
+        path: this.$route.query.redirect,
+        name: this.$route.query.redirect
+      });
+      }else{
+        this.$router.push({
+        path: "/home",
+        name: "home"
+      });
+
+      }
     }
   }
 };
@@ -118,6 +199,38 @@ export default {
       font-size: 14px;
       color: #101012;
       text-decoration: underline;
+    }
+  }
+}
+.form-container {
+  width: 800px;
+  height: 800px;
+  margin: 30px auto 0 auto;
+  .el-card,
+  .el-message {
+    border-radius: 10px;
+  }
+  .el-form {
+    width: 300px;
+    margin: 50px auto;
+    .title {
+      font-size: 18px;
+    }
+    .el-button {
+      width: 100%;
+    }
+    .vertaicl-line {
+      display: inline-block;
+      width: 1px;
+      height: 15px;
+      background: #000;
+    }
+    a {
+      height: 30px;
+      line-height: 30px;
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #101012;
     }
   }
 }

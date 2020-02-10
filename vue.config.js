@@ -14,7 +14,8 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'https://tcc.taobao.com',
+               //target: 'https://tcc.taobao.com',
+                target: 'https://www.irego.cn/api',
                 changeOrigin: true, // 是否跨域
                 pathRewrite: {
                     '/api': '' // 规定请求地址以什么作为开头

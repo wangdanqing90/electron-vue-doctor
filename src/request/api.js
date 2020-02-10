@@ -7,4 +7,7 @@ export const apiAddress = p => post('https://tcc.taobao.com/cc/json/mobile_tel_s
 
 export const apiget = () => get('/api/cc/json/mobile_tel_segment.htm?tel=13816946233');
 
+export const apiLogin = p => post('/api/login/', p);
+export const apigetUserInfo = p => get('/api/user/info/');
+
 

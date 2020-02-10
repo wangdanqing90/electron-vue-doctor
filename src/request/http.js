@@ -2,6 +2,7 @@
 
 import axios from 'axios'; // 引入axios
 import QS from 'qs'; // 引入qs模块，用来序列化post类型的数据
+import { MessageBox, Message } from 'element-ui'
 
 // 环境的切换
 // if (process.env.NODE_ENV == 'development') {    
@@ -25,7 +26,7 @@ axios.interceptors.request.use(
         // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况
         // 即使本地存在token，也有可能token是过期的，所以在响应拦截器中要对返回状态进行判断 
         const token = store.state.token;        
-        token && (config.headers.Authorization = token);        
+        token && (config.headers.Authorization = 'Bearer '+token);       
         return config;    
     },    
     error => {        
@@ -48,19 +49,9 @@ axios.interceptors.response.use(
     error => {            
         if (error.response.status) {            
             switch (error.response.status) {                
-                // 401: 未登录 未登录则跳转登录页面，并携带当前页面的路径 在登录成功后返回当前页面，这一步需要在登录页操作。                
-                case 401:                    
-                this.$router.replace({                        
-                        path: '/login',                        
-                        query: { 
-                            redirect: this.$route.currentRoute.fullPath 
-                        }
-                    });
-                    break;
-
-                // 403 token过期,登录过期对用户进行提示,清空vuex中token对象 跳转登录页面                
-                case 403:
-                    alert('登录过期，请重新登录')                
+                // 401未登录或者token过期,清空vuex中token对象 跳转登录页面                
+                case 401:
+                    alert('未登录或者登录过期，请重新登录')                
                     // 清除token
                     store.commit('clearToken')
                     // 跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面 
@@ -80,11 +71,14 @@ axios.interceptors.response.use(
                     break;
                 // 其他错误，直接抛出错误提示
                 default:
-                    alert(error.response.data.message)
+                    if(error.response.data.message){alert(error.response.data.message)}
+                     
+                     else{
+                        alert("网络请求不存在")
+                     }
             }
             return Promise.reject(error.response);
-        }
-     
+        } 
 });
 
 //get方法：get函数有两个参数，第一个参数表示我们要请求的url地址，第二个参数是我们要携带的请求参数。get函数返回一个promise对象，当axios其请求成功时resolve服务器返回 值，请求失败时reject错误值。最后通过export抛出get函数。
@@ -110,13 +104,14 @@ export function get(url, params){
  * @param {String} url [请求的url地址] 
  * @param {Object} params [请求时携带的参数] 
  */
-export function post(url, params) {
+export function post(url, params) { 
     return new Promise((resolve, reject) => {
          axios.post(url, QS.stringify(params))
         .then(res => {
             resolve(res.data);
         })
-        .catch(err =>{
+        .catch(
+            err =>{
             reject(err.data)
         })
     });
