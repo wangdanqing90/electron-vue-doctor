@@ -112,6 +112,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
+import { apiPatientlist } from '@/request/api.js';
 
 export default {
   name: "home",

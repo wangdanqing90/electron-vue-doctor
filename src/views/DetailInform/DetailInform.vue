@@ -257,7 +257,7 @@ export default {
       this.titleName = "刘邦";
     }
 
-    this.initHosipital();
+    this.initHosipital(); 
   },
   methods: {
     //删除患者信息
@@ -273,7 +273,7 @@ export default {
       apiHospitallist().then(res => {   
         this.hosipitalsData  =res.data;              
       })      
-    },
+    }, 
     initdepartment(value){
       this.formLabelAlign.department = '';
       var id = this.common.getSelectID(value,this.hosipitalsData)

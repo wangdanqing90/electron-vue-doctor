@@ -73,12 +73,6 @@ export default {
         verificationCode: [
           { required: true, message: "请输入验证码", trigger: "blur" }
         ],
-        // newPassword: [
-        //   { required: true, message: "请输入新密码", trigger: "blur" }
-        // ],
-        // confirmPassword: [
-        //   { required: true, message: "请输入确认密码", trigger: "blur" }
-        // ],
         newPassword: [{
         required: true,
         message: '请输入密码',
@@ -173,18 +167,10 @@ export default {
              var params={
           'phone':this.formLabelAlign.phone.trim(),
           'code':this.formLabelAlign.verificationCode.trim(),
-           'newPassword':this.formLabelAlign.newPassword.trim()
+           'password':this.formLabelAlign.newPassword.trim()
         }
-              apiModifypassword(params).then(res => {    
-               if(res.data.status =='T'){
-                  this.nextClickCallback(); 
-               } else{
-                  this.$message({
-                     message: res.data.msg,
-                     type: 'warning'
-                  });
-
-               }             
+              apiModifypassword(params).then(res => {               
+                this.nextPage(res.data.status,res.data.msg);       
         })  
             }else{
                 this.$message({
@@ -202,8 +188,8 @@ export default {
       this.verShow = true;
       clearInterval(this.auth_timer);
     },
-    nextPage(){
-            if (false) {
+    nextPage(status,msg){
+            if (status == 'T') {
               this.$router.push({
                 path: "/result",
                 name: "result",
@@ -216,7 +202,7 @@ export default {
                 query: {
                   type: "fail",
                   message: "重设失败！",
-                  failReason: "xxxxx"
+                  failReason: msg
                 }
               });
             }

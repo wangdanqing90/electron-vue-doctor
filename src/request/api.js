@@ -21,4 +21,8 @@ export const apiModifypassword = p => post('/api/modifypassword/', p)
 export const apiHospitallist= () => get('/api/hospitallist/')
 //获取医院列表
 export const apiDepartment= p => get('/api/department/', p)
+//医生注册
+export const apiRegister= p => post('/api/register/', p)
+//获取患者列表
+export const apiPatientlist= p => get('/api/patientlist/', p)
 

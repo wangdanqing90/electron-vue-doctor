@@ -11,51 +11,53 @@
       <el-col :span="24" class="margin-top-50">
         <div class="form-container">
           <el-card class="box-card">
-            <el-form :model="formLabelAlign">
+            <el-form :model="formLabelAlign" ref="formLabelAlign" status-icon :rules="rules">
               <div v-if="step == 1">
-                <el-form-item label="所属医院：" label-width="100px">
-                  <el-select v-model="value" placeholder="请选择医院">
+                <el-form-item label="所属医院：" label-width="100px" prop="hosipital">
+                  <el-select v-model="formLabelAlign.hosipital" placeholder="请选择医院"  @change="initdepartment($event)">
                     <el-option
-                      v-for="item in hospitalsList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
+                       v-for="item in hosipitalsData"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.name"
+                    :id="item.id"
                     ></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="所属科室：" label-width="100px">
-                  <el-select v-model="value" placeholder="请选择科室">
+                <el-form-item label="所属科室：" label-width="100px" prop="department">
+                  <el-select v-model="formLabelAlign.department" placeholder="请选择科室">
                     <el-option
-                      v-for="item in departmentsList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
+                      v-for="item in departmentsData"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item.name"
+                    :id="item.id"
                     ></el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="工号：" label-width="100px">
-                  <el-input placeholder="请输入工号" v-model="formLabelAlign.verificationCode"></el-input>
+                <el-form-item label="工号：" label-width="100px" prop="jobnumber">
+                  <el-input placeholder="请输入工号" v-model="formLabelAlign.jobnumber"></el-input>
                 </el-form-item>
               </div>
               <div v-else-if="step == 2">
-                <el-form-item label="姓名：" label-width="100px">
+                <el-form-item label="姓名：" label-width="100px" prop="name">
                   <el-input placeholder="请输入姓名" v-model="formLabelAlign.name"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号：" label-width="100px">
+                <el-form-item label="手机号：" label-width="100px" prop="phone">
                   <el-input placeholder="请输入手机号" v-model="formLabelAlign.phone"></el-input>
                   <el-link :underline="false" v-show="verShow" @click="handleClick()">发送验证码</el-link>
                   <el-link :underline="false" v-show="!verShow">
                     <span>{{timer}}</span>秒后重新获取
                   </el-link>
                 </el-form-item>
-                <el-form-item label="验证码：" label-width="100px">
+                <el-form-item label="验证码：" label-width="100px" prop="verificationCode">
                   <el-input placeholder="请输入验证码" v-model="formLabelAlign.verificationCode"></el-input>
                 </el-form-item>
-                <el-form-item label="密码：" label-width="100px">
-                  <el-input placeholder="请输入密码" v-model="formLabelAlign.password"></el-input>
+                <el-form-item label="密码：" label-width="100px" prop="password">
+                  <el-input placeholder="请输入密码" show-password v-model="formLabelAlign.password"></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码：" label-width="100px">
-                  <el-input placeholder="请确认密码" v-model="formLabelAlign.confirmPassword"></el-input>
+                <el-form-item label="确认密码：" label-width="100px" prop="confirmPassword">
+                  <el-input placeholder="请确认密码" show-password v-model="formLabelAlign.confirmPassword"></el-input>
                 </el-form-item>
               </div>
 
@@ -72,6 +74,8 @@
 
 <script>
 import Header from "@/components/Header/Header.vue";
+import { apiHospitallist,apiDepartment,apiPhoneCode,apiRegister } from '@/request/api.js';
+
 
 export default {
   name: "register",
@@ -92,77 +96,136 @@ export default {
         phone: "",
         verificationCode: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        hosipital:'',
+        department:'',
+        jobnumber:''
       },
-      hospitalsList: [
-        {
-          value: "医院1",
-          label: "医院1"
-        },
-        {
-          value: "医院2",
-          label: "医院2"
-        },
-        {
-          value: "医院3",
-          label: "医院3"
-        },
-        {
-          value: "医院4",
-          label: "医院4"
-        },
-        {
-          value: "医院5",
-          label: "医院5"
-        }
-      ],
-      departmentsList: [
-        {
-          value: "科室1",
-          label: "科室1"
-        },
-        {
-          value: "科室2",
-          label: "科室2"
-        },
-        {
-          value: "科室3",
-          label: "科室3"
-        },
-        {
-          value: "科室4",
-          label: "科室4"
-        },
-        {
-          value: "科室5",
-          label: "科室5"
-        }
-      ]
+      hosipitalsData: [],
+      departmentsData: [],
+      rules: {
+        hosipital: [
+          { required: true, message: "请选择医院", trigger: "change" }
+        ],
+        department: [
+          { required: true, message: "请选择科室", trigger: "change" }
+        ],
+        jobnumber: [{ required: true, message: "请输入工号", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        verificationCode: [
+          { required: true, message: "请输入验证码", trigger: "blur" }
+        ],
+        password: [{
+        required: true,
+        message: '请输入密码',
+        trigger: 'blur'
+    }, {
+        min: 8,
+        max: 16,
+        message: '长度在 8 到 16 个字符'
+    }, {
+        pattern: /^(\w){8,16}$/,
+        message: '只能输入8-16个字母、数字、下划线'
+    }],confirmPassword: [{
+        required: true,
+        message: '请输入密码',
+        trigger: 'blur'
+    }, {
+        min: 8,
+        max: 16,
+        message: '长度在 8 到 16 个字符'
+    }, {
+        pattern: /^(\w){8,16}$/,
+        message: '只能输入8-16个字母、数字、下划线'
+    }]
+      }
     };
   },
   created() {
     this.leftImg = require("../../../images/logo.png");
     this.step = this.$route.query.step;
     console.log("step == " + this.step);
+
+    this.initHosipital(); 
   },
   methods: {
+     initHosipital(){
+      apiHospitallist().then(res => {   
+        this.hosipitalsData  =res.data;              
+      })      
+    }, 
+    initdepartment(value){
+      this.formLabelAlign.department = '';
+      var id = this.common.getSelectID(value,this.hosipitalsData)
+      var params={
+        'hospitalid':id
+      }
+      apiDepartment(params).then(res => {   
+        this.departmentsData =   res.data          
+      }) 
+    
+    },   
     //点击获取短信验证码
     handleClick() {
-      this.verShow = false;
+      var params={
+          'phone':this.formLabelAlign.phone.trim()
+        }
+        //获取短信验证码
+      apiPhoneCode(params).then(res => {   
+        if(res.data.status =='T'){ 
+          this.handleClickCallback();     
+        }else{
+          this.$message({
+          message: res.data.msg,
+          type: 'warning'
+        });
+        }
+        })       
+    },
+    
+    handleClickCallback(){
+       this.verShow = false;
       this.timer = 60;
-      var auth_timer = setInterval(() => {
+      clearInterval(this.auth_timer);
+      this.auth_timer = setInterval(() => {
         this.timer--;
         if (this.timer <= 0) {
           this.verShow = true;
-          clearInterval(auth_timer);
+          clearInterval(this.auth_timer);
         }
       }, 1000);
+
     },
+    
     nextClick() {
-      if (this.step == 1) {
+      this.$refs["formLabelAlign"].validate(valid => {
+          if (valid) {
+                  if (this.step == 1) {
         this.step = 2;
       } else {
-        if (false) {
+          this.register();
+      }
+
+          }
+      })
+    },
+    register(){
+        var params={          
+          'hospitalid':this.formLabelAlign.hosipital,
+          'department':this.formLabelAlign.department,
+          'jobnumber':this.formLabelAlign.jobnumber.trim(),
+          'phone':this.formLabelAlign.phone.trim(),
+          'name':this.formLabelAlign.name.trim(),
+          'code':this.formLabelAlign.verificationCode.trim(),
+          'password':this.formLabelAlign.password.trim(),
+        }
+        apiRegister(params).then(res => {                 
+               this.registerCallback()                     
+        })
+    }, 
+    registerCallback(){
+              if (false) {
           this.$router.push({
             path: "/result",
             name: "result",
@@ -175,7 +238,7 @@ export default {
             query: { type: "fail", message: "注册失败！", failReason: "xxxxx" }
           });
         }
-      }
+
     },
     backClick() {
       if (this.step == 2) {
