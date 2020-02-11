@@ -31,9 +31,10 @@ export default {
     return {};
   },
 
-  created() {},
+  created() {
+    console.log(this.$store.state.userInfo);
+  },
   beforeDestroy() {},
-  beforeMount() {},
   mounted() {},
   destroyed() {},
   methods: {}

@@ -2,7 +2,7 @@
 /**   
  * api接口统一管理
  */
-import { get, post } from './http'
+import { get, post,put } from './http'
 export const apiAddress = p => post('https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13816946233', p);
 
 export const apiget = () => get('/api/cc/json/mobile_tel_segment.htm?tel=13816946233');
@@ -24,5 +24,7 @@ export const apiDepartment= p => get('/api/department/', p)
 //医生注册
 export const apiRegister= p => post('/api/register/', p)
 //获取患者列表
-export const apiPatientlist= p => get('/api/patientlist/', p)
+export const apiPatientlist= (p) => get('/api/patientlist/?page='+p.page+'&limit='+p.limit)
+//获取医生信息
+export const apiDoctorinfo= () => get('/api/doctorinfo/')
 

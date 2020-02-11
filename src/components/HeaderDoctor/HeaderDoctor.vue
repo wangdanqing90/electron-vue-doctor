@@ -13,7 +13,7 @@
         <div
           class="display_flex flex-direction_column justify-content_flex-center align-items_center margin-left-10"
         >
-          <div class="name">李某某</div>
+          <div class="name">{{name}}</div>
           <div class="job">医生</div>
         </div>
       </div>
@@ -41,10 +41,15 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      name:''
+    };
   },
 
-  created() {},
+  created() {
+    console.log(this.$store.state.userInfo);
+    this.name=this.$store.state.userInfo.name
+  },
   beforeDestroy() {},
   beforeMount() {},
   mounted() {},

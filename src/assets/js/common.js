@@ -18,14 +18,6 @@ export default {
         iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)
         return iDays
     },
-    //在数组里面获取value对应的id
-    getSelectID: function (value,arry) {
-        var obj = {};
-            obj = arry.find(item =>{
-              return item.name === value 
-            });
-            return obj.id;
-      },
 
     getUserInfo:function(){
         //ws start

@@ -71,7 +71,7 @@
                     v-for="item in hosipitalsData"
                     :key="item.name"
                     :label="item.name"
-                    :value="item.name"
+                    :value="item"
                     :id="item.id"
                   ></el-option>
                 </el-select>
@@ -81,7 +81,7 @@
                   <el-option
                     v-for="item in departmentsData"
                     :key="item.name"
-                    :label="item.name"
+                    :label="item"
                     :value="item.name"
                     :id="item.id"
                   ></el-option>
@@ -274,17 +274,16 @@ export default {
         this.hosipitalsData  =res.data;              
       })      
     }, 
-    initdepartment(value){
+   initdepartment(item){
       this.formLabelAlign.department = '';
-      var id = this.common.getSelectID(value,this.hosipitalsData)
       var params={
-        'hospitalid':id
+        'hospitalid':item.id
       }
       apiDepartment(params).then(res => {   
         this.departmentsData =   res.data          
       }) 
     
-    },
+    },   
     showResult() {
       this.$confirm("您已成功添加该患者？", "", {
         confirmButtonText: "回工作台",

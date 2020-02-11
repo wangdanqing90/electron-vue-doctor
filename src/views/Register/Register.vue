@@ -13,13 +13,13 @@
           <el-card class="box-card">
             <el-form :model="formLabelAlign" ref="formLabelAlign" status-icon :rules="rules">
               <div v-if="step == 1">
-                <el-form-item label="所属医院：" label-width="100px" prop="hosipital">
-                  <el-select v-model="formLabelAlign.hosipital" placeholder="请选择医院"  @change="initdepartment($event)">
+                <el-form-item label="所属医院：" label-width="100px" prop="hosipital" >
+                  <el-select v-model="formLabelAlign.hosipital" filterable  placeholder="请选择医院" value-key="id"  @change="initdepartment">
                     <el-option
                        v-for="item in hosipitalsData"
                     :key="item.name"
                     :label="item.name"
-                    :value="item.name"
+                    :value="item"
                     :id="item.id"
                     ></el-option>
                   </el-select>
@@ -30,7 +30,7 @@
                       v-for="item in departmentsData"
                     :key="item.name"
                     :label="item.name"
-                    :value="item.name"
+                    :value="item"
                     :id="item.id"
                     ></el-option>
                   </el-select>
@@ -143,6 +143,7 @@ export default {
     };
   },
   created() {
+    window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.step = this.$route.query.step;
     console.log("step == " + this.step);
@@ -155,11 +156,10 @@ export default {
         this.hosipitalsData  =res.data;              
       })      
     }, 
-    initdepartment(value){
+    initdepartment(item){
       this.formLabelAlign.department = '';
-      var id = this.common.getSelectID(value,this.hosipitalsData)
       var params={
-        'hospitalid':id
+        'hospitalid':item.id
       }
       apiDepartment(params).then(res => {   
         this.departmentsData =   res.data          
@@ -212,8 +212,8 @@ export default {
     },
     register(){
         var params={          
-          'hospitalid':this.formLabelAlign.hosipital,
-          'department':this.formLabelAlign.department,
+          'hospitalid':this.formLabelAlign.hosipital.id,
+          'department':this.formLabelAlign.department.id,
           'jobnumber':this.formLabelAlign.jobnumber.trim(),
           'phone':this.formLabelAlign.phone.trim(),
           'name':this.formLabelAlign.name.trim(),
@@ -221,11 +221,11 @@ export default {
           'password':this.formLabelAlign.password.trim(),
         }
         apiRegister(params).then(res => {                 
-               this.registerCallback()                     
+               this.registerCallback(res.message)                     
         })
     }, 
-    registerCallback(){
-              if (false) {
+    registerCallback(message){
+       if (message=="success") {
           this.$router.push({
             path: "/result",
             name: "result",
@@ -235,7 +235,7 @@ export default {
           this.$router.push({
             path: "/result",
             name: "result",
-            query: { type: "fail", message: "注册失败！", failReason: "xxxxx" }
+            query: { type: "fail", message: "注册失败！", failReason: message }
           });
         }
 
