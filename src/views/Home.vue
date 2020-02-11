@@ -13,7 +13,7 @@
         <el-col :span="24">
           <div class="search">
             <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
-              <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="searchClick"></el-button>
             </el-input>
           </div>
         </el-col>
@@ -126,177 +126,7 @@ export default {
       page: 1,
       limit: 10,
       totalSize: 0,
-      tableData: [
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: false,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: false,
-        //   plan: false,
-        //   message: false
-        // },
-        // {
-        //   state: false,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // },
-        // {
-        //   state: true,
-        //   number: "11",
-        //   ID: "100",
-        //   name: "王小虎",
-        //   sex: "男",
-        //   age: 10,
-        //   illness: "右侧偏瘫",
-        //   date: "2016-05-03",
-        //   inform: true,
-        //   plan: true,
-        //   message: true
-        // }
-      ]
+      tableData: []
     };
   },
   created() {
@@ -324,12 +154,16 @@ export default {
       var params={
          'page': this.page,
          'limit': this.limit,
+         'search':this.search
       }
       apiPatientlist(params).then(res => {               
           this.tableData = res.data.items;  
           this.totalSize = res.data.total ;
       })  
-
+    },
+    searchClick(){
+      this.page = 1;
+      this.initPatientlist();
     },
     //审核
     examineClick(index, row) {

@@ -221,7 +221,7 @@ export default {
           'password':this.formLabelAlign.password.trim(),
         }
         apiRegister(params).then(res => {                 
-               this.registerCallback(res.message)                     
+          this.registerCallback(res.message)                     
         })
     }, 
     registerCallback(message){

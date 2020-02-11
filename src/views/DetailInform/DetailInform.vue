@@ -23,7 +23,7 @@
               修改完成请点击
               <img src="@/../images/certain.png" />键。
             </div>
-            <div class="gou">
+            <div class="gou" v-if="type!='doctor'">
               删除患者信息请点击
               <img src="@/../images/close.png" />键。
             </div>
@@ -47,17 +47,14 @@
               <el-form-item label="姓名" prop="name">
                 <el-input v-model="formLabelAlign.name" placeholder="请输入姓名"></el-input>
               </el-form-item>
-              <el-form-item label="性别" prop="sex">
+              <el-form-item label="性别" prop="sex">         
                 <el-radio-group v-model="formLabelAlign.sex">
-                  <el-radio label="男" value="男"></el-radio>
-                  <el-radio label="女" value="女"></el-radio>
+                  <el-radio :label="1" v-model="formLabelAlign.sex"  value="1">男</el-radio>
+                  <el-radio :label="0" v-model="formLabelAlign.sex" value="0">女</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="年龄" prop="age">
                 <el-input v-model="formLabelAlign.age" placeholder="请输入年龄"></el-input>
-              </el-form-item>
-              <el-form-item label="ID" prop="ID">
-                <el-input v-model="formLabelAlign.ID" placeholder="请输入ID"></el-input>
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input v-model="formLabelAlign.password" placeholder="请输入密码"></el-input>
@@ -65,10 +62,24 @@
               <el-form-item label="身份证号" prop="IDNumber">
                 <el-input v-model="formLabelAlign.IDNumber" placeholder="请输入身份证号"></el-input>
               </el-form-item>
-              <el-form-item label="所属医院" prop="hosipital">
-                <el-select v-model="formLabelAlign.hosipital" placeholder="请选择所属医院"  @change="initdepartment($event)">
+              <el-form-item label="工号" prop="jobNumber" v-if="type=='doctor'">
+                <el-input v-model="formLabelAlign.jobNumber" placeholder="请输入工号"></el-input>
+              </el-form-item>
+              <el-form-item label="所属医院" prop="hospital">
+                  <el-select v-model="formLabelAlign.hospital" filterable  placeholder="请选择医院" value-key="id"  @change="initdepartment">
+                    <el-option
+                       v-for="item in hospitalsData"
+                    :key="item.name"
+                    :label="item.name"
+                    :value="item"
+                    :id="item.id"
+                    ></el-option>
+                  </el-select>
+              </el-form-item>
+              <el-form-item label="所属科室" prop="department">
+                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" >
                   <el-option
-                    v-for="item in hosipitalsData"
+                    v-for="item in departmentsData"
                     :key="item.name"
                     :label="item.name"
                     :value="item"
@@ -76,32 +87,12 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="所属科室" prop="department">
-                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" >
-                  <el-option
-                    v-for="item in departmentsData"
-                    :key="item.name"
-                    :label="item"
-                    :value="item.name"
-                    :id="item.id"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="工号" prop="jobNumber" v-if="type=='doctor'">
-                <el-select v-model="formLabelAlign.jobNumber" placeholder="请选择工号">
-                  <el-option
-                    v-for="item in jobNumbersData"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
+
               <el-form-item label="办公电话" prop="officePhone" v-if="type=='doctor'">
                 <el-input v-model="formLabelAlign.officePhone" placeholder="请输入办公电话"></el-input>
               </el-form-item>
-              <el-form-item label="手机号" prop="phone" v-if="type=='doctor'">
-                <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号"></el-input>
+              <el-form-item label="手机号"  prop="phone" v-if="type=='doctor'">
+                <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号" disabled></el-input>
               </el-form-item>
               <el-form-item label="邮箱" prop="email" v-if="type=='doctor'">
                 <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
@@ -169,7 +160,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiHospitallist,apiDepartment } from '@/request/api.js';
+import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo } from '@/request/api.js';
 
 export default {
   name: "home",
@@ -184,7 +175,7 @@ export default {
       titleName: "",
       type: "", // doctor：医生，patientModify：患者修改，patient：患者新增，examine:患者审核
       imgsrc: require("@/../images/doctor.png"),
-      hosipitalsData: [],
+      hospitalsData: [],
       departmentsData: [],
       jobNumbersData: [
         {
@@ -197,13 +188,12 @@ export default {
         }
       ],
       formLabelAlign: {
-        user: "",
+        name: "",
         sex: "",
         age: "",
-        ID: "",
         password: "",
         IDNumber: "",
-        hosipital: "",
+        hospital: "",
         department: "",
         jobNumber: "",
         officePhone: "",
@@ -221,12 +211,10 @@ export default {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         sex: [{ required: true, message: "请选择性别", trigger: "change" }],
         age: [{ required: true, message: "请输入年龄", trigger: "blur" }],
-        ID: [{ required: true, message: "请输入ID", trigger: "blur" }],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
         IDNumber: [
           { required: true, message: "请输入身份证号", trigger: "blur" }
         ],
-        hosipital: [
+        hospital: [
           { required: true, message: "请选择医院", trigger: "change" }
         ],
         department: [
@@ -236,7 +224,8 @@ export default {
           { required: true, message: "请选择工号", trigger: "change" }
         ],
         doctor: [{ required: true, message: "请输入所属医生", trigger: "blur" }]
-      }
+      },
+      doctorinfo:[]
     };
   },
   created() {
@@ -256,10 +245,44 @@ export default {
       this.title = "的基本信息";
       this.titleName = "刘邦";
     }
-
-    this.initHosipital(); 
+    this.initDoctorinfo();
+    this.inithospital(); 
   },
+  
   methods: {
+    //获取医生信息
+    initDoctorinfo(){
+       apiDoctorinfo().then(res => {    
+         this.doctorinfo = res.data;
+         this.formLabelAlign.age=res.data.age;
+         //this.formLabelAlign.hospital=res.data.hospital;
+         //this.formLabelAlign.department=res.data.department;
+         this.formLabelAlign.email=res.data.email;
+         this.formLabelAlign.IDNumber=res.data.identitycard;
+         this.formLabelAlign.jobNumber=res.data.jobnumber;
+         this.formLabelAlign.name=res.data.name;
+         this.formLabelAlign.officePhone=res.data.officephone;
+         this.formLabelAlign.phone=res.data.phone;
+         this.formLabelAlign.sex=res.data.sex;
+         this.formLabelAlign.hospital={
+           'id':res.data.hospitalid,
+           'name':res.data.hospital
+         };
+         this.formLabelAlign.department={
+           'id':res.data.departmentid,
+           'name':res.data.department
+         }
+
+      //初始化科室下拉框
+      var params={
+        'hospitalid':res.data.hospitalid
+      }
+      apiDepartment(params).then(res => {   
+        this.departmentsData =   res.data          
+      }) 
+
+      })  
+    },
     //删除患者信息
     deleteClick() {},
     backClick() {
@@ -269,9 +292,9 @@ export default {
         query: {}
       });
     },
-    initHosipital(){
+    inithospital(){
       apiHospitallist().then(res => {   
-        this.hosipitalsData  =res.data;              
+        this.hospitalsData  =res.data;              
       })      
     }, 
    initdepartment(item){
@@ -313,6 +336,7 @@ export default {
       });
     },
     onSubmit(formName) {
+      let _this = this;
       if (this.type == "examine") {
         this.$confirm("您是否确认审核通过？", "", {
           confirmButtonText: "确定",
@@ -326,6 +350,7 @@ export default {
       } else {
         this.$refs[formName].validate(valid => {
           if (valid) {
+            //修改医生信息
             if (this.type == "doctor") {
               this.$confirm("您是否确认修改？", "", {
                 confirmButtonText: "确定",
@@ -333,11 +358,7 @@ export default {
                 confirmButtonClass: "el-button purple"
               })
                 .then(() => {
-                  this.$router.push({
-                    path: "/",
-                    name: "home",
-                    query: {}
-                  });
+                  this.changeDoctor();
                 })
                 .catch(() => {});
             } else if (this.type == "patient") {
@@ -357,19 +378,48 @@ export default {
                 confirmButtonClass: "el-button purple"
               })
                 .then(() => {
-                  this.$router.push({
-                    path: "/",
-                    name: "home",
-                    query: {}
-                  });
+                 
                 })
                 .catch(() => {});
             }
           }
         });
       }
-    }
+    },
+    changeDoctor(){
+    var params={
+         'password':this.formLabelAlign.password,
+         'sex':this.formLabelAlign.sex,
+         'age': this.formLabelAlign.age,
+         'name':this.formLabelAlign.name,
+         'identitycard':this.formLabelAlign.IDNumber,
+         'email':this.formLabelAlign.email,
+         'jobnumber':this.formLabelAlign.jobNumber,
+         'officephone':this.formLabelAlign.officePhone,
+         "hospitalid":this.formLabelAlign.hospital.id,
+         "departmentid":this.formLabelAlign.department.id
+      }
+    apichangeDoctorinfo(params).then(res => {      
+       this.$router.push({
+            path: "/result",
+            name: "result",
+            query: { type: "success", message: "修改成功！" }
+          });         
+         
+    })  
+    
   },
+  changeDoctorCallback(){
+     this.$router.push({
+                    path: "/",
+                    name: "home",
+                    query: {}
+                  });
+    
+  }
+  },
+  
+
   watch: {
     $route(newVal, oldVal) {
       this.$router.go(0);
