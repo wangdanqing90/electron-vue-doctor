@@ -169,7 +169,7 @@ export default {
     return {
       leftImg: "",
       title: "的训练信息",
-      titleName: "刘邦",
+      titleName: this.$store.state.patientInfo.name,
       leaveDialogVisible: false,
       search: "",
       currentPage: 1,
@@ -295,13 +295,18 @@ export default {
         .catch(() => {});
     },
     //生成汇总报告
-    generateReportClick() {},
+    generateReportClick() {
+      this.$router.push({
+        path: "/summaryReport",
+        name: "summaryReport"
+      });
+    },
     //修改患者
     headModifyClick() {
       this.$router.push({
         path: "/detailInform",
         name: "detailInform",
-        query: { type: "patientModify", patientid:this.$route.query.patientid}
+        query: { type: "patientModify"}
       });
     },
     //添加训练

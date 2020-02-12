@@ -12,6 +12,7 @@ const store = new Vuex.Store({
   state: {
     token:'',
     userInfo:'',
+    patientInfo:'',
     WS:'',
     WS_MSG:'',
     // 输入的搜索值
@@ -263,9 +264,16 @@ const store = new Vuex.Store({
     clearToken: (state) => {
       state.token='';
       state.userInfo='';
+      state.patientInfo='';
     },
     saveUserInfo: (state,payload) => {
         state.userInfo=payload;
+    },
+    savePatientInfo: (state,payload) => {
+        state.patientInfo=payload;
+    },
+    clearPatientInfo: (state) => {
+        state.patientInfo='';
     },
     SET_WS: (state,payload) => {
       state.WS=payload;

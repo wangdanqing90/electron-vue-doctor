@@ -181,10 +181,11 @@ export default {
     },
     //查看
     checkClick(index, row) {
+      var patientInfo =row;
+      this.$store.commit('savePatientInfo',row)
       this.$router.push({
         path: "/trainingList",
         name: "trainingList",
-        query: { patientid: row.id }
       });
     },
 

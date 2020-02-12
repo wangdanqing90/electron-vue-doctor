@@ -46,8 +46,7 @@ export default {
     };
   },
 
-  created() {
-    console.log(this.$store.state.userInfo);
+  created() { 
     this.name=this.$store.state.userInfo.name
   },
   beforeDestroy() {},

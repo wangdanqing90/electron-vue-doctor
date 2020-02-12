@@ -186,7 +186,7 @@ export default {
     return {
       leftImg: "",
       title: "",
-      titleName: "",
+      titleName: this.$store.state.patientInfo.name,
       type: "", // doctor：医生，patientModify：患者修改，patient：患者新增，examine:患者审核
       imgsrc: require("@/../images/doctor.png"),
       patientid:'',
@@ -254,8 +254,7 @@ export default {
     } else if (this.type == "patientModify") {
       //修改病人
       this.title = "的基本信息";
-      this.titleName = "刘邦";
-      this.patientid=this.$route.query.patientid;
+      this.patientid=this.$store.state.patientInfo.id;
       this.initOldPatient();
       this.inithospital();
     }
@@ -360,6 +359,7 @@ export default {
       this.updatadepartment(params)
       })  
     },
+    //获取以前的患者信息
     initOldPatient(){
       var params={
         'patientid':this.patientid
@@ -377,6 +377,7 @@ export default {
          this.formLabelAlign.PelvicHeight= res.data.pelv;
          this.formLabelAlign.hemiplegiaSide = res.data.hemi;
          this.formLabelAlign.lossWeight = res.data.loss;
+         this.formLabelAlign.contactinfo= res.data.contactinfo;
          this.formLabelAlign.hospital={
            'id':res.data.hospitalid,
            'name':res.data.hospital
@@ -384,6 +385,10 @@ export default {
          this.formLabelAlign.department={
            'id':res.data.departmentid,
            'name':res.data.department
+         }
+          this.formLabelAlign.doctor={
+           'id':res.data.doctorid,
+           'name':res.data.doctor
          }
 
       //初始化科室下拉框
@@ -545,6 +550,7 @@ export default {
    //修改患者
   changePatient(){
      var params={
+        'patientid':this.patientid,
         'name':this.formLabelAlign.name,
         'sex'	:this.formLabelAlign.sex,
         'age'	:this.formLabelAlign.age,
@@ -558,9 +564,8 @@ export default {
         'loss':this.formLabelAlign.lossWeight,//	减重
         'hemi':this.formLabelAlign.hemiplegiaSide,//	偏瘫
         "hospitalid":this.formLabelAlign.hospital.id,
-         "departmentid":this.formLabelAlign.department.id
-// doctorid
-
+         "departmentid":this.formLabelAlign.department.id,
+         "doctorid":this.formLabelAlign.doctor.id
       }
       debugger;
     apiChangePatientinfo(params).then(res => {    

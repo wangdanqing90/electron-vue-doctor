@@ -121,8 +121,8 @@ export default {
   created() {
     _this = this;
     this.leftImg = require("../../../images/logo.png");
-    this.title = "的申请详情";
-    this.titleName = "刘邦";
+    this.title = "训练报告一览表";
+    // this.titleName = "刘邦";
   },
   methods: {
     next() {
