@@ -2,7 +2,7 @@
 /**   
  * api接口统一管理
  */
-import { get, post,put } from './http'
+import { get, post,put,deletefun} from './http'
 export const apiAddress = p => post('https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13816946233', p);
 
 export const apiget = () => get('/api/cc/json/mobile_tel_segment.htm?tel=13816946233');
@@ -37,4 +37,9 @@ export const apiGetPatientinfo= (p) =>get('/api/patientinfo/?patientid='+p.patie
 export const apiAddPatientinfo = p => post('/api/patientinfo/', p)
 //修改患者
 export const apiChangePatientinfo = p => put('/api/patientinfo/', p)
+//审批患者通过申请
+export const apiVerifypatient = p => put('/api/verifypatient/', p)
+//删除患者
+export const apiDeletepatient = p => deletefun('/api/patientinfo/', p)
+
 

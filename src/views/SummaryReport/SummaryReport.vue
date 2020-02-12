@@ -122,7 +122,7 @@ export default {
     _this = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "训练报告一览表";
-    // this.titleName = "刘邦";
+    this.titleName =this.$store.state.patientInfo.name;
   },
   methods: {
     next() {

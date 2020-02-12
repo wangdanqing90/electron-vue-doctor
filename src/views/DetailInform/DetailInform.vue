@@ -23,7 +23,7 @@
               修改完成请点击
               <img src="@/../images/certain.png" />键。
             </div>
-            <div class="gou" v-if="type!='doctor'">
+            <div class="gou" v-if="type=='patientModify'">
               删除患者信息请点击
               <img src="@/../images/close.png" />键。
             </div>
@@ -56,7 +56,7 @@
               <el-form-item label="年龄" prop="age">
                 <el-input v-model="formLabelAlign.age" placeholder="请输入年龄"></el-input>
               </el-form-item>
-              <el-form-item label="密码" prop="password">
+              <el-form-item label="密码" prop="password" :required="type == 'patient'">
                 <el-input v-model="formLabelAlign.password" placeholder="请输入密码"></el-input>
               </el-form-item>
               <el-form-item label="身份证号" prop="IDNumber">
@@ -98,10 +98,9 @@
               <el-form-item label="邮箱" prop="email" v-if="type=='doctor'">
                 <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
               </el-form-item>
-
             
-              <el-form-item label="所属医生" prop="department">
-                <el-select v-model="formLabelAlign.doctor" placeholder="请选择所属医生" value-key="id"  v-if="type=='patientModify'||type=='patient'||type=='examine'"  :disabled="type == 'patient'">
+              <el-form-item label="所属医生" prop="department"  v-if="type=='patientModify'||type=='patient'||type=='examine'" >
+                <el-select v-model="formLabelAlign.doctor" placeholder="请选择所属医生" value-key="id"  :disabled="type == 'patient'">
                   <el-option
                     v-for="item in doctorsData"
                     :key="item.id"
@@ -111,14 +110,6 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-
-                <!-- <el-form-item
-                label="所属医生"
-                prop="doctor"
-                v-if="type=='patientModify'||type=='patient'||type=='examine'" 
-              >
-                <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"  :disabled="type == 'patient'"></el-input>
-              </el-form-item> -->
               <el-form-item
                 label="身高（cm）"
                 prop="height"
@@ -174,7 +165,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo,apigetUserInfo,apiGetPatientinfo,apiAddPatientinfo,apiChangePatientinfo,apiDoctorlist } from '@/request/api.js';
+import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo,apigetUserInfo,apiGetPatientinfo,apiAddPatientinfo,apiChangePatientinfo,apiDoctorlist,apiVerifypatient,apiDeletepatient } from '@/request/api.js';
 
 export default {
   name: "home",
@@ -186,7 +177,7 @@ export default {
     return {
       leftImg: "",
       title: "",
-      titleName: this.$store.state.patientInfo.name,
+      titleName: "",
       type: "", // doctor：医生，patientModify：患者修改，patient：患者新增，examine:患者审核
       imgsrc: require("@/../images/doctor.png"),
       patientid:'',
@@ -231,6 +222,12 @@ export default {
         ],
         doctor: [{ required: true, message: "请选择所属医生", trigger: "change" }],
         phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        password: [{  message: "请输入密码", trigger: "blur" }],
+        height: [{ required: true, message: "请输入身高", trigger: "blur" }],
+        weight: [{ required: true, message: "请输入体重", trigger: "blur" }],
+        PelvicHeight: [{ required: true, message: "请输入骨盆高度", trigger: "blur" }],
+        lossWeight: [{ required: true, message: "请输入减重值", trigger: "blur" }],
+        hemiplegiaSide: [{ required: true, message: "请选择偏瘫侧", trigger: "change" }],
       },
       doctorinfo:[]
     };
@@ -248,12 +245,13 @@ export default {
     } else if (this.type == "patient") {
       //新建病人
       this.title = "请您填写患者信息";
-      this.titleName = "您好，";
+      // this.titleName = "您好，"+this.$store.state.patientInfo.name;
       this.initNewPatient();
       this.inithospital(); 
-    } else if (this.type == "patientModify") {
-      //修改病人
+    } else if (this.type == "patientModify"||this.type == "examine") {
+      //修改病人,审核病人
       this.title = "的基本信息";
+      this.titleName =this.$store.state.patientInfo.name;
       this.patientid=this.$store.state.patientInfo.id;
       this.initOldPatient();
       this.inithospital();
@@ -289,6 +287,27 @@ export default {
     },
     //删除患者信息
     deleteClick() {
+      this.$confirm("您是否确定删除？", "", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                confirmButtonClass: "el-button purple"
+          }).then(() => {
+                   this.delete();                
+          });
+
+    },
+    delete(){
+       var params={
+        'patientid':this.patientid
+      }
+      apiDeletepatient(params).then(res => {         
+              this.$alert('删除成功', '', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.changeDoctorCallback();
+          }
+        });
+      }) 
 
     },
     backClick() {
@@ -418,26 +437,20 @@ export default {
     //       });
     //     });
     // },
-    examine() {
-      this.$router.push({
-        path: "/",
-        name: "home",
-        query: {}
-      });
-    },
     onSubmit(formName) {
       let _this = this;
       //examine:患者审核
       if (this.type == "examine") {
-        this.$confirm("您是否确认审核通过？", "", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          confirmButtonClass: "el-button purple"
-        })
-          .then(() => {
-            this.examine();
-          })
-          .catch(() => {});
+         this.$confirm("您是否确认审核通过？", "", {
+                confirmButtonText: "通过",
+                cancelButtonText: "拒绝",
+                confirmButtonClass: "el-button purple"
+              })
+                .then(() => {
+                   _this.examPatient(1);
+                 
+                }) 
+                .catch(() => { _this.examPatient(2);});
       } else {
         this.$refs[formName].validate(valid => {
           if (valid) {
@@ -475,9 +488,8 @@ export default {
                 .then(() => {
                    _this.changePatient();
                  
-                })
-                .catch(() => {});
-            }
+                });
+            }  
           }
         });
       }
@@ -504,8 +516,7 @@ export default {
             this.changeDoctorCallback();
           }
         });
-    })  
-    
+    })    
   },
   changeDoctorCallback(){
      this.$router.push({
@@ -537,14 +548,24 @@ export default {
         'loss':this.formLabelAlign.lossWeight,//	减重
         'hemi':this.formLabelAlign.hemiplegiaSide,//	偏瘫
       }
-    apiAddPatientinfo(params).then(res => {    
-        this.$alert('新增成功', '', {
+    apiAddPatientinfo(params).then(res => { 
+        if(res.message=='success'){
+          this.$alert('新增成功', '', {
           confirmButtonText: '确定',
           showClose:false,
           callback: action => {
             this.changeDoctorCallback();
           }
         });
+
+        } else{
+          this.$alert(res.message, '', {
+          confirmButtonText: '确定',
+          showClose:false,
+        });
+
+        }  
+
     })  
   },
    //修改患者
@@ -567,7 +588,6 @@ export default {
          "departmentid":this.formLabelAlign.department.id,
          "doctorid":this.formLabelAlign.doctor.id
       }
-      debugger;
     apiChangePatientinfo(params).then(res => {    
         this.$alert('修改成功', '', {
           confirmButtonText: '确定',
@@ -578,6 +598,7 @@ export default {
         });
     })  
   },
+
    //删除患者
   removePatient(){
     var params={
@@ -592,6 +613,22 @@ export default {
         });
     })  
   },
+  //审核通过
+  examPatient(type){
+    var params={
+        'patientid':this.patientid,
+        'type':type
+      }
+    apiVerifypatient(params).then(res => {    
+        this.$alert('操作成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.changeDoctorCallback();
+          }
+        });
+    })  
+  }
   },
   
   watch: {
