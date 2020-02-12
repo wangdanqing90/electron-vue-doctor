@@ -19,8 +19,10 @@ export const apiVerifyCode = p => post('/api/verifycode/', p)
 export const apiModifypassword = p => post('/api/modifypassword/', p)
 //获取医院列表
 export const apiHospitallist= () => get('/api/hospitallist/')
-//获取医院列表
+//获取科室列表
 export const apiDepartment= p => get('/api/department/', p)
+//获取医生列表
+export const apiDoctorlist= p => get('/api/doctorlist/', p)
 //医生注册
 export const apiRegister= p => post('/api/register/', p)
 //获取患者列表

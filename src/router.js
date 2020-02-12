@@ -9,6 +9,7 @@ Router.prototype.push = function push(location) {
   return routerPush.call(this, location).catch(error => error)
 }
 
+
 Vue.use(Router)
 
 export default new Router({
@@ -18,7 +19,8 @@ export default new Router({
       component: Home,
       meta: {
         title: '首页',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/login',
@@ -26,7 +28,8 @@ export default new Router({
       component: () => import('./views/Login/Login.vue'),
       meta: {
         title: '登录',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:false
       }
     },
     {
@@ -35,7 +38,8 @@ export default new Router({
       component: () => import('./views/Result/Result.vue'),
       meta: {
         title: '重置结果',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:false
       }
     },
     {
@@ -44,7 +48,8 @@ export default new Router({
       component: () => import('./views/ForgetPassword/ForgetPassword.vue'),
       meta: {
         title: '忘记密码',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:false
       }
     }, {
       path: '/register',
@@ -52,7 +57,8 @@ export default new Router({
       component: () => import('./views/Register/Register.vue'),
       meta: {
         title: '注册',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:false
       }
     }, {
       path: '/detailInform',
@@ -60,7 +66,8 @@ export default new Router({
       component: () => import('./views/DetailInform/DetailInform.vue'),
       meta: {
         title: '基本信息',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/trainingList',
@@ -68,7 +75,8 @@ export default new Router({
       component: () => import('./views/TrainingList/TrainingList.vue'),
       meta: {
         title: '训练列表',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/trainingPlan',
@@ -76,7 +84,8 @@ export default new Router({
       component: () => import('./views/TrainingPlan/TrainingPlan.vue'),
       meta: {
         title: '本次训练计划',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/trainingSlider',
@@ -84,7 +93,8 @@ export default new Router({
       component: () => import('./views/TrainingSlider/TrainingSlider.vue'),
       meta: {
         title: '训练模式选择',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/trainingAdjust',
@@ -92,7 +102,8 @@ export default new Router({
       component: () => import('./views/TrainingAdjust/TrainingAdjust.vue'),
       meta: {
         title: '训练控件数字调节',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/appointment',
@@ -100,7 +111,8 @@ export default new Router({
       component: () => import('./views/Appointment/Appointment.vue'),
       meta: {
         title: '时间预约',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/applicationDetails',
@@ -108,7 +120,8 @@ export default new Router({
       component: () => import('./views/ApplicationDetails/ApplicationDetails.vue'),
       meta: {
         title: '时间预约',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/patientApplication',
@@ -116,15 +129,27 @@ export default new Router({
       component: () => import('./views/PatientApplication/PatientApplication.vue'),
       meta: {
         title: '病人申请详情',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
+      path: '/summaryReport',
+      name: 'summaryReport',
+      component: () => import('./views/SummaryReport/SummaryReport.vue'),
+      meta: {
+        title: '病人汇总报告',
+        keepAlive: false,
+        requireAuth:true
+      }
+    }, 
+    {
       path: '/chat',
       name: 'chat',
       component: () => import('./views/chat/chat.vue'),
       meta: {
         title: '聊天',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/friend',
@@ -132,12 +157,13 @@ export default new Router({
       component: () => import('./views/friend/friend.vue'),
       meta: {
         title: '聊天',
-        keepAlive: false
+        keepAlive: false,
+        requireAuth:true
       }
     }, {
       path: '/componentsA',
       name: 'componentsA',
-      component: () => import('./components/componentsA.vue'),
+      component: () => import('./components/componentsA.vue')
   }
   
   

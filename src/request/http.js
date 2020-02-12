@@ -1,6 +1,7 @@
 //封装axios
 
 import axios from 'axios'; // 引入axios
+import router from '@/router'
 import { MessageBox, Message } from 'element-ui'
 
 // 环境的切换
@@ -56,11 +57,11 @@ axios.interceptors.response.use(
                     store.commit('clearToken')
                     // 跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面 
                     setTimeout(() => {                        
-                        this.$router.replace({                            
+                        router.replace({                            
                             path: '/login',                            
-                            query: { 
-                                redirect: this.$route.currentRoute.fullPath 
-                            }                        
+                            // query: { 
+                            //     redirect: router.currentRoute.fullPath 
+                            // }                        
                         });                    
                     }, 1000);                    
                     break; 

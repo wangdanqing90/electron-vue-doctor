@@ -72,7 +72,7 @@
                   <el-select v-model="formLabelAlign.hospital" filterable  placeholder="请选择医院" value-key="id"  @change="initdepartment"  :disabled="type == 'patient'" >
                     <el-option
                        v-for="item in hospitalsData"
-                    :key="item.name"
+                    :key="item.id"
                     :label="item.name"
                     :value="item"
                     :id="item.id"
@@ -80,10 +80,10 @@
                   </el-select>
               </el-form-item>
               <el-form-item label="所属科室" prop="department">
-                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" :disabled="type == 'patient'">
+                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" value-key="id" @change="initdoctor" :disabled="type == 'patient'">
                   <el-option
                     v-for="item in departmentsData"
-                    :key="item.name"
+                    :key="item.id"
                     :label="item.name"
                     :value="item"
                     :id="item.id"
@@ -99,13 +99,26 @@
                 <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
               </el-form-item>
 
-              <el-form-item
+            
+              <el-form-item label="所属医生" prop="department">
+                <el-select v-model="formLabelAlign.doctor" placeholder="请选择所属医生" value-key="id"  v-if="type=='patientModify'||type=='patient'||type=='examine'"  :disabled="type == 'patient'">
+                  <el-option
+                    v-for="item in doctorsData"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item"
+                    :id="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+
+                <!-- <el-form-item
                 label="所属医生"
                 prop="doctor"
                 v-if="type=='patientModify'||type=='patient'||type=='examine'" 
               >
                 <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"  :disabled="type == 'patient'"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item
                 label="身高（cm）"
                 prop="height"
@@ -161,7 +174,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo,apigetUserInfo,apiGetPatientinfo,apiAddPatientinfo,apiChangePatientinfo } from '@/request/api.js';
+import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo,apigetUserInfo,apiGetPatientinfo,apiAddPatientinfo,apiChangePatientinfo,apiDoctorlist } from '@/request/api.js';
 
 export default {
   name: "home",
@@ -179,6 +192,7 @@ export default {
       patientid:'',
       hospitalsData: [],
       departmentsData: [],
+      doctorsData: [],
       formLabelAlign: {
         name: "",
         sex: "",
@@ -215,7 +229,7 @@ export default {
         jobNumber: [
           { required: true, message: "请选择工号", trigger: "change" }
         ],
-        doctor: [{ required: true, message: "请输入所属医生", trigger: "blur" }],
+        doctor: [{ required: true, message: "请选择所属医生", trigger: "change" }],
         phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
       },
       doctorinfo:[]
@@ -290,8 +304,11 @@ export default {
         this.hospitalsData  =res.data;              
       })      
     }, 
+    //选择医院调用
     initdepartment(item){
       this.formLabelAlign.department = '';
+      this.formLabelAlign.doctor = '';
+      this.doctorsData=[];
       var params={
         'hospitalid':item.id
       }
@@ -304,6 +321,27 @@ export default {
         this.departmentsData =   res.data          
       }) 
       
+    },
+    //选择科室
+    initdoctor(){
+      this.formLabelAlign.doctor = '';
+      var params={
+         "hospitalid":this.formLabelAlign.hospital.id,
+         "departmentid":this.formLabelAlign.department.id
+      }
+      console.log(this.formLabelAlign.hospital.id+'  '+this.formLabelAlign.department.id)
+      apiDoctorlist(params).then(res => {   
+        this.doctorsData =   res.data          
+      }) 
+    }, 
+    updatadoctor(){
+       var params={
+         "hospitalid":this.formLabelAlign.hospital.id,
+         "departmentid":this.formLabelAlign.department.id
+       }
+        apiDoctorlist(params).then(res => {   
+        this.doctorsData =   res.data          
+      }) 
     },
 
     initNewPatient(){
@@ -351,6 +389,7 @@ export default {
       //初始化科室下拉框
        var params={'hospitalid':res.data.hospitalid}
       this.updatadepartment(params)
+      this.updatadoctor()
       })  
     },
     // showResult() {

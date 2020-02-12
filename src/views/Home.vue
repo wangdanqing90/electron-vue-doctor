@@ -142,6 +142,11 @@ export default {
     },
     confirmClick() {
       this.leaveDialogVisible = false;
+      this.$store.commit('clearToken')
+       this.$router.push({
+        path: "/login",
+        name: "login"
+      });
     },
     //翻页
     handleCurrentChange(val) {
