@@ -301,7 +301,7 @@ export default {
       this.$router.push({
         path: "/detailInform",
         name: "detailInform",
-        query: { type: "patientModify" }
+        query: { type: "patientModify", patientid:this.$route.query.patientid}
       });
     },
     //添加训练

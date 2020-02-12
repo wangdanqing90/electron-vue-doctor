@@ -29,4 +29,10 @@ export const apiPatientlist= (p) => get('/api/patientlist/?page='+p.page+'&limit
 export const apiDoctorinfo= () => get('/api/doctorinfo/')
 //修改医生信息
 export const apichangeDoctorinfo= p => put('/api/doctorinfo/', p)
+//获取患者信息
+export const apiGetPatientinfo= (p) =>get('/api/patientinfo/?patientid='+p.patientid)
+//新增患者
+export const apiAddPatientinfo = p => post('/api/patientinfo/', p)
+//修改患者
+export const apiChangePatientinfo = p => put('/api/patientinfo/', p)
 

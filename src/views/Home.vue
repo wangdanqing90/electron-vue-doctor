@@ -178,7 +178,8 @@ export default {
     checkClick(index, row) {
       this.$router.push({
         path: "/trainingList",
-        name: "trainingList"
+        name: "trainingList",
+        query: { patientid: row.id }
       });
     },
 

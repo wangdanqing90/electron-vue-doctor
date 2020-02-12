@@ -65,8 +65,11 @@
               <el-form-item label="工号" prop="jobNumber" v-if="type=='doctor'">
                 <el-input v-model="formLabelAlign.jobNumber" placeholder="请输入工号"></el-input>
               </el-form-item>
+              <el-form-item label="手机号"  prop="phone" >
+                <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号" :disabled="type != 'patient'"></el-input>
+              </el-form-item>
               <el-form-item label="所属医院" prop="hospital">
-                  <el-select v-model="formLabelAlign.hospital" filterable  placeholder="请选择医院" value-key="id"  @change="initdepartment">
+                  <el-select v-model="formLabelAlign.hospital" filterable  placeholder="请选择医院" value-key="id"  @change="initdepartment"  :disabled="type == 'patient'" >
                     <el-option
                        v-for="item in hospitalsData"
                     :key="item.name"
@@ -77,7 +80,7 @@
                   </el-select>
               </el-form-item>
               <el-form-item label="所属科室" prop="department">
-                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" >
+                <el-select v-model="formLabelAlign.department" placeholder="请选择所属科室" :disabled="type == 'patient'">
                   <el-option
                     v-for="item in departmentsData"
                     :key="item.name"
@@ -91,9 +94,7 @@
               <el-form-item label="办公电话" prop="officePhone" v-if="type=='doctor'">
                 <el-input v-model="formLabelAlign.officePhone" placeholder="请输入办公电话"></el-input>
               </el-form-item>
-              <el-form-item label="手机号"  prop="phone" v-if="type=='doctor'">
-                <el-input v-model="formLabelAlign.phone" placeholder="请输入手机号" disabled></el-input>
-              </el-form-item>
+            
               <el-form-item label="邮箱" prop="email" v-if="type=='doctor'">
                 <el-input v-model="formLabelAlign.email" placeholder="请输入邮箱"></el-input>
               </el-form-item>
@@ -101,9 +102,9 @@
               <el-form-item
                 label="所属医生"
                 prop="doctor"
-                v-if="type=='patientModify'||type=='patient'||type=='examine'"
+                v-if="type=='patientModify'||type=='patient'||type=='examine'" 
               >
-                <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"></el-input>
+                <el-input v-model="formLabelAlign.doctor" placeholder="请输入所属医生"  :disabled="type == 'patient'"></el-input>
               </el-form-item>
               <el-form-item
                 label="身高（cm）"
@@ -117,7 +118,7 @@
                 prop="weight"
                 v-if="type=='patientModify'||type=='patient'||type=='examine'"
               >
-                <el-input v-model="formLabelAlign.height" placeholder="请输入体重"></el-input>
+                <el-input v-model="formLabelAlign.weight" placeholder="请输入体重"></el-input>
               </el-form-item>
               <el-form-item
                 label="联系信息"
@@ -146,8 +147,8 @@
                 v-if="type=='patientModify'||type=='patient'||type=='examine'"
               >
                 <el-radio-group v-model="formLabelAlign.hemiplegiaSide">
-                  <el-radio label="左" value="左"></el-radio>
-                  <el-radio label="右" value="右"></el-radio>
+                  <el-radio :label="1" v-model="formLabelAlign.hemiplegiaSide" value="1">左</el-radio>
+                  <el-radio :label="0" v-model="formLabelAlign.hemiplegiaSide" value="0">右</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-form>
@@ -160,7 +161,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo } from '@/request/api.js';
+import { apiHospitallist,apiDepartment,apiDoctorinfo,apichangeDoctorinfo,apigetUserInfo,apiGetPatientinfo,apiAddPatientinfo,apiChangePatientinfo } from '@/request/api.js';
 
 export default {
   name: "home",
@@ -175,18 +176,9 @@ export default {
       titleName: "",
       type: "", // doctor：医生，patientModify：患者修改，patient：患者新增，examine:患者审核
       imgsrc: require("@/../images/doctor.png"),
+      patientid:'',
       hospitalsData: [],
       departmentsData: [],
-      jobNumbersData: [
-        {
-          value: "工号1",
-          name: "工号1"
-        },
-        {
-          value: "工号2",
-          name: "工号2"
-        }
-      ],
       formLabelAlign: {
         name: "",
         sex: "",
@@ -223,7 +215,8 @@ export default {
         jobNumber: [
           { required: true, message: "请选择工号", trigger: "change" }
         ],
-        doctor: [{ required: true, message: "请输入所属医生", trigger: "blur" }]
+        doctor: [{ required: true, message: "请输入所属医生", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
       },
       doctorinfo:[]
     };
@@ -236,17 +229,22 @@ export default {
     if (this.type == "doctor") {
       //医生
       this.title = "编辑我的基本信息";
+      this.initDoctorinfo();
+      this.inithospital(); 
     } else if (this.type == "patient") {
       //新建病人
       this.title = "请您填写患者信息";
       this.titleName = "您好，";
+      this.initNewPatient();
+      this.inithospital(); 
     } else if (this.type == "patientModify") {
       //修改病人
       this.title = "的基本信息";
       this.titleName = "刘邦";
+      this.patientid=this.$route.query.patientid;
+      this.initOldPatient();
+      this.inithospital();
     }
-    this.initDoctorinfo();
-    this.inithospital(); 
   },
   
   methods: {
@@ -255,8 +253,6 @@ export default {
        apiDoctorinfo().then(res => {    
          this.doctorinfo = res.data;
          this.formLabelAlign.age=res.data.age;
-         //this.formLabelAlign.hospital=res.data.hospital;
-         //this.formLabelAlign.department=res.data.department;
          this.formLabelAlign.email=res.data.email;
          this.formLabelAlign.IDNumber=res.data.identitycard;
          this.formLabelAlign.jobNumber=res.data.jobnumber;
@@ -274,17 +270,14 @@ export default {
          }
 
       //初始化科室下拉框
-      var params={
-        'hospitalid':res.data.hospitalid
-      }
-      apiDepartment(params).then(res => {   
-        this.departmentsData =   res.data          
-      }) 
-
+      var params={'hospitalid':res.data.hospitalid}
+      this.updatadepartment(params)
       })  
     },
     //删除患者信息
-    deleteClick() {},
+    deleteClick() {
+
+    },
     backClick() {
       this.$router.push({
         path: "/",
@@ -297,7 +290,7 @@ export default {
         this.hospitalsData  =res.data;              
       })      
     }, 
-   initdepartment(item){
+    initdepartment(item){
       this.formLabelAlign.department = '';
       var params={
         'hospitalid':item.id
@@ -305,29 +298,82 @@ export default {
       apiDepartment(params).then(res => {   
         this.departmentsData =   res.data          
       }) 
-    
-    },   
-    showResult() {
-      this.$confirm("您已成功添加该患者？", "", {
-        confirmButtonText: "回工作台",
-        cancelButtonText: "制定计划",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          this.$router.push({
-            path: "/",
-            name: "home",
-            query: {}
-          });
-        })
-        .catch(() => {
-          this.$router.push({
-            path: "/",
-            name: "home",
-            query: {}
-          });
-        });
+    }, 
+    updatadepartment(params){
+        apiDepartment(params).then(res => {   
+        this.departmentsData =   res.data          
+      }) 
+      
     },
+
+    initNewPatient(){
+       apiDoctorinfo().then(res => {    
+         this.formLabelAlign.doctor=res.data.name;  
+         this.formLabelAlign.hospital={
+           'id':res.data.hospitalid,
+           'name':res.data.hospital
+         };
+         this.formLabelAlign.department={
+           'id':res.data.departmentid,
+           'name':res.data.department
+         }
+      //初始化科室下拉框
+       var params={'hospitalid':res.data.hospitalid}
+      this.updatadepartment(params)
+      })  
+    },
+    initOldPatient(){
+      var params={
+        'patientid':this.patientid
+      }
+      apiGetPatientinfo(params).then(res => { 
+         this.formLabelAlign.age=res.data.age;
+         this.formLabelAlign.height=res.data.height;
+         this.formLabelAlign.weight=res.data.weight;
+         this.formLabelAlign.inform=res.data.contactinfo;
+         this.formLabelAlign.IDNumber=res.data.identitycard;
+         this.formLabelAlign.name=res.data.name;
+         this.formLabelAlign.phone=res.data.phone;
+         this.formLabelAlign.sex=res.data.sex;
+         this.formLabelAlign.doctor = res.data.doctor;
+         this.formLabelAlign.PelvicHeight= res.data.pelv;
+         this.formLabelAlign.hemiplegiaSide = res.data.hemi;
+         this.formLabelAlign.lossWeight = res.data.loss;
+         this.formLabelAlign.hospital={
+           'id':res.data.hospitalid,
+           'name':res.data.hospital
+         };
+         this.formLabelAlign.department={
+           'id':res.data.departmentid,
+           'name':res.data.department
+         }
+
+      //初始化科室下拉框
+       var params={'hospitalid':res.data.hospitalid}
+      this.updatadepartment(params)
+      })  
+    },
+    // showResult() {
+    //   this.$confirm("您已成功添加该患者", "", {
+    //     confirmButtonText: "回工作台",
+    //     cancelButtonText: "制定计划",
+    //     confirmButtonClass: "el-button purple"
+    //   })
+    //     .then(() => {
+    //       this.$router.push({
+    //         path: "/",
+    //         name: "home",
+    //         query: {}
+    //       });
+    //     })
+    //     .catch(() => {
+    //       this.$router.push({
+    //         path: "/",
+    //         name: "home",
+    //         query: {}
+    //       });
+    //     });
+    // },
     examine() {
       this.$router.push({
         path: "/",
@@ -337,6 +383,7 @@ export default {
     },
     onSubmit(formName) {
       let _this = this;
+      //examine:患者审核
       if (this.type == "examine") {
         this.$confirm("您是否确认审核通过？", "", {
           confirmButtonText: "确定",
@@ -361,23 +408,28 @@ export default {
                   this.changeDoctor();
                 })
                 .catch(() => {});
-            } else if (this.type == "patient") {
+            }
+            //patient：患者新增 
+            else if (this.type == "patient") {
               this.$confirm("您是否添加该患者？", "", {
                 confirmButtonText: "确认添加",
                 cancelButtonText: "暂不添加",
                 confirmButtonClass: "el-button purple"
               })
                 .then(() => {
-                  this.showResult();
+                  _this.addPatient();
                 })
                 .catch(() => {});
-            } else if (this.type == "patientModify") {
+            }
+            //患者修改 
+            else if (this.type == "patientModify") {
               this.$confirm("您是否确认修改？", "", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",
                 confirmButtonClass: "el-button purple"
               })
                 .then(() => {
+                   _this.changePatient();
                  
                 })
                 .catch(() => {});
@@ -399,13 +451,15 @@ export default {
          "hospitalid":this.formLabelAlign.hospital.id,
          "departmentid":this.formLabelAlign.department.id
       }
-    apichangeDoctorinfo(params).then(res => {      
-       this.$router.push({
-            path: "/result",
-            name: "result",
-            query: { type: "success", message: "修改成功！" }
-          });         
-         
+    apichangeDoctorinfo(params).then(res => {    
+      this.getUserInfo();  
+      this.$alert('修改成功', '', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.getUserInfo();
+            this.changeDoctorCallback();
+          }
+        });
     })  
     
   },
@@ -416,10 +470,86 @@ export default {
                     query: {}
                   });
     
-  }
+  },
+  //更新vuex医生信息
+   getUserInfo(){
+      apigetUserInfo(this.$store.state.token).then(res => {               
+            this.$store.commit('saveUserInfo',res.data); 
+        })        
+    },
+    //新增患者
+  addPatient(){
+     var params={
+        'name':this.formLabelAlign.name,
+        'sex'	:this.formLabelAlign.sex,
+        'age'	:this.formLabelAlign.age,
+        'phone'	:this.formLabelAlign.phone,
+        'password':this.formLabelAlign.password,	
+        'identifycard'	:this.formLabelAlign.IDNumber,
+        'height'	:this.formLabelAlign.height,
+        'weight'	:this.formLabelAlign.weight,
+        'contactinfo'	:this.formLabelAlign.inform,
+        'pelv':this.formLabelAlign.PelvicHeight,//	骨盆高度
+        'loss':this.formLabelAlign.lossWeight,//	减重
+        'hemi':this.formLabelAlign.hemiplegiaSide,//	偏瘫
+      }
+    apiAddPatientinfo(params).then(res => {    
+        this.$alert('新增成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.changeDoctorCallback();
+          }
+        });
+    })  
+  },
+   //修改患者
+  changePatient(){
+     var params={
+        'name':this.formLabelAlign.name,
+        'sex'	:this.formLabelAlign.sex,
+        'age'	:this.formLabelAlign.age,
+        'phone'	:this.formLabelAlign.phone,
+        'password':this.formLabelAlign.password,	
+        'identifycard'	:this.formLabelAlign.IDNumber,
+        'height'	:this.formLabelAlign.height,
+        'weight'	:this.formLabelAlign.weight,
+        'contactinfo'	:this.formLabelAlign.inform,
+        'pelv':this.formLabelAlign.PelvicHeight,//	骨盆高度
+        'loss':this.formLabelAlign.lossWeight,//	减重
+        'hemi':this.formLabelAlign.hemiplegiaSide,//	偏瘫
+        "hospitalid":this.formLabelAlign.hospital.id,
+         "departmentid":this.formLabelAlign.department.id
+// doctorid
+
+      }
+      debugger;
+    apiChangePatientinfo(params).then(res => {    
+        this.$alert('修改成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.changeDoctorCallback();
+          }
+        });
+    })  
+  },
+   //删除患者
+  removePatient(){
+    var params={
+    }
+    apichangeDoctorinfo(params).then(res => {    
+        this.$alert('删除成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.changeDoctorCallback();
+          }
+        });
+    })  
+  },
   },
   
-
   watch: {
     $route(newVal, oldVal) {
       this.$router.go(0);
