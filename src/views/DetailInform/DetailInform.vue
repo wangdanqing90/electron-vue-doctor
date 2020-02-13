@@ -151,8 +151,10 @@
                 v-if="type=='patientModify'||type=='patient'||type=='examine'"
               >
                 <el-radio-group v-model="formLabelAlign.hemiplegiaSide">
+                  <el-radio :label="0" v-model="formLabelAlign.hemiplegiaSide" value="0">未知</el-radio>
                   <el-radio :label="1" v-model="formLabelAlign.hemiplegiaSide" value="1">左</el-radio>
-                  <el-radio :label="0" v-model="formLabelAlign.hemiplegiaSide" value="0">右</el-radio>
+                  <el-radio :label="2" v-model="formLabelAlign.hemiplegiaSide" value="2">右</el-radio>
+                  <el-radio :label="3" v-model="formLabelAlign.hemiplegiaSide" value="3">双侧</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-form>
@@ -694,6 +696,10 @@ export default {
     ::v-deep .el-radio-group {
       margin: 10px auto;
     }
+  }
+  
+  .el-radio{
+    margin-right:10px;
   }
 }
 </style>

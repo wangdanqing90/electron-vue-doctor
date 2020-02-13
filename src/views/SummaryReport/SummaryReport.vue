@@ -149,7 +149,7 @@ export default {
     return {
       leftImg: "",
       patientid: "",
-      reportid: 165,
+      reportid: this.$route.query.planid,
       reportData: [],
       patientInfo: []
     };
