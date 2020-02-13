@@ -47,5 +47,11 @@ export const apiReportinfo = (p) => get('/api/reportinfo/', p)
 export const apiPatientplanlist = (p) => get('/api/patientplanlist', p)
 //删除计划
 export const apiDeleteplaninfo = p => deletefun('/api/planinfo/', p)
-
-
+//获取计划
+export const apiGetplaninfo = (p) => get('/api/planinfo/', p)
+//新增计划
+export const apiAddPlaninfo = p => post('/api/planinfo/', p)
+//修改计划
+export const apiVerifyplaninfo = p => put('/api/planinfo/', p)
+//时间预约计划
+export const apiGetplanlist = (p) => get('/api/planlist/', p)

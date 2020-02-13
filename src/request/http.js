@@ -54,7 +54,7 @@ axios.interceptors.response.use(
                 case 401:
                     alert('未登录或者登录过期，请重新登录')                
                     // 清除token
-                    store.commit('clearToken')
+                    store.commit('clearAll')
                     // 跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面 
                     setTimeout(() => {                        
                         router.replace({                            

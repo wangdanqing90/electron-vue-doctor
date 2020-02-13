@@ -40,6 +40,8 @@
           :enable-cross="false"
           :height="100"
           :dot-options="dotOptions"
+                :min=0
+      :max=30
         >
           <template v-slot:process="{ start, end, style, index }">
             <div class="vue-slider-process" :style="style">
@@ -49,7 +51,7 @@
               'vue-slider-dot-tooltip-inner',
               'vue-slider-dot-tooltip-inner-top'
             ]"
-              >{{ value[index + 1]-value[index] }}%</div>
+              >{{ value[index + 1]-value[index] }}</div>
             </div>
           </template>
         </vue-slider>
@@ -78,7 +80,7 @@ export default {
   data() {
     return {
       leftImg: "",
-      value: [0, 25, 50, 75, 100],
+      value: [0, 8, 16, 24, 30],
       process: val => [
         [val[0], val[1], { backgroundColor: "#8da1f2" }],
         [val[1], val[2], { backgroundColor: "#fd8dad" }],
@@ -294,5 +296,8 @@ export default {
   border: 10px transparent solid;
   border-top-width: 0;
   border-bottom-color: #d8d8da;
+}
+.vue-slider-rail{
+  border-radius: 0;
 }
 </style>

@@ -103,44 +103,44 @@
             <div class="cell">16:30-17:00</div>
           </div>
           <div id="Sunday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" :timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Monday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Tuesday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Wednesday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Thursday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Friday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
           <div id="Saturday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell">
-              <div v-if="item.able<item.all" @click="cellClick(item)">{{item.able}}/{{item.all}}</div>
+            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
+              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
           </div>
@@ -153,6 +153,7 @@
 <script>
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
+import { apiGetplanlist } from "@/request/api.js";
 
 export default {
   name: "Appointment",
@@ -165,6 +166,7 @@ export default {
       vm: "",
       leftImg: "",
       dateValue: new Date(),
+      total:0,
 
       tableData: [
         {
@@ -172,93 +174,75 @@ export default {
           data: "01",
           list: [
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 5
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             },
             {
-              id: 1,
-              all: 5,
+              timeID: 1,
               able: 1
             }
           ]
@@ -268,22 +252,43 @@ export default {
   },
   created() {
     this.vm = this;
+    window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的时间预约计划表";
     this.titleName = "刘邦";
+
+    this.initList();
   },
   methods: {
-    // okClick() {
-    //   this.$confirm("您是否确认信息？", "", {
-    //     confirmButtonText: "确定",
-    //     cancelButtonText: "取消",
-    //     confirmButtonClass: "el-button purple"
-    //   })
-    //     .then(() => {
-    //       this.okNextClick();
-    //     })
-    //     .catch(() => {});
-    // },
+    initList(){
+       console.log(this.tableData);
+       var params = {
+        plandate: '2020-02-20',
+      };
+      apiGetplanlist(params).then(res => {
+        this.total=res.data.total;
+        var items =res.data.items;
+        for (let item in items) {
+            var newObj={};
+            newObj.data=item;
+           var list=[];  
+           var objs=JSON.parse(items[item]);
+           for (let item1 in objs) {
+             var re = {};
+             re.timeID = item1;
+             re.able = this.total- objs[item1];
+             list.push(re);
+           }   
+          newObj.list=list;
+          console.log(newObj);
+          this.tableData.push(newObj)
+        }
+
+        console.log(this.tableData);
+      });
+
+     
+    },
     backClick() {
       this.$router.go(-1);
     },

@@ -143,7 +143,7 @@ export default {
     },
     confirmClick() {
       this.leaveDialogVisible = false;
-      this.$store.commit('clearToken')
+      this.$store.commit('clearAll')
        this.$router.push({
         path: "/login",
         name: "login"
