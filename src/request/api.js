@@ -41,5 +41,7 @@ export const apiChangePatientinfo = p => put('/api/patientinfo/', p)
 export const apiVerifypatient = p => put('/api/verifypatient/', p)
 //删除患者
 export const apiDeletepatient = p => deletefun('/api/patientinfo/', p)
+//获取训练报告
+export const apiReportinfo = (p) => get('/api/reportinfo/', p)
 
 

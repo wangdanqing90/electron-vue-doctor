@@ -150,14 +150,12 @@
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import AdjustContiner from "@/components/Adjust/AdjustContiner.vue";
-
 export default {
   name: "trainingPlan",
   components: {
     HeaderDoctor,
     AdjustContiner
   },
-
   data() {
     return {
       vm: "",

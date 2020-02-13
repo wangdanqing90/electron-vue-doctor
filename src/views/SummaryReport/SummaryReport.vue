@@ -8,74 +8,114 @@
       </template>
     </HeaderDoctor>
     <el-card class="box-card">
-      <div class="application-container">
-        <div class="top display_flex justify-content_flex-start align-items_center">
-          <el-avatar
-            :size="70"
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-          ></el-avatar>
-          <div
-            class="display_flex flex-direction_column justify-content_flex-center align-items_flex-start margin-left-10"
-          >
-            <div class="name">修改训练申请</div>
-            <div class="job">发送时间{{time}}</div>
+      <div class='out-continer'>
+        <div class='inform-continer text-left'>
+          <div class='title'>
+               基本信息
+          </div>
+          <div class="line">
+          </div>
+          <div class='inform display_flex justify-content_flex-start'>
+            <div class='detail'>
+              <div class='piece'>姓名：{{patientInfo.name}}</div>
+              <div class='piece'>账号：{{patientInfo.phone}}</div>
+              <div class='piece'>性别：{{patientInfo.sex?'男':'女'}}</div>
+              <div class='piece'>年龄：{{patientInfo.age}}岁</div>
+            </div>
+             <div class='detail'>
+              <div class='piece'>身高：{{patientInfo.height}}cm</div>
+              <div class='piece'>体重：{{patientInfo.weight}}kg</div>
+              <div class='piece'>偏瘫侧：{{hemiVal}}</div>
+              <div class='piece'>盆骨高度：{{patientInfo.pelv}}cm</div>
+            </div>
           </div>
         </div>
-        <div class="middle">
-          <el-card class="box-card">
-            <div class="display_flex justify-content_flex-center align-items_center"></div>
-            <div class="display_flex justify-content_flex-center align-items_center">
-              <div class="left">
-                <div class="title">修改前</div>
-                <div class="time">
-                  时间:
-                  <span class="yellowFontColor">{{original.time}}</span>
-                </div>
-                <div class="imgs">
-                  项目:
-                  <span v-for="item in original.imgs" :key="item.value">
-                    <img :src="item" />
-                  </span>
-                </div>
-              </div>
-              <div class="middle">
-                <img src="@/../images/jiantou.png" />
-              </div>
-              <div class="right">
-                <div class="title">修改前</div>
-                <div class="time">
-                  时间:
-                  <span class="yellowFontColor">{{original.time}}</span>
-                </div>
-                <div class="imgs">
-                  项目:
-                  <span v-for="item in original.imgs" :key="item.value">
-                    <img :src="item" />
-                  </span>
-                </div>
-              </div>
+        <div class='inform-continer text-left'>
+          <div class='title'>
+               行走训练
+          </div>
+          <div class="line">
+          </div>
+          <div class='inform display_flex justify-content_flex-start'>
+            <div class='detail'>
+              <div class='piece'>模式：{{WalkModeVal}}</div>
+              <div class='piece'>减重：{{reportData.WImponderability}}kg</div>
+              <div class='piece'>总时间：{{reportData.WTime}}min</div>
+              <div class='piece'>总距离：{{reportData.WDistance}}m</div>
             </div>
-            <div
-              class="button-container display_flex justify-content_flex-justify align-items_center"
-            >
-              <div class="reason">
-                <div>修改理由:</div>
-                <div>{{reason}}</div>
-              </div>
-              <div>
-                <el-button class="purple" @click="passClick()">通过</el-button>
-                <el-button @click="refuseClick()">拒绝</el-button>
-              </div>
+             <div class='detail'>
+              <div class='piece'>总步数：{{reportData.WSteps}}步</div>
+              <div class='piece'>平均步频：{{reportData.WAvgFrequency}}个/min</div>
+              <div class='piece'>平均步数：{{reportData.WSteps}}87mm/s</div>
             </div>
-          </el-card>
+             <div class='detail'>
+              <div class='piece'>平均步态周期：{{reportData.WAvgGaitPeriod}}s</div>
+              <div class='piece'>阻力：{{reportData.WForce}}N</div>
+            </div>
+          </div>
         </div>
-        <div class="bottom">
-          <el-card class="box-card">
-            <div>
-              <div class="margin-bottom-5">请填写医嘱或备注:</div>
-              <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
+        <div class='inform-continer text-left'>
+          <div class='title'>
+               坐站训练
+          </div>
+          <div class="line">
+          </div>
+          <div class='inform display_flex justify-content_flex-start'>
+            <div class='detail'>
+              <div class='piece'>模式：{{SitAndStandModeVal}}</div>
+              <div class='piece'>减重：{{reportData.SImponderability}}kg</div>
+              <div class='piece'>总时间：{{reportData.STime}}min</div>
+              <div class='piece'>总个数：{{reportData.SNumber}}个</div>
             </div>
-          </el-card>
+             <div class='detail'>
+              <div class='piece'>单个最短坐站时间：{{reportData.SMinTime}}s</div>
+              <div class='piece'>单个最长坐站时间：{{reportData.SMaxTime}}s</div>
+              <div class='piece'>平均坐站时间：{{reportData.SAvgTime}}s</div>
+            </div>
+          </div>
+        </div>
+        <div class='inform-continer text-left'>
+          <div class='title'>
+               游戏训练
+          </div>
+          <div class="line">
+          </div>
+          <div class='inform display_flex justify-content_flex-start'>
+            <div class='detail'>
+              <div class='piece'>类型：{{GameModeVal}}</div>
+              <div class='piece'>时间：{{reportData.GTime}}min</div>
+            </div>
+             <div class='detail'>
+              <div class='piece'>游戏难度：{{GDifficultyVal}}</div>
+            </div>
+             <div class='detail'>
+              <div class='piece'>评分：{{reportData.GScore}}</div>
+            </div>
+          </div>
+        </div>
+        <div class='inform-continer text-left'>
+          <div class='title'>
+               平衡训练
+          </div>
+          <div class="line">
+          </div>
+          <div class='inform display_flex justify-content_flex-start'>
+            <div class='detail'>
+              <div class='piece'>模式：{{BalanceModeVal}}</div>
+              <div class='piece'>减重：{{reportData.BImponderability}}kg</div>
+              <div class='piece'>总时间：{{reportData.BTime}}min</div>
+            </div>
+             <div class='detail'>
+              <div class='piece'>最大前倾：{{reportData.BMaxFrontLean}}mm</div>
+              <div class='piece'>最大左顷：{{reportData.BMaxLeftLean}}mm</div>
+              <div class='piece'>轨迹面积：{{reportData.BTrajectoryArea}}mm²</div>
+            </div>
+             <div class='detail'>
+              <div class='piece'>最大后倾：{{reportData.BMaxBackLean}}mm</div>
+              <div class='piece'>最大右顷：{{reportData.BMaxRightLean}}mm</div>
+              <div class='piece'>轨迹长度：{{reportData.BTrajectoryLength}}mm²</div>
+            </div>
+          </div>
         </div>
       </div>
     </el-card>
@@ -85,44 +125,30 @@
 <script>
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-let _this;
+import{apiReportinfo,apiGetPatientinfo} from '@/request/api.js';
 
 export default {
   name: "summaryReport",
   components: {
     HeaderDoctor
   },
-
   data() {
     return {
       leftImg: "",
-      time: "2019/12/12 12:12:12",
-      reason: "子女探望，希望能延迟一天",
-      textarea: "",
-      original: {
-        time: "2019/12/12 12:12:12",
-        imgs: [
-          require("@/../images/walkingtraining_a.png"),
-          require("@/../images/balancedetermination_a.png"),
-          require("@/../images/gametraining_a.png"),
-          require("@/../images/stationtraining_a.png")
-        ]
-      },
-      new: {
-        time: "2019/12/12 12:12:12",
-        imgs: [
-          require("@/../images/walkingtraining_a.png"),
-          require("@/../images/balancedetermination_a.png"),
-          require("@/../images/gametraining_a.png")
-        ]
-      }
+      patientid:'',
+      reportid:165,
+      reportData:[],
+      patientInfo:[]
     };
   },
   created() {
-    _this = this;
+    window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "训练报告一览表";
     this.titleName =this.$store.state.patientInfo.name;
+    this.patientid=this.$store.state.patientInfo.id;
+    this.initPatientInfo();
+    this.initReport();
   },
   methods: {
     next() {
@@ -134,36 +160,71 @@ export default {
     backClick() {
       this.$router.go(-1);
     },
-    passClick() {
-      this.$confirm("您确定要通过申请？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          _this.passClickCallback();
-        })
-        .catch(() => {});
-    }, //通过
-    refuseClick() {
-      this.$confirm("您确定要拒绝申请？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          _this.refuseClickCallback();
-        })
-        .catch(() => {});
-    }, //拒绝
-
-    passClickCallback() {
-      this.next();
+    initPatientInfo(){
+       var params={
+        'patientid':this.patientid
+      }
+      apiGetPatientinfo(params).then(res => { 
+         this.patientInfo=res.data;
+      })  
     },
-    refuseClickCallback() {
-      this.next();
+    //获取报告
+    initReport(){
+       var params={
+        'reportid':this.reportid
+      }
+      apiReportinfo(params).then(res => {              
+          this.reportData = res.data;  
+      })  
     }
-  }
+  },
+  computed: {
+    hemiVal: function() {
+      var hemiVal
+      if(this.patientInfo.hemi==0) hemiVal= '未知';
+      else if(this.patientInfo.hemi==1) hemiVal= '左';
+      else if(this.patientInfo.hemi==2) hemiVal= '右';
+      else if(this.patientInfo.hemi==3) hemiVal=  '双侧';
+      return hemiVal; 
+    },
+    WalkModeVal: function() {
+      var val
+      if(this.reportData.WalkMode==0) val= '跟随';
+      else if(this.reportData.WalkMode==1) val= '阻力';
+      else if(this.reportData.WalkMode==2) val= '主动';
+      return val; 
+    },
+    SitAndStandModeVal: function() {
+      var val
+      if(this.reportData.SitAndStandMode==0) val= '跟随';
+      else if(this.reportData.SitAndStandMode==1) val= '阻力';
+      else if(this.reportData.SitAndStandMode==2) val= '主动';
+      return val; 
+    },
+    BalanceModeVal: function() {
+      var val
+      if(this.reportData.BalanceMode==0) val= '--';
+      else if(this.reportData.BalanceMode==5) val= '左脚';
+      else if(this.reportData.BalanceMode==6) val= '右脚';
+      else if(this.reportData.BalanceMode==7) val= '双脚';
+      else if(this.reportData.BalanceMode==8) val= 'FRT';
+      return val; 
+    },
+    GameModeVal: function() {
+      var val;
+      if(this.reportData.GameMode==0) val= '--';
+      if(this.reportData.GameMode==3) val= '七巧板';
+      else if(this.reportData.GameMode==4) val= '太空';
+      return val; 
+    },
+    GDifficultyVal: function() {
+      var val;
+      if(this.reportData.GDifficulty==0) val= '简单';
+      if(this.reportData.GDifficulty==1) val= '普通';
+      else if(this.reportData.GDifficulty==2) val= '困难';
+      return val; 
+    },
+  },
 };
 </script>
 
@@ -176,101 +237,43 @@ export default {
     }
   }
 }
-
-.application-container {
-  padding: 0 250px;
-  margin: 100px auto 100px auto;
-  font-size: 12px;
-  .top {
-    height: 100%;
-    text-align: left;
-    margin-right: 30px;
-    img {
-      width: 150px;
-    }
-    .name {
-      height: 20px;
-      line-height: 20px;
-      font-size: 18px;
-    }
-    .job {
-      height: 20px;
-      line-height: 20px;
-      font-size: 14px;
-      color: #b0b3b9;
-    }
+.container{
+  height: 100%;
+  .box-card{
+  height: calc(100% - 160px);
+  overflow: scroll;
+  padding: 40px 40px 0 40px;
   }
-  .middle {
-    margin-top: 20px;
-    .left,
-    .right {
-      .title {
-        font-size: 20px;
-        height: 30px;
-        line-height: 30px;
-        margin-bottom: 20px;
-      }
-      .time,
-      .imgs {
-        font-size: 16px;
-        text-align: left;
-        height: 30px;
-        line-height: 30px;
+}
+.out-continer{ 
+  .inform-continer{
+    height: 270px;
+    .title{
+      background-color: #ededed;
+      border: 1px solid #908888;
+      display: inline-block;
+      font-size: 16px;
+      height: 24px;
+      line-height: 24px;
+      padding: 0 10px;
 
-        img {
-          width: 25px;
-          height: 25px;
-          vertical-align: middle;
-          margin-right: 5px;
+    }
+    .line{
+      height: 1;
+      border-top: 1px solid #554B4B;
+    }
+    .inform{
+      padding: 30px;
+      .detail{
+         width:33.3%;
+        .piece{
+          font-size: 14px;
+          height: 40px;
+          line-height: 40px;        
         }
       }
     }
-    .left .title::before {
-      content: "";
-      background: $yellowFontColor;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      position: relative;
-      left: -7px;
-      top: -1px;
-      display: inline-block;
-    }
-    .right .title::before {
-      content: "";
-      background: $pinkFontColor;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      position: relative;
-      left: -7px;
-      top: -1px;
-      display: inline-block;
-    }
-    .middle {
-      img {
-        width: 50px;
-        margin: 30px 50px 0 50px;
-      }
-    }
-    .button-container {
-      margin: 20px 0 0 0;
-      text-align: left;
-      border-top: 2px dashed #eee;
-      padding: 20px 0 0 0;
-      .reason {
-        font-size: 16px;
-      }
-    }
   }
-  .bottom {
-    margin-top: 20px;
-    font-size: 16px;
 
-    text-align: left;
-    div {
-      color: #b0b3b9;
-    }
-  }
-}
+} 
 </style>
