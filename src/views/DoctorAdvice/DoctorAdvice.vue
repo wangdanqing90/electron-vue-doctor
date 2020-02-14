@@ -47,6 +47,8 @@ export default {
     this.leftImg = require("../../../images/logo.png");
     this.title = "的医嘱";
     this.titleName = this.$store.state.patientInfo.name;
+
+    this.initaskinfo();
   },
   methods: {
     next() {
@@ -57,6 +59,16 @@ export default {
     },
     backClick() {
       this.$router.go(-1);
+    },
+    initaskinfo(){
+       var params = {
+        planid: this.planid
+      };
+      apiGetaskinfo(params).then(res => {
+        if(res.message=='success'&&!this.common.isNullOrBlank(res.data.content)){
+          this.textarea = res.data.content;  
+        }
+      });
     },
     passClick() {
       this.$confirm("请确认医嘱。", "", {

@@ -103,7 +103,6 @@ export default {
       leftImg: "",
       dateValue: new Date(),
       total:0,
-
       tableData: [
         // {
         //   type: "sun",
@@ -269,8 +268,8 @@ export default {
     window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的时间预约计划表";
-     this.titleName =this.$store.state.patientInfo.name; 
-     this.initList( this.common.getNowFormatDate());
+    this.titleName =this.$store.state.patientInfo.name; 
+    this.initList( this.common.getNowFormatDate());
   },
   methods: {
     initList(day){
@@ -307,10 +306,10 @@ export default {
     },
     cellClick(event,item) {
       var _this=this;
-      console.log(item);
-      console.log(event.target.parentNode.getAttribute('day'));
+      let day = event.target.parentNode.getAttribute('day')
 
-      this.$confirm("您是否确认预约该时间？", "", {
+      if(this.compareDate(day)){
+              this.$confirm("您是否确认预约该时间？", "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         confirmButtonClass: "el-button purple"
@@ -318,7 +317,7 @@ export default {
         .then(() => {
           var info={};
           info['timeid']=item.timeID;
-          info['plandate']=event.target.parentNode.getAttribute('day');
+          info['plandate']=day;
           
           _this.$store.commit('savePlanInfo',info);
           this.$router.push({
@@ -328,10 +327,25 @@ export default {
           });
         })
         .catch(() => {});
-    }
-  },
 
-  watch: {}
+      }else{
+        this.$alert('请选择今天以后的日期', '', {
+          confirmButtonText: '确定',
+          showClose:false     
+        });
+      }
+    },
+    //比较日期
+    compareDate(day){
+      var oDate1 = new Date(day);
+      let now = new Date();
+      if(oDate1 >= now){
+        return true
+      } else {
+        return false
+      }
+    }
+  }
 };
 </script>
 

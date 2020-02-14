@@ -276,11 +276,8 @@ const store = new Vuex.Store({
         state.patientInfo='';
     },
     savePlanInfo: (state,payload) => {  
-        debugger;
-        let newObj = { ...state.planInfo,...payload }
-        
+        let newObj = { ...state.planInfo,...payload }       
         state.planInfo = newObj;
-        debugger;
     },
     clearPlanInfo: (state) => {
         state.planInfo='';
