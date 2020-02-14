@@ -133,6 +133,15 @@ export default new Router({
         requireAuth:true
       }
     }, {
+      path: '/doctorAdvice',
+      name: 'doctorAdvice',
+      component: () => import('./views/DoctorAdvice/DoctorAdvice.vue'),
+      meta: {
+        title: '医嘱',
+        keepAlive: false,
+        requireAuth:true
+      }
+    }, {
       path: '/summaryReport',
       name: 'summaryReport',
       component: () => import('./views/SummaryReport/SummaryReport.vue'),

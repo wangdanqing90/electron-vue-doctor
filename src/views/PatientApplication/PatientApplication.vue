@@ -18,7 +18,7 @@
             class="display_flex flex-direction_column justify-content_flex-center align-items_flex-start margin-left-10"
           >
             <div class="name">修改训练申请</div>
-            <div class="job">发送时间{{time}}</div>
+            <div class="job">发送时间{{inform.sendtime}}</div>
           </div>
         </div>
         <div class="middle">
@@ -29,12 +29,21 @@
                 <div class="title">修改前</div>
                 <div class="time">
                   时间:
-                  <span class="yellowFontColor">{{original.time}}</span>
+                  <span class="yellowFontColor">{{inform.before}}</span>
                 </div>
                 <div class="imgs">
                   项目:
-                  <span v-for="item in original.imgs" :key="item.value">
-                    <img :src="item" />
+                  <span v-if="inform.content&&inform.content.indexOf('1')!= -1">
+                    <img src="@/../images/walkingtraining_a.png"/>
+                  </span>
+                   <span v-if="inform.content&&inform.content.indexOf('2')!= -1">
+                    <img src="@/../images/stationtraining_a.png"/>
+                  </span>
+                   <span v-if="inform.content&&inform.content.indexOf('3')!= -1">
+                    <img src="@/../images/gametraining_a.png"/>
+                  </span>
+                   <span v-if="inform.content&&inform.content.indexOf('4')!= -1">
+                    <img src="@/../images/balancedetermination_a.png"/>
                   </span>
                 </div>
               </div>
@@ -42,15 +51,24 @@
                 <img src="@/../images/jiantou.png" />
               </div>
               <div class="right">
-                <div class="title">修改前</div>
+                <div class="title">修改后</div>
                 <div class="time">
                   时间:
-                  <span class="yellowFontColor">{{original.time}}</span>
+                  <span class="yellowFontColor">{{inform.after}}</span>
                 </div>
                 <div class="imgs">
                   项目:
-                  <span v-for="item in original.imgs" :key="item.value">
-                    <img :src="item" />
+                   <span v-if="inform.content&&inform.content.indexOf('1')!= -1">
+                    <img src="@/../images/walkingtraining_a.png"/>
+                  </span>
+                   <span v-if="inform.content&&inform.content.indexOf('2')!= -1">
+                    <img src="@/../images/stationtraining_a.png"/>
+                  </span>
+                   <span v-if="inform.content&&inform.content.indexOf('3')!= -1">
+                    <img src="@/../images/gametraining_a.png"/>
+                  </span>
+                   <span v-if="inform.content&&inform.content.indexOf('4')!= -1">
+                    <img src="@/../images/balancedetermination_a.png"/>
                   </span>
                 </div>
               </div>
@@ -60,7 +78,7 @@
             >
               <div class="reason">
                 <div>修改理由:</div>
-                <div>{{reason}}</div>
+                <div>{{inform.reson}}</div>
               </div>
               <div>
                 <el-button class="purple" @click="passClick()">通过</el-button>
@@ -69,14 +87,14 @@
             </div>
           </el-card>
         </div>
-        <div class="bottom">
+        <!-- <div class="bottom">
           <el-card class="box-card">
             <div>
               <div class="margin-bottom-5">请填写医嘱或备注:</div>
               <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
             </div>
           </el-card>
-        </div>
+        </div> -->
       </div>
     </el-card>
   </div>
@@ -85,6 +103,7 @@
 <script>
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
+import { apiGetModifyplan,apiVerifyplaninfo } from "@/request/api.js";
 let _this;
 
 export default {
@@ -96,33 +115,20 @@ export default {
   data() {
     return {
       leftImg: "",
+      patientid : this.$store.state.patientInfo.id,
+      planid: this.$route.query.planid,
       time: "2019/12/12 12:12:12",
       reason: "子女探望，希望能延迟一天",
       textarea: "",
-      original: {
-        time: "2019/12/12 12:12:12",
-        imgs: [
-          require("@/../images/walkingtraining_a.png"),
-          require("@/../images/balancedetermination_a.png"),
-          require("@/../images/gametraining_a.png"),
-          require("@/../images/stationtraining_a.png")
-        ]
-      },
-      new: {
-        time: "2019/12/12 12:12:12",
-        imgs: [
-          require("@/../images/walkingtraining_a.png"),
-          require("@/../images/balancedetermination_a.png"),
-          require("@/../images/gametraining_a.png")
-        ]
-      }
+      inform:{ },
     };
   },
   created() {
     _this = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的申请详情";
-    this.titleName = "刘邦";
+    this.titleName = this.$store.state.patientInfo.name;
+    this.initModifyplan();
   },
   methods: {
     next() {
@@ -134,6 +140,14 @@ export default {
     backClick() {
       this.$router.go(-1);
     },
+    initModifyplan(){
+      var params = {
+        planid: this.planid
+      };
+      apiGetModifyplan(params).then(res => {
+        this.inform = res.data;
+       });
+    },
     passClick() {
       this.$confirm("您确定要通过申请？", "", {
         confirmButtonText: "确定",
@@ -144,7 +158,7 @@ export default {
           _this.passClickCallback();
         })
         .catch(() => {});
-    }, //通过
+    }, 
     refuseClick() {
       this.$confirm("您确定要拒绝申请？", "", {
         confirmButtonText: "确定",
@@ -155,13 +169,56 @@ export default {
           _this.refuseClickCallback();
         })
         .catch(() => {});
-    }, //拒绝
-
+    }, 
+    //通过
     passClickCallback() {
-      this.next();
+      var params = {
+        planid: this.planid,
+        plandate:this.inform.after.substring(0,10),
+        timeid:this.inform.timeid,
+        type:1
+      };
+      apiVerifyplaninfo(params).then(res => {
+        if(res.message=='success'){
+          this.$alert('操作成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.next();
+          }
+        });
+        } else{
+          this.$alert(res.message, '', {
+          confirmButtonText: '确定',
+          showClose:false,
+        });
+        }    
+      });
     },
+    //拒绝
     refuseClickCallback() {
-      this.next();
+      var params = {
+        planid: this.planid,
+        plandate:this.inform.after.substring(0,10),
+        timeid:this.inform.timeid,
+        type:2
+      };
+      apiVerifyplaninfo(params).then(res => {
+        if(res.message=='success'){
+          this.$alert('操作成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.next();
+          }
+        });
+        } else{
+          this.$alert(res.message, '', {
+          confirmButtonText: '确定',
+          showClose:false,
+        });
+        }    
+      });
     }
   }
 };

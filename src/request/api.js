@@ -55,3 +55,11 @@ export const apiAddPlaninfo = p => post('/api/planinfo/', p)
 export const apiVerifyplaninfo = p => put('/api/planinfo/', p)
 //时间预约计划
 export const apiGetplanlist = (p) => get('/api/planlist/', p)
+//获取患者申请修改计划
+export const apiGetModifyplan = (p) => get('/api/modifyplan/', p)
+//查看医嘱
+export const apiGetaskinfo = (p) => get('/api/askinfo/', p)
+//添加医嘱
+export const apiPostaskinfo = p => post('/api/askinfo/', p)
+
+

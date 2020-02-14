@@ -128,7 +128,7 @@
                     @click="adviceClick(scope.$index, scope.row)"
                     class="hand"
                   >查看</span>
-                  <span v-else @click="adviceClick(scope.$index, scope.row)">填写</span>
+                  <span v-else class="hand" @click="adviceClick(scope.$index, scope.row)">填写</span>
                 </span>
               </template>
             </el-table-column>
@@ -214,7 +214,7 @@ export default {
       this.$router.push({
         path: "/summaryReport",
         name: "summaryReport",
-        query: { 'planid': row.planid }
+        query: { planid: row.planid }
       });
     },
     //月份报告
@@ -223,14 +223,19 @@ export default {
     },
     //医嘱
     adviceClick(index, row) {
-      console.log(index, row);
+      this.$router.push({
+        path: "/doctorAdvice",
+        name: "doctorAdvice",     
+        query:{planid: row.planid}
+      });
     },
     //申请
     applyClick(index, row) {
       console.log(index, row);
       this.$router.push({
         path: "/patientApplication",
-        name: "patientApplication"
+        name: "patientApplication",
+        query: { 'planid': row.planid }
       });
     },
     //修改
@@ -247,7 +252,6 @@ export default {
         });
     },
     deleteClickCallback(planid){
-      debugger;
        var params = {
         planid: planid
       };
@@ -268,7 +272,6 @@ export default {
           confirmButtonText: '确定',
           showClose:false,
         });
-
         }  
       });
 
