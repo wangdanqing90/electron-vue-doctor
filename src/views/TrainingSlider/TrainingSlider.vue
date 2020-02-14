@@ -51,7 +51,7 @@
               'vue-slider-dot-tooltip-inner',
               'vue-slider-dot-tooltip-inner-top'
             ]"
-              >{{ value[index + 1]-value[index] }}</div>
+              >{{ value[index + 1]-value[index] }}min</div>
             </div>
           </template>
         </vue-slider>
@@ -107,6 +107,7 @@ export default {
     };
   },
   created() {
+    window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练模式选择";
     this.titleName = "刘邦";
@@ -131,7 +132,12 @@ export default {
       console.log(this.sitValue);
       console.log(this.gameValue);
       console.log(this.balanceValue);
-
+      var info={};
+      info['Walk_Time']=this.walkValue;
+      info['Gaming_Time']=this.gameValue;
+      info['Balance_Time']=this.balanceValue;
+      info['SitAndStand_Time']=this.sitValue;
+      this.$store.commit('savePlanInfo',info);
       this.$router.push({
         path: "/trainingAdjust",
         name: "trainingAdjust",

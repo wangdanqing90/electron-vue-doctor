@@ -39,13 +39,14 @@
           </div>
           <div  v-for="(item,index) in tableData" :key="index" > 
             <div class="title cell">
-              <div v-if='index == 0'>Sunday</div>
-               <div v-if='index == 1'>Monday</div>
-                <div v-if='index == 2'>Tuesday</div>
-                 <div v-if='index == 3'>Wednesday</div>
-                  <div v-if='index == 4'>Thursday</div>
-                   <div v-if='index == 5'>Friday</div>
-                    <div v-if='index == 6'>Saturday</div>
+              
+               <div v-if='index == 0'>Monday</div>
+                <div v-if='index == 1'>Tuesday</div>
+                 <div v-if='index == 2'>Wednesday</div>
+                  <div v-if='index == 3'>Thursday</div>
+                   <div v-if='index == 4'>Friday</div>
+                    <div v-if='index == 5'>Saturday</div>
+                    <div v-if='index == 6'>Sunday</div>
               <div>{{tableData[index].day}}</div>
             </div>
           </div>
@@ -72,48 +73,13 @@
             <div class="cell">16:00-16:30</div>
             <div class="cell">16:30-17:00</div>
           </div>
-          <!-- <div id="Sunday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" :timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
+
+          <div v-for="(item1,index1) in tableData" :key="index1" :day="item1.day">
+            <div v-for="(item,index) in tableData[index1].list" :key="index" class="cell" :timeID="item.timeID" :day="item1.day">
+              <div v-if="item.able>0" @click="cellClick($event,item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
-          </div>
-          <div id="Monday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
-              <div v-else class="pinkBackColor"></div>
-            </div>
-          </div>
-          <div id="Tuesday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
-              <div v-else class="pinkBackColor"></div>
-            </div>
-          </div>
-          <div id="Wednesday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
-              <div v-else class="pinkBackColor"></div>
-            </div>
-          </div>
-          <div id="Thursday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
-              <div v-else class="pinkBackColor"></div>
-            </div>
-          </div>
-          <div id="Friday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
-              <div v-else class="pinkBackColor"></div>
-            </div>
-          </div>
-          <div id="Saturday">
-            <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" timeID="item.timeID">
-              <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
-              <div v-else class="pinkBackColor"></div>
-            </div>
-          </div> -->
+          </div>      
         </div>
       </div>
     </div>
@@ -303,16 +269,14 @@ export default {
     window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的时间预约计划表";
-    this.titleName = "刘邦";
-
-    this.initList();
+     this.titleName =this.$store.state.patientInfo.name; 
+     this.initList( this.common.getNowFormatDate());
   },
   methods: {
-    initList(){
-      //  console.log(this.tableData);
-      //  debugger;
+    initList(day){
+      this.tableData=[];
        var params = {
-        plandate: '2020-02-20',
+        plandate: day,
       };
       apiGetplanlist(params).then(res => {
         this.total=res.data.total;
@@ -329,27 +293,34 @@ export default {
              list.push(re);
            }   
           newObj.list=list;
-          //console.log(newObj);
           this.tableData.push(newObj)
         }
-        console.log(this.tableData);
-       
+        console.log(this.tableData);     
       });   
     },
     backClick() {
       this.$router.go(-1);
     },
+    //选择日期
     calendarSelect(data) {
-      console.log(data.day);
+      this.initList(data.day)
     },
-    cellClick(item) {
+    cellClick(event,item) {
+      var _this=this;
       console.log(item);
+      console.log(event.target.parentNode.getAttribute('day'));
+
       this.$confirm("您是否确认预约该时间？", "", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         confirmButtonClass: "el-button purple"
       })
         .then(() => {
+          var info={};
+          info['timeid']=item.timeID;
+          info['plandate']=event.target.parentNode.getAttribute('day');
+          
+          _this.$store.commit('savePlanInfo',info);
           this.$router.push({
             path: "/trainingSlider",
             name: "trainingSlider",

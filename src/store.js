@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
-
 Vue.use(Vuex)
 
 
@@ -276,6 +275,17 @@ const store = new Vuex.Store({
     clearPatientInfo: (state) => {
         state.patientInfo='';
     },
+    savePlanInfo: (state,payload) => {  
+        debugger;
+        let newObj = { ...state.planInfo,...payload }
+        
+        state.planInfo = newObj;
+        debugger;
+    },
+    clearPlanInfo: (state) => {
+        state.planInfo='';
+    },
+    
     SET_WS: (state,payload) => {
       state.WS=payload;
     },
