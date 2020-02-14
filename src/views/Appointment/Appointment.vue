@@ -37,46 +37,16 @@
           <div>
             <div class="cell">时间</div>
           </div>
-          <div>
+          <div  v-for="(item,index) in tableData" :key="index" > 
             <div class="title cell">
-              <div>Sunday</div>
-              <div>{{tableData[0].data}}</div>
-            </div>
-          </div>
-          <div>
-            <div class="title cell">
-              <div>Monday</div>
-              <div>{{tableData[0].data}}</div>
-            </div>
-          </div>
-          <div>
-            <div class="title cell">
-              <div>Tuesday</div>
-              <div>{{tableData[0].data}}</div>
-            </div>
-          </div>
-          <div>
-            <div class="title cell">
-              <div>Wednesday</div>
-              <div>{{tableData[0].data}}</div>
-            </div>
-          </div>
-          <div>
-            <div class="title cell">
-              <div>Thursday</div>
-              <div>{{tableData[0].data}}</div>
-            </div>
-          </div>
-          <div>
-            <div class="title cell">
-              <div>Friday</div>
-              <div>{{tableData[0].data}}</div>
-            </div>
-          </div>
-          <div style="border-right: 1px solid #ebeef5;">
-            <div class="title cell">
-              <div>Saturday</div>
-              <div>{{tableData[0].data}}</div>
+              <div v-if='index == 0'>Sunday</div>
+               <div v-if='index == 1'>Monday</div>
+                <div v-if='index == 2'>Tuesday</div>
+                 <div v-if='index == 3'>Wednesday</div>
+                  <div v-if='index == 4'>Thursday</div>
+                   <div v-if='index == 5'>Friday</div>
+                    <div v-if='index == 6'>Saturday</div>
+              <div>{{tableData[index].day}}</div>
             </div>
           </div>
           <div style="width:9px;height:100%"></div>
@@ -102,7 +72,7 @@
             <div class="cell">16:00-16:30</div>
             <div class="cell">16:30-17:00</div>
           </div>
-          <div id="Sunday">
+          <!-- <div id="Sunday">
             <div v-for="(item,index) in tableData[0].list" :key="index" class="cell" :timeID="item.timeID">
               <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
@@ -143,7 +113,7 @@
               <div v-if="item.able>0" @click="cellClick(item)">{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -169,84 +139,162 @@ export default {
       total:0,
 
       tableData: [
-        {
-          type: "sun",
-          data: "01",
-          list: [
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 5
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            },
-            {
-              timeID: 1,
-              able: 1
-            }
-          ]
-        }
+        // {
+        //   type: "sun",
+        //   day: "01",
+        //   list: [
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 5
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     }
+        //   ]
+        // },
+        //  {
+        //   type: "mon",
+        //   day: "02",
+        //   list: [
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 5
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     },
+        //     {
+        //       timeID: 1,
+        //       able: 1
+        //     }
+        //   ]
+        // }
       ]
     };
   },
@@ -261,7 +309,8 @@ export default {
   },
   methods: {
     initList(){
-       console.log(this.tableData);
+      //  console.log(this.tableData);
+      //  debugger;
        var params = {
         plandate: '2020-02-20',
       };
@@ -270,7 +319,7 @@ export default {
         var items =res.data.items;
         for (let item in items) {
             var newObj={};
-            newObj.data=item;
+            newObj.day=item;
            var list=[];  
            var objs=JSON.parse(items[item]);
            for (let item1 in objs) {
@@ -280,14 +329,12 @@ export default {
              list.push(re);
            }   
           newObj.list=list;
-          console.log(newObj);
+          //console.log(newObj);
           this.tableData.push(newObj)
         }
-
         console.log(this.tableData);
-      });
-
-     
+       
+      });   
     },
     backClick() {
       this.$router.go(-1);
