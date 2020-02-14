@@ -205,45 +205,98 @@ export default {
   },
   methods: {
     okClick() {
+      let obj={};
       this.$refs.type1.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('行走训练：跟随模式：' + item.name + item.total);
+        if(index == 0) obj['WFollowing_Imponderability']=item.total;
+        if(index == 1) obj['WFollowing_FixedDistance']=item.total;
+        if(index == 2) obj['WFollowing_Speed']=item.total;
       });
       this.$refs.type2.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('行走训练：主动模式：'+ item.name + item.total);
+        if(index == 0) obj['WInitiative_Imponderability']=item.total;
+        if(index == 1) obj['WInitiative_Force']=item.total;
+        if(index == 2) obj['WInitiative_FixedDistance']=item.total;
       });
 
       console.log("方向限定" + this.$refs.type2.config.switch);
       console.log("方向" + this.$refs.type2.config.tabActive);
+      obj['WInitiative_Direction']=this.$refs.type2.config.tabActive;
 
       this.$refs.type3.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+         console.log('行走训练：阻力模式：'+ item.name + item.total);
+        if(index == 0) obj['WResistance_Imponderability']=item.total;
+        if(index == 1) obj['WResistance_Force']=item.total;
+        if(index == 2) obj['WResistance_FixedDistance']=item.total;
       });
       this.$refs.type4.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('坐站训练：跟随模式：'+ item.name + item.total);
+        if(index == 0) obj['SFollowing_Speed']=item.total;
+        if(index == 1) obj['SFollowing_Count']=item.total;
       });
       this.$refs.type5.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('坐站训练：主动模式：'+ item.name + item.total);
+        if(index == 0) obj['SInitiative_Imponderability']=item.total;
+        if(index == 1) obj['SInitiative_Count']=item.total;
       });
       console.log("七巧板" + this.$refs.type6.config.radio);
+      obj['GWall_Intensity']=this.$refs.type6.config.radio;
       console.log("太空飞行" + this.$refs.type7.config.radio);
+      obj['GPlane_Intensity']=this.$refs.type7.config.radio;
       this.$refs.type8.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('平衡训练：左脚：' + item.name + item.total);
+        obj['BLeft_Imponderability']=item.total;
       });
       this.$refs.type9.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('平衡训练：右脚：' + item.name + item.total);
+        obj['BRight_Imponderability']=item.total;
       });
       this.$refs.type10.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('平衡训练：双脚：' + item.name + item.total);
+         obj['BBoth_Imponderability']=item.total;
       });
       this.$refs.type11.config.adjusts.forEach((item, index) => {
-        console.log(index + item.name + item.total);
+        console.log('平衡训练：FRT：' + item.name + item.total);
+         obj['BFRT_Imponderability']=item.total;
       });
 
-      this.$router.push({
-        path: "/trainingPlan",
-        name: "trainingPlan",
-        query: {}
-      });
+      if(this.active1Right==1){
+        obj['Walk_Mode']=0;
+      }else if(this.active1Right==2){
+        obj['Walk_Mode']=1;
+      }else if(this.active1Right==3){
+        obj['Walk_Mode']=2;
+      }
+      if(this.active2Right==4){
+        obj['SitAndStand_Mode']=0;
+      }else if(this.active2Right==5){
+        obj['SitAndStand_Mode']=1;
+      }
+      if(this.active3Right==6){
+        obj['Gaming_Mode']=0;
+      }else if(this.active3Right==7){
+        obj['Gaming_Mode']=1;
+      }
+      if(this.active4Right==8){
+        obj['Balance_Mode']=0;
+      }else if(this.active4Right==9){
+        obj['Balance_Mode']=1;
+      }else if(this.active4Right==10){
+        obj['Balance_Mode']=2;
+      }else if(this.active4Right==11){
+        obj['Balance_Mode']=3;
+      }
+
+      console.log(obj);
+
+      
+
+
+      // this.$router.push({
+      //   path: "/trainingPlan",
+      //   name: "trainingPlan",
+      //   query: {}
+      // });
     },
     backClick() {
       this.$router.go(-1);
@@ -282,12 +335,6 @@ export default {
       } else if (this.activeClass == 2) {
         //第三行
         this.active3Right = index;
-        // this.$refs.type4.config.adjusts.forEach((item, index) => {
-        //   this.vm.$set(item, "total", 0);
-        // });
-        // this.$refs.type5.config.adjusts.forEach((item, index) => {
-        //   this.vm.$set(item, "total", 0);
-        // });
       } else if (this.activeClass == 3) {
         //第四行
         this.active4Right = index;

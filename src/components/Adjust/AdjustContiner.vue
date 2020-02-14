@@ -22,29 +22,29 @@
       <div class="switch-continar" v-if="type==2">
         <div>
           <span>方向限定</span>
-          <el-switch v-model="config.switch" active-color="#8da1f2">></el-switch>
+          <el-switch v-model="config.switch"  active-color="#8da1f2">></el-switch>
         </div>
-        <div class="direction">
-          <span
+        <div class="direction " :class="{'disable':config.switch}">
+           <span
+            :style="{color:(config.tabActive == 0) ? '#8da1f2':'black'}"
+            @click="config.tabActive = 0"
+          >全向</span>
+           <span
             :style="{color:(config.tabActive == 1) ? '#8da1f2':'black'}"
             @click="config.tabActive = 1"
-          >直行</span>
+          >直行+后退</span>
           <span
             :style="{color:(config.tabActive == 2) ? '#8da1f2':'black'}"
             @click="config.tabActive = 2"
-          >全向</span>
-          <span
-            :style="{color:(config.tabActive == 3) ? '#8da1f2':'black'}"
-            @click="config.tabActive = 3"
-          >直行+后退</span>
+          >直行</span>        
         </div>
       </div>
     </div>
     <div v-else>
       <el-radio-group v-model="config.radio">
-        <el-radio :label="1" text-color="#E6A23C" fill="#E6A23C">难</el-radio>
-        <el-radio :label="2">中</el-radio>
-        <el-radio :label="3">易</el-radio>
+        <el-radio :label="0" text-color="#E6A23C" fill="#E6A23C">易</el-radio>
+        <el-radio :label="1">中</el-radio>
+        <el-radio :label="2">难</el-radio>
       </el-radio-group>
     </div>
   </div>
@@ -119,8 +119,8 @@ export default {
           imgsrcGray: require("@/../images/activemode_2.png"),
           width: "120px",
           fontColor: "purpleFontColor",
-          switch: true, //方向限定
-          tabActive: 1, //方向
+          switchswitch: true, //方向限定
+          tabActive: 0, //方向
           adjusts: [
             {
               name: "减重",
@@ -220,7 +220,7 @@ export default {
           imgsrc: require("@/../images/Tangram_1.png"),
           imgsrcGray: require("@/../images/Tangram_2.png"),
           fontColor: "pinkFontColor",
-          radio: 1
+          radio: 0
         };
       } else if (this.type === 7) {
         this.config = {
@@ -228,7 +228,7 @@ export default {
           imgsrc: require("@/../images/Spaceflight_1.png"),
           imgsrcGray: require("@/../images/Spaceflight_2.png"),
           fontColor: "greenFontColor",
-          radio: 1
+          radio: 0
         };
       } else if (this.type === 8) {
         this.config = {
@@ -295,6 +295,18 @@ export default {
           ]
         };
       }
+    }
+  },
+  computed: {
+switch() {
+return this.config.switch
+}
+},
+  watch: {
+   switch(newValue, oldValue) {
+       if(newValue){
+         this.config.tabActive=0;
+       }
     }
   }
 };
@@ -370,10 +382,9 @@ export default {
     -webkit-align-items: center;
     align-items: center;
   }
-  // .el-radio__input.is-checked .el-radio__inner {
-  //   border-color: $pinkFontColor;
-  //   background: $pinkFontColor;
-  // }
+  .disable {
+    pointer-events: none;
+   }
 }
 </style>
           
