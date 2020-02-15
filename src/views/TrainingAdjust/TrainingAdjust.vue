@@ -16,7 +16,7 @@
           <div v-if="this.activeClass<3" class="next purpleFontColor" @click="nextClick()">下一步</div>
           <!-- 左边tab -->
           <div
-            class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center"
+            class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center hand"
           >
             <div
               class="left-inner"
@@ -45,6 +45,7 @@
               ref="type1"
               :type="1"
               :disable="active1Right!=1"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -52,6 +53,7 @@
               ref="type2"
               :type="2"
               :disable="active1Right!=2"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -59,6 +61,7 @@
               ref="type3"
               :type="3"
               :disable="active1Right!=3"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -73,6 +76,7 @@
               ref="type4"
               :type="4"
               :disable="active2Right!=4"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -80,6 +84,7 @@
               ref="type5"
               :type="5"
               :disable="active2Right!=5"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -115,6 +120,7 @@
               ref="type8"
               :type="8"
               :disable="active4Right!=8"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
@@ -122,6 +128,7 @@
               ref="type9"
               :type="9"
               :disable="active4Right!=9"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
@@ -129,6 +136,7 @@
               ref="type10"
               :type="10"
               :disable="active4Right!=10"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
@@ -136,6 +144,7 @@
               ref="type11"
               :type="11"
               :disable="active4Right!=11"
+              :stepData='this.stepData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
@@ -150,6 +159,7 @@
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import AdjustContiner from "@/components/Adjust/AdjustContiner.vue";
+import { apiGetStepdetails } from "@/request/api.js";
 export default {
   name: "trainingPlan",
   components: {
@@ -165,6 +175,7 @@ export default {
       active2Right: 4,
       active3Right: 6,
       active4Right: 8,
+      stepData:{},
       tagList: [
         {
           name: "行走",
@@ -201,9 +212,17 @@ export default {
     this.vm = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练控件数字调节";
-    this.titleName = "刘邦";
+    this.titleName = this.$store.state.patientInfo.name;
+
+    this.initStep();
   },
   methods: {
+     initStep(){
+       var _this = this;
+      apiGetStepdetails().then(res => {
+        _this.stepData=res.data;
+      });
+    },
     okClick() {
       let obj={};
       this.$refs.type1.config.adjusts.forEach((item, index) => {

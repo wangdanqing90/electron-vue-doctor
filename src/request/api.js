@@ -61,5 +61,7 @@ export const apiGetModifyplan = (p) => get('/api/modifyplan/', p)
 export const apiGetaskinfo = (p) => get('/api/askinfo/', p)
 //添加医嘱
 export const apiPostaskinfo = p => post('/api/askinfo/', p)
+//获取计划表步长
+export const apiGetStepdetails = () => get('/api/stepdetails/')
 
 

@@ -2,7 +2,7 @@
 <template>
   <div class="adjust-container" :class="disable?'':config.fontColor">
     <div
-      class="top"
+      class="top hand"
       :class="(type==8||type==9||type==10||type==11)?'small':''"
       @click="selectClick()"
     >
@@ -65,17 +65,67 @@ export default {
     disable: {
       type: Boolean,
       default: true
-    }
+    }, 
+//     stepData: {
+//       type: Object,
+//       default: function () {
+//         return {
+// WFollowing_Speed:70,
+// WInitiative_Force:5,
+// WResistance_Force:5,
+// WFollowing_FixedDistance:20,
+// WInitiative_FixedDistance:20,
+// WResistance_FixedDistance:20,
+// WFollowing_Imponderability:10,
+// WInitiative_Imponderability:10,
+// WResistance_Imponderability:10,
+// SFollowing_Count:10,
+// SFollowing_Speed:70,
+// SInitiative_Imponderability:10,
+// SInitiative_Count:10,
+// BFRT_Imponderability:10,
+// BBoth_Imponderability:10,
+// BLeft_Imponderability:10,
+// BRight_Imponderability:10
+
+//         }
+//     }
+//     }
   },
 
   data() {
     return {
-      config: {}
+      config: {},
+      stepData: {
+     
+WFollowing_Speed:70,
+WInitiative_Force:5,
+WResistance_Force:5,
+WFollowing_FixedDistance:20,
+WInitiative_FixedDistance:20,
+WResistance_FixedDistance:20,
+WFollowing_Imponderability:10,
+WInitiative_Imponderability:10,
+WResistance_Imponderability:10,
+SFollowing_Count:10,
+SFollowing_Speed:70,
+SInitiative_Imponderability:10,
+SInitiative_Count:10,
+BFRT_Imponderability:10,
+BBoth_Imponderability:10,
+BLeft_Imponderability:10,
+BRight_Imponderability:10
+
+    }
     };
   },
 
   created() {
     this.initData();
+     console.log(this.stepData)
+  },
+  updated(){
+    //console.log(this.stepData)
   },
 
   methods: {
@@ -83,10 +133,11 @@ export default {
       if (!this.disable) return;
       this.$emit("selectRightClick", this.type);
     },
+   
     initData() {
       if (this.type === 1) {
         this.config = {
-          title: "跟随模式",
+          title: "行走跟随模式",
           imgsrc: require("@/../images/followmode_1.png"),
           imgsrcGray: require("@/../images/followmode_2.png"),
           width: "120px",
@@ -94,19 +145,19 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.WFollowing_Imponderability,
               total: 0,
               unit: "KG"
             },
             {
               name: "定距",
-              step: 70,
+              step: this.stepData.WFollowing_FixedDistance,
               total: 0,
               unit: "M"
             },
             {
               name: "速度",
-              step: 20,
+              step: this.stepData.WFollowing_Speed,
               total: 0,
               unit: "MM/s"
             }
@@ -114,7 +165,7 @@ export default {
         };
       } else if (this.type === 2) {
         this.config = {
-          title: "主动模式",
+          title: "行走主动模式",
           imgsrc: require("@/../images/activemode_1.png"),
           imgsrcGray: require("@/../images/activemode_2.png"),
           width: "120px",
@@ -124,19 +175,19 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.WInitiative_Imponderability,
               total: 0,
               unit: "KG"
             },
             {
               name: "阻力",
-              step: 6,
+              step:  this.stepData.WInitiative_Force,
               total: 0,
               unit: "N"
             },
             {
               name: "定距",
-              step: 20,
+              step: this.stepData.WInitiative_FixedDistance,
               total: 0,
               unit: "M"
             }
@@ -144,7 +195,7 @@ export default {
         };
       } else if (this.type === 3) {
         this.config = {
-          title: "阻力模式",
+          title: "行走阻力模式",
           imgsrc: require("@/../images/resistancemode_1.png"),
           imgsrcGray: require("@/../images/resistancemode_2.png"),
           width: "120px",
@@ -152,19 +203,19 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.WResistance_Imponderability,
               total: 0,
               unit: "KG"
             },
             {
               name: "阻力",
-              step: 6,
+              step: this.stepData.WResistance_Force,
               total: 0,
               unit: "N"
             },
             {
               name: "定距",
-              step: 20,
+              step: this.stepData.WResistance_FixedDistance,
               total: 0,
               unit: "M"
             }
@@ -172,7 +223,7 @@ export default {
         };
       } else if (this.type === 4) {
         this.config = {
-          title: "跟随模式",
+          title: "坐站跟随模式",
           imgsrc: require("@/../images/followmode_0.png"),
           imgsrcGray: require("@/../images/followmode_2.png"),
           width: "120px",
@@ -180,13 +231,13 @@ export default {
           adjusts: [
             {
               name: "速度",
-              step: 20,
+              step: this.stepData.SFollowing_Speed,
               total: 0,
               unit: "MM/s"
             },
             {
               name: "计数",
-              step: 1,
+              step: this.stepData.SFollowing_Count,
               total: 0,
               unit: "次"
             }
@@ -194,7 +245,7 @@ export default {
         };
       } else if (this.type === 5) {
         this.config = {
-          title: "主动模式",
+          title: "坐站主动模式",
           imgsrc: require("@/../images/activemode_0.png"),
           imgsrcGray: require("@/../images/activemode_2.png"),
           width: "120px",
@@ -202,13 +253,13 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.SInitiative_Imponderability,
               total: 0,
               unit: "KG"
             },
             {
               name: "计数",
-              step: 1,
+              step: this.stepData.SInitiative_Count,
               total: 0,
               unit: "次"
             }
@@ -216,7 +267,7 @@ export default {
         };
       } else if (this.type === 6) {
         this.config = {
-          title: "七巧板",
+          title: "游戏七巧板",
           imgsrc: require("@/../images/Tangram_1.png"),
           imgsrcGray: require("@/../images/Tangram_2.png"),
           fontColor: "pinkFontColor",
@@ -224,7 +275,7 @@ export default {
         };
       } else if (this.type === 7) {
         this.config = {
-          title: "太空飞行",
+          title: "游戏太空飞行",
           imgsrc: require("@/../images/Spaceflight_1.png"),
           imgsrcGray: require("@/../images/Spaceflight_2.png"),
           fontColor: "greenFontColor",
@@ -232,7 +283,7 @@ export default {
         };
       } else if (this.type === 8) {
         this.config = {
-          title: "左脚站立",
+          title: "平衡左脚减重",
           imgsrc: require("@/../images/leftfoot_01.png"),
           imgsrcGray: require("@/../images/leftfoot_02.png"),
           width: "120px",
@@ -240,7 +291,7 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.BLeft_Imponderability,
               total: 0,
               unit: "KG"
             }
@@ -248,7 +299,7 @@ export default {
         };
       } else if (this.type === 9) {
         this.config = {
-          title: "右脚站立",
+          title: "平衡右脚减重",
           imgsrc: require("@/../images/rightfoot_01.png"),
           imgsrcGray: require("@/../images/rightfoot_02.png"),
           width: "120px",
@@ -256,7 +307,7 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.BRight_Imponderability,
               total: 0,
               unit: "KG"
             }
@@ -264,7 +315,7 @@ export default {
         };
       } else if (this.type === 10) {
         this.config = {
-          title: "双脚站立",
+          title: "平衡双脚减重",
           imgsrc: require("@/../images/bothfoot_01.png"),
           imgsrcGray: require("@/../images/bothfoot_02.png"),
           width: "120px",
@@ -272,7 +323,7 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.BBoth_Imponderability,
               total: 0,
               unit: "KG"
             }
@@ -280,7 +331,7 @@ export default {
         };
       } else if (this.type === 11) {
         this.config = {
-          title: "FRT模式",
+          title: "平衡FRT减重",
           imgsrc: require("@/../images/frtmode_01.png"),
           imgsrcGray: require("@/../images/frtmode_02.png"),
           width: "120px",
@@ -288,7 +339,7 @@ export default {
           adjusts: [
             {
               name: "减重",
-              step: 10,
+              step: this.stepData.BFRT_Imponderability,
               total: 0,
               unit: "KG"
             }
@@ -308,6 +359,11 @@ return this.config.switch
          this.config.tabActive=0;
        }
     }
+  },
+  stepData(newValue, oldValue){
+    alert(newValue)
+    console.log(newValue)
+
   }
 };
 </script>
