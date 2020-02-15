@@ -13,59 +13,261 @@
     <el-row>
       <el-card class="box-card">
         <el-col :span="24" class="inform-container">
-         
-          <!-- <div v-for="item in planData" :key="item.value">
-            <div
-              class="inform display_flex justify-content_flex-justify align-items_center"
-              :class="{'purpleFontColor':item.type==1,'pinkFontColor':item.type==2,'yellowFontColor':item.type==3,'greenFontColor':item.type==4}"
-            >
-
-
+           <!-- 行走模式 -->
+           <div class="inform display_flex justify-content_flex-justify align-items_center purpleFontColor" >
               <div
                 class="left display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
               >
-                <img v-if="item.type==1" src="@/../images/walkingtraining.png" />
-                <img v-if="item.type==2" src="@/../images/stationtraining.png" />
-                <img v-if="item.type==3" src="@/../images/gametraining.png" />
-                <img v-if="item.type==4" src="@/../images/balancedetermination.png" />
-                <div v-if="item.type==1">行走训练</div>
-                <div v-if="item.type==2">坐站训练</div>
-                <div v-if="item.type==3">游戏训练</div>
-                <div v-if="item.type==4">平衡测定</div>
+                <img  src="@/../images/walkingtraining.png" />
+                <div>行走训练</div>
               </div>
-              <div class="middle display_inline-flex flex-direction_column align-items_center">
-                <div class="margin-top-10">时段</div>
-                <div class="margin-top-40">{{item.time}}</div>
+              <div class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center">
+                <div >时间</div>
+                <div class="font">{{planInfo.Walk_Time}}min</div>
               </div>
-              <div
+              <!-- 跟随模式 -->
+              <div v-if='planInfo.Walk_Mode == 0'
                 class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
               >
-                <div>路程(m)</div>
-                <div>{{item.distance}}</div>
+                <div>模式</div>
+                <div class='font'>跟随</div>
               </div>
-              <div
+              <div v-if='planInfo.Walk_Mode == 0'
                 class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
               >
-                <div>减重（n）</div>
-                <div>{{item.weight}}</div>
+                <div>减重</div>
+                <div class='font'>{{planInfo.WFollowing_Imponderability}}kg</div>
               </div>
-              <div
+              <div v-if='planInfo.Walk_Mode == 0'
                 class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
               >
-                <div>速度（m/s）</div>
-                <div>{{item.speed}}</div>
+                <div>定距</div>
+                <div class='font'>{{planInfo.WFollowing_FixedDistance}}M</div>
               </div>
-              <div
+              <div v-if='planInfo.Walk_Mode == 0'
                 class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
               >
-                <div>助力（n）</div>
-                <div>{{item.assistance}}</div>
+                <div>速度</div>
+                <div class='font'>{{planInfo.WFollowing_Speed}}MM/s</div>
               </div>
 
+               <!-- 主动模式 -->
+              <div v-if='planInfo.Walk_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>主动</div>
+              </div>
+              <div v-if='planInfo.Walk_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.WInitiative_Imponderability}}kg</div>
+              </div>
+              <div v-if='planInfo.Walk_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>阻力</div>
+                <div class='font'>{{planInfo.WInitiative_Force}}M</div>
+              </div>
+              <div v-if='planInfo.Walk_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>定距</div>
+                <div class='font'>{{planInfo.WInitiative_FixedDistance}}MM/s</div>
+              </div>
 
-              
-            </div>
-          </div> -->
+               <!-- 阻力模式 -->
+              <div v-if='planInfo.Walk_Mode == 1'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>阻力</div>
+              </div>
+              <div v-if='planInfo.Walk_Mode == 1'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.WResistance_Imponderability}}kg</div>
+              </div>
+              <div v-if='planInfo.Walk_Mode == 1'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>阻力</div>
+                <div class='font'>{{planInfo.WResistance_Force}}M</div>
+              </div>
+              <div v-if='planInfo.Walk_Mode == 1'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>定距</div>
+                <div class='font'>{{planInfo.WResistance_FixedDistance}}MM/s</div>
+              </div>
+           </div>
+
+           <!-- 坐站训练 -->
+           <div class="inform display_flex justify-content_flex-justify align-items_center pinkFontColor" >
+              <div
+                class="left display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <img src="@/../images/stationtraining.png" />
+                <div>坐站训练</div>
+              </div>
+              <div class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center">
+                <div >时间</div>
+                <div class="font">{{planInfo.SitAndStand_Time}}min</div>
+              </div>
+              <!-- 跟随模式 -->
+              <div v-if='planInfo.SitAndStand_Mode == 0'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>跟随</div>
+              </div>
+              <div v-if='planInfo.SitAndStand_Mode == 0'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>速度</div>
+                <div class='font'>{{planInfo.SFollowing_Speed}}MM/S</div>
+              </div>
+              <div v-if='planInfo.SitAndStand_Mode == 0'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>计数</div>
+                <div class='font'>{{planInfo.SFollowing_Count}}次</div>
+              </div>
+
+               <!-- 主动模式 -->
+              <div v-if='planInfo.SitAndStand_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>主动</div>
+              </div>
+              <div v-if='planInfo.SitAndStand_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.SInitiative_Imponderability}}kg</div>
+              </div>
+              <div v-if='planInfo.SitAndStand_Mode == 2'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>计数</div>
+                <div class='font'>{{planInfo.SInitiative_Count}}次</div>
+              </div>
+           </div>
+
+
+           <!-- 游戏训练 -->
+           <div class="inform display_flex justify-content_flex-justify align-items_center yellowFontColor" >
+              <div
+                class="left display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <img src="@/../images/gametraining.png" />
+                <div>游戏训练</div>
+              </div>
+              <div class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center">
+                <div >时间</div>
+                <div class="font">{{planInfo.Gaming_Time}}min</div>
+              </div>
+              <!-- 七巧板 -->
+              <div v-if='planInfo.Gaming_Mode == 3'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>七巧板</div>
+              </div>
+              <div v-if='planInfo.Gaming_Mode == 3'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>难易度</div>
+                <div class='font' v-if="planInfo.GWall_Intensity == 0">易</div>
+                <div class='font' v-else-if="planInfo.GWall_Intensity == 1">中</div>
+                <div class='font' v-else-if="planInfo.GWall_Intensity == 2">难</div>
+              </div>
+               <!-- 太空模式 -->
+              <div v-if='planInfo.Gaming_Mode == 4'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>太空模式</div>
+              </div>
+              <div v-if='planInfo.Gaming_Mode == 4'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>难易度</div>
+                <div class='font' v-if="planInfo.GPlane_Intensity == 0">易</div>
+                <div class='font' v-else-if="planInfo.GPlane_Intensity == 1">中</div>
+                <div class='font' v-else-if="planInfo.GPlane_Intensity == 2">难</div>
+              </div>
+           </div>
+
+
+            <!-- 平衡测定 -->
+           <div class="inform display_flex justify-content_flex-justify align-items_center greenFontColor" >
+              <div
+                class="left display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <img src="@/../images/balancedetermination.png" />
+                <div>平衡测定</div>
+              </div>
+              <div class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center">
+                <div >时间</div>
+                <div class="font">{{planInfo.Balance_Time}}min</div>
+              </div>
+              <!-- 左脚减重 -->
+              <div v-if='planInfo.Balance_Mode == 5'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>左脚减重</div>
+              </div>
+              <div v-if='planInfo.Balance_Mode == 5'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.BLeft_Imponderability}}KG</div>
+              </div>
+               <!-- 右脚减重 -->
+              <div v-if='planInfo.Balance_Mode == 6'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>右脚减重</div>
+              </div>
+              <div v-if='planInfo.Balance_Mode == 6'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.BRight_Imponderability}}KG</div>
+              </div>
+                <!-- 双脚减重 -->
+              <div v-if='planInfo.Balance_Mode == 7'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>双脚减重</div>
+              </div>
+              <div v-if='planInfo.Balance_Mode == 7'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.BBoth_Imponderability}}KG</div>
+              </div>
+                <!-- FRT减重 -->
+              <div v-if='planInfo.Balance_Mode == 8'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>模式</div>
+                <div class='font'>FRT减重</div>
+              </div>
+              <div v-if='planInfo.Balance_Mode == 8'
+                class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
+              >
+                <div>减重</div>
+                <div class='font'>{{planInfo.BFRT_Imponderability}}KG</div>
+              </div>
+           </div>
         </el-col>
       </el-card>
     </el-row>
@@ -74,7 +276,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-
+import { apiAddPlaninfo } from "@/request/api.js";
 export default {
   name: "trainingPlan",
   components: {
@@ -84,41 +286,7 @@ export default {
   data() {
     return {
       leftImg: "",
-      planInfo:'',
-      planData: [
-        {
-          type: 1,
-          time: "07:00-07:30",
-          distance: 30,
-          weight: 10,
-          speed: 10,
-          assistance: 30
-        },
-        {
-          type: 2,
-          time: "07:00-07:30",
-          distance: 30,
-          weight: 10,
-          speed: 10,
-          assistance: 30
-        },
-        {
-          type: 3,
-          time: "07:00-07:30",
-          distance: 30,
-          weight: 10,
-          speed: 10,
-          assistance: 30
-        },
-        {
-          type: 4,
-          time: "07:00-07:30",
-          distance: 30,
-          weight: 10,
-          speed: 10,
-          assistance: 30
-        }
-      ]
+      planInfo:''
     };
   },
   created() {
@@ -145,6 +313,29 @@ export default {
         .catch(() => {});
     },
     okNextClick() {
+      let patientid = this.$store.state.patientInfo.id;
+      var obj={'patientid':patientid};
+      let params = { ...this.planInfo,...obj } ;
+      apiAddPlaninfo(params).then(res => {
+         if(res.message=='success'){
+          this.$alert('添加计划成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.okNextClickCallback();
+          }
+        });
+
+        } else{
+          this.$alert(res.message, '', {
+          confirmButtonText: '确定',
+          showClose:false,
+        });
+        }  
+      });
+      
+    },
+    okNextClickCallback(){
       this.$router.push({
         path: "/",
         name: "home",
@@ -194,8 +385,8 @@ export default {
       div:nth-child(1) {
         color: #2c3e50;
       }
-      div:nth-child(2) {
-        font-size: 40px;
+      .font{
+        font-size: 16px;
       }
     }
   }
