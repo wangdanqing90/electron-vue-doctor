@@ -95,7 +95,7 @@
                   :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}"
                 >
                   <span
-                    v-if="scope.row.status==1"
+                    v-if="scope.row.status==0"
                     class="hand"
                     @click="modifyClick(scope.$index, scope.row)"
                   >修改</span>
@@ -239,7 +239,13 @@ export default {
       });
     },
     //修改
-    modifyClick(index, row) {},
+    modifyClick(index, row) {
+       this.$router.push({
+        path: "/appointment",
+        name: "appointment",
+        query: { 'planid': row.planid }
+      });
+    },
     //删除
     deleteClick(index, row) {
       this.$confirm("您确定要删除该计划？", "", {

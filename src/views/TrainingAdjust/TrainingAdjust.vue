@@ -41,27 +41,30 @@
             v-show="this.activeClass == 0"
             class="right display_flex justify-content_flex-start align-items_center"
           >
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type1"
               :type="1"
               :disable="active1Right!=1"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type2"
               :type="2"
               :disable="active1Right!=2"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type3"
               :type="3"
               :disable="active1Right!=3"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -72,19 +75,21 @@
             v-show="this.activeClass == 1"
             class="right display_flex justify-content_flex-start align-items_center"
           >
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type4"
               :type="4"
               :disable="active2Right!=4"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type5"
               :type="5"
               :disable="active2Right!=5"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -95,17 +100,19 @@
             v-show="this.activeClass == 2"
             class="right display_flex justify-content_flex-start align-items_center"
           >
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type6"
               :type="6"
               :disable="active3Right!=6"
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type7"
               :type="7"
               :disable="active3Right!=7"
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -116,35 +123,39 @@
             v-show="this.activeClass == 3"
             class="right display_flex justify-content_flex-justify align-items_center"
           >
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type8"
               :type="8"
               :disable="active4Right!=8"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type9"
               :type="9"
               :disable="active4Right!=9"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type10"
               :type="10"
               :disable="active4Right!=10"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag"
+            <AdjustContiner v-if="flag&&flag1"
               ref="type11"
               :type="11"
               :disable="active4Right!=11"
               :stepData='this.stepData'
+              :lastPlanData='this.lastPlanData'
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
@@ -159,7 +170,7 @@
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import AdjustContiner from "@/components/Adjust/AdjustContiner.vue";
-import { apiGetStepdetails } from "@/request/api.js";
+import { apiGetStepdetails,apiGetplaninfo } from "@/request/api.js";
 export default {
   name: "trainingPlan",
   components: {
@@ -170,13 +181,17 @@ export default {
     return {
       vm: "",
       leftImg: "",
+      planid : this.$route.query.planid,
+      patientid : this.$store.state.patientInfo.id,
       activeClass: 0,
       active1Right: 1,
       active2Right: 4,
       active3Right: 6,
       active4Right: 8,
+      lastPlanData:{},
       stepData:{},
       flag: false,//解决props异步问题
+      flag1: false,
       tagList: [
         {
           name: "行走",
@@ -210,14 +225,43 @@ export default {
     };
   },
   created() {
+    window.vue = this;
     this.vm = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练控件数字调节";
     this.titleName = this.$store.state.patientInfo.name;
 
+    if (!this.common.isNullOrBlank(this.planid)) {
+      this.initLastPlan();
+    }else{
+      this.flag1 = true;
+    }
     this.initStep();
   },
   methods: {
+    //获取之前的计划
+    initLastPlan(){
+       var params = {
+        planid: this.planid,
+        patientid:this.patientid
+      };
+      apiGetplaninfo(params).then(res => {
+        let data = res.data;
+        if(res.data.Walk_Mode==0) this.active1Right = 1;
+        else if(res.data.Walk_Mode==2) this.active1Right = 2;
+        else if(res.data.Walk_Mode==1) this.active1Right = 3;
+        if(res.data.SitAndStand_Mode==0) this.active2Right = 4;
+        else if(res.data.SitAndStand_Mode==2) this.active2Right = 5;
+        if(res.data.Gaming_Mode==3) this.active3Right = 6;
+        else if(res.data.Gaming_Mode==4) this.active3Right = 7;
+        if(res.data.Balance_Mode==5) this.active4Right = 8;
+        else if(res.data.Balance_Mode==6) this.active4Right = 9;
+        else if(res.data.Balance_Mode==7) this.active4Right = 10;
+        else if(res.data.Balance_Mode==8) this.active4Right = 11;
+
+        this.flag1 = true;
+      });
+    },
      initStep(){
       apiGetStepdetails().then(res => {
         this.stepData=res.data;

@@ -69,6 +69,7 @@
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
+import { apiGetplaninfo } from "@/request/api.js";
 
 export default {
   name: "trainingPlan",
@@ -80,7 +81,9 @@ export default {
   data() {
     return {
       leftImg: "",
-      value: [0, 8, 16, 24, 30],
+      planid : this.$route.query.planid,
+      patientid : this.$store.state.patientInfo.id,
+      value: [],
       process: val => [
         [val[0], val[1], { backgroundColor: "#8da1f2" }],
         [val[1], val[2], { backgroundColor: "#fd8dad" }],
@@ -111,6 +114,11 @@ export default {
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练模式选择";
     this.titleName = this.$store.state.patientInfo.name;
+    if (!this.common.isNullOrBlank(this.planid)) {
+      this.initLastPlan();
+    }else{
+      this.value= [0, 8, 16, 24, 30];
+    }
   },
   computed: {
     walkValue: function() {
@@ -127,6 +135,24 @@ export default {
     }
   },
   methods: {
+    initLastPlan(){
+       var params = {
+        planid: this.planid,
+        patientid:this.patientid
+      };
+      apiGetplaninfo(params).then(res => {
+        let data = res.data;
+        let wt =data.Walk_Time;
+        let st =data.SitAndStand_Time;
+        let gt =data.Gaming_Time;
+        let bt =data.Balance_Time;
+        this.value= [0];
+        this.value.push(wt);
+        this.value.push(wt+st);
+        this.value.push(wt+st+gt);
+        this.value.push(30);
+      });
+    },
     okClick() {
       console.log(this.walkValue);
       console.log(this.sitValue);
@@ -138,11 +164,23 @@ export default {
       info['Balance_Time']=this.balanceValue;
       info['SitAndStand_Time']=this.sitValue;
       this.$store.commit('savePlanInfo',info);
-      this.$router.push({
+
+       if (!this.common.isNullOrBlank(this.planid)) {
+           this.$router.push({
+            path: "/trainingAdjust",
+            name: "trainingAdjust",
+            query: { 'planid': this.planid }
+          });
+          }else{
+             this.$router.push({
         path: "/trainingAdjust",
         name: "trainingAdjust",
         query: {}
       });
+
+          }
+
+     
     },
     backClick() {
       this.$router.go(-1);

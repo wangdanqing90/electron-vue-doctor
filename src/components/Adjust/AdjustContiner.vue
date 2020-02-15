@@ -71,6 +71,12 @@ export default {
       default: function () {
         return {}
     }
+    },
+    lastPlanData: {
+      type: Object,
+      default: function () {
+        return {}
+    }
     }
   },
 
@@ -81,7 +87,11 @@ export default {
   },
 
   created() {
+  
     this.initData();
+  },
+  mounted(){
+ console.log(this.lastPlanData)
   },
   methods: {
     selectClick() {
@@ -101,19 +111,19 @@ export default {
             {
               name: "减重",
               step: this.stepData.WFollowing_Imponderability,
-              total: 0,
+              total: this.lastPlanData.WFollowing_Imponderability||0,
               unit: "KG"
             },
             {
               name: "定距",
               step: this.stepData.WFollowing_FixedDistance,
-              total: 0,
+              total: this.lastPlanData.WFollowing_FixedDistance||0,
               unit: "M"
             },
             {
               name: "速度",
               step: this.stepData.WFollowing_Speed,
-              total: 0,
+              total: this.lastPlanData.WFollowing_Speed||0,
               unit: "MM/s"
             }
           ]
@@ -131,19 +141,19 @@ export default {
             {
               name: "减重",
               step: this.stepData.WInitiative_Imponderability,
-              total: 0,
+              total: this.lastPlanData.WInitiative_Imponderability||0,
               unit: "KG"
             },
             {
               name: "阻力",
               step:  this.stepData.WInitiative_Force,
-              total: 0,
+              total: this.lastPlanData.WInitiative_Force||0,
               unit: "N"
             },
             {
               name: "定距",
               step: this.stepData.WInitiative_FixedDistance,
-              total: 0,
+              total: this.lastPlanData.WInitiative_FixedDistance||0,
               unit: "M"
             }
           ]
@@ -159,19 +169,19 @@ export default {
             {
               name: "减重",
               step: this.stepData.WResistance_Imponderability,
-              total: 0,
+              total: this.lastPlanData.WResistance_Imponderability||0,
               unit: "KG"
             },
             {
               name: "阻力",
               step: this.stepData.WResistance_Force,
-              total: 0,
+              total: this.lastPlanData.WResistance_Force||0,
               unit: "N"
             },
             {
               name: "定距",
               step: this.stepData.WResistance_FixedDistance,
-              total: 0,
+              total: this.lastPlanData.WResistance_FixedDistance||0,
               unit: "M"
             }
           ]
@@ -187,13 +197,13 @@ export default {
             {
               name: "速度",
               step: this.stepData.SFollowing_Speed,
-              total: 0,
+              total: this.lastPlanData.SFollowing_Speed||0,
               unit: "MM/s"
             },
             {
               name: "计数",
               step: this.stepData.SFollowing_Count,
-              total: 0,
+              total: this.lastPlanData.SFollowing_Count||0,
               unit: "次"
             }
           ]
@@ -209,13 +219,13 @@ export default {
             {
               name: "减重",
               step: this.stepData.SInitiative_Imponderability,
-              total: 0,
+              total: this.lastPlanData.SInitiative_Imponderability||0,
               unit: "KG"
             },
             {
               name: "计数",
               step: this.stepData.SInitiative_Count,
-              total: 0,
+              total: this.lastPlanData.SInitiative_Count||0,
               unit: "次"
             }
           ]
@@ -226,7 +236,7 @@ export default {
           imgsrc: require("@/../images/Tangram_1.png"),
           imgsrcGray: require("@/../images/Tangram_2.png"),
           fontColor: "pinkFontColor",
-          radio: 0
+          radio: this.lastPlanData.GWall_Intensity||0
         };
       } else if (this.type === 7) {
         this.config = {
@@ -234,7 +244,7 @@ export default {
           imgsrc: require("@/../images/Spaceflight_1.png"),
           imgsrcGray: require("@/../images/Spaceflight_2.png"),
           fontColor: "greenFontColor",
-          radio: 0
+          radio: this.lastPlanData.GPlane_Intensity||0
         };
       } else if (this.type === 8) {
         this.config = {
@@ -247,7 +257,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BLeft_Imponderability,
-              total: 0,
+              total: this.lastPlanData.BLeft_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -263,7 +273,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BRight_Imponderability,
-              total: 0,
+              total: this.lastPlanData.BRight_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -279,7 +289,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BBoth_Imponderability,
-              total: 0,
+              total: this.lastPlanData.BBoth_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -295,7 +305,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BFRT_Imponderability,
-              total: 0,
+              total: this.lastPlanData.BFRT_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -314,11 +324,6 @@ return this.config.switch
          this.config.tabActive=0;
        }
     }
-  },
-  stepData(newValue, oldValue){
-    alert(newValue)
-    console.log(newValue)
-
   }
 };
 </script>

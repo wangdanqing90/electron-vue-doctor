@@ -320,11 +320,21 @@ export default {
           info['plandate']=day;
           
           _this.$store.commit('savePlanInfo',info);
-          this.$router.push({
+          let planid = this.$route.query.planid;
+          if (!this.common.isNullOrBlank(planid)) {
+           this.$router.push({
             path: "/trainingSlider",
             name: "trainingSlider",
-            query: {}
+            query: { 'planid': planid }
           });
+          }else{
+             this.$router.push({
+            path: "/trainingSlider",
+            name: "trainingSlider"
+          });
+
+          }
+         
         })
         .catch(() => {});
 
