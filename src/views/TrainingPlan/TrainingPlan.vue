@@ -276,7 +276,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiAddPlaninfo } from "@/request/api.js";
+import { apiAddPlaninfo,apiVerifyplaninfo } from "@/request/api.js";
 export default {
   name: "trainingPlan",
   components: {
@@ -293,6 +293,7 @@ export default {
     window.vue = this;
     this.leftImg = require("../../../images/logo.png");
     this.planInfo=this.$store.state.planInfo;
+    this.planid=this.$route.query.planid;
     console.log(this.planInfo);
     this.title = "的本次训练计划（"+this.planInfo.plandate+')';
     this.titleName = this.$store.state.patientInfo.name;
@@ -313,10 +314,12 @@ export default {
         .catch(() => {});
     },
     okNextClick() {
-      let patientid = this.$store.state.patientInfo.id;
-      var obj={'patientid':patientid};
+      if (this.common.isNullOrBlank(this.planid)) {
+        //新建计划
+        let patientid = this.$store.state.patientInfo.id;
+      let obj={'patientid':patientid};
       let params = { ...this.planInfo,...obj } ;
-      apiAddPlaninfo(params).then(res => {
+         apiAddPlaninfo(params).then(res => {
          if(res.message=='success'){
           this.$alert('添加计划成功', '', {
           confirmButtonText: '确定',
@@ -333,6 +336,31 @@ export default {
         });
         }  
       });
+     
+    }else{
+      //修改计划
+      let patientid = this.$store.state.patientInfo.id;
+      let obj={'patientid':patientid,'type':0,'planid':this.planid  };
+      let params = { ...this.planInfo,...obj } ;
+       apiVerifyplaninfo(params).then(res => {
+         if(res.message=='success'){
+          this.$alert('修改计划成功', '', {
+          confirmButtonText: '确定',
+          showClose:false,
+          callback: action => {
+            this.okNextClickCallback();
+          }
+        });
+
+        } else{
+          this.$alert(res.message, '', {
+          confirmButtonText: '确定',
+          showClose:false,
+        });
+        }  
+      });
+      
+    }
       
     },
     okNextClickCallback(){

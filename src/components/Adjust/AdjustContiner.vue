@@ -111,19 +111,19 @@ export default {
             {
               name: "减重",
               step: this.stepData.WFollowing_Imponderability,
-              total: this.lastPlanData.WFollowing_Imponderability||0,
+              total: this.lastPlanData.WFollowing_Imponderability/this.stepData.WFollowing_Imponderability||0,
               unit: "KG"
             },
             {
               name: "定距",
               step: this.stepData.WFollowing_FixedDistance,
-              total: this.lastPlanData.WFollowing_FixedDistance||0,
+              total: this.lastPlanData.WFollowing_FixedDistance/this.stepData.WFollowing_FixedDistance||0,
               unit: "M"
             },
             {
               name: "速度",
               step: this.stepData.WFollowing_Speed,
-              total: this.lastPlanData.WFollowing_Speed||0,
+              total: this.lastPlanData.WFollowing_Speed/this.stepData.WFollowing_Speed||0,
               unit: "MM/s"
             }
           ]
@@ -141,19 +141,19 @@ export default {
             {
               name: "减重",
               step: this.stepData.WInitiative_Imponderability,
-              total: this.lastPlanData.WInitiative_Imponderability||0,
+              total: this.lastPlanData.WInitiative_Imponderability/this.stepData.WInitiative_Imponderability||0,
               unit: "KG"
             },
             {
               name: "阻力",
               step:  this.stepData.WInitiative_Force,
-              total: this.lastPlanData.WInitiative_Force||0,
+              total: this.lastPlanData.WInitiative_Force/this.stepData.WInitiative_Force||0,
               unit: "N"
             },
             {
               name: "定距",
               step: this.stepData.WInitiative_FixedDistance,
-              total: this.lastPlanData.WInitiative_FixedDistance||0,
+              total: this.lastPlanData.WInitiative_FixedDistance/this.stepData.WInitiative_FixedDistance||0,
               unit: "M"
             }
           ]
@@ -169,19 +169,19 @@ export default {
             {
               name: "减重",
               step: this.stepData.WResistance_Imponderability,
-              total: this.lastPlanData.WResistance_Imponderability||0,
+              total: this.lastPlanData.WResistance_Imponderability/this.stepData.WResistance_Imponderability||0,
               unit: "KG"
             },
             {
               name: "阻力",
               step: this.stepData.WResistance_Force,
-              total: this.lastPlanData.WResistance_Force||0,
+              total: this.lastPlanData.WResistance_Force/this.stepData.WResistance_Force||0,
               unit: "N"
             },
             {
               name: "定距",
               step: this.stepData.WResistance_FixedDistance,
-              total: this.lastPlanData.WResistance_FixedDistance||0,
+              total: this.lastPlanData.WResistance_FixedDistance/this.stepData.WResistance_FixedDistance||0,
               unit: "M"
             }
           ]
@@ -197,13 +197,13 @@ export default {
             {
               name: "速度",
               step: this.stepData.SFollowing_Speed,
-              total: this.lastPlanData.SFollowing_Speed||0,
+              total: this.lastPlanData.SFollowing_Speed/this.stepData.SFollowing_Speed||0,
               unit: "MM/s"
             },
             {
               name: "计数",
               step: this.stepData.SFollowing_Count,
-              total: this.lastPlanData.SFollowing_Count||0,
+              total: this.lastPlanData.SFollowing_Count/this.stepData.SFollowing_Count||0,
               unit: "次"
             }
           ]
@@ -219,13 +219,13 @@ export default {
             {
               name: "减重",
               step: this.stepData.SInitiative_Imponderability,
-              total: this.lastPlanData.SInitiative_Imponderability||0,
+              total: this.lastPlanData.SInitiative_Imponderability/this.stepData.SInitiative_Imponderability||0,
               unit: "KG"
             },
             {
               name: "计数",
               step: this.stepData.SInitiative_Count,
-              total: this.lastPlanData.SInitiative_Count||0,
+              total: this.lastPlanData.SInitiative_Count/this.stepData.SInitiative_Count||0,
               unit: "次"
             }
           ]
@@ -257,7 +257,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BLeft_Imponderability,
-              total: this.lastPlanData.BLeft_Imponderability||0,
+              total: this.lastPlanData.BLeft_Imponderability/this.stepData.BLeft_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -273,7 +273,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BRight_Imponderability,
-              total: this.lastPlanData.BRight_Imponderability||0,
+              total: this.lastPlanData.BRight_Imponderability/this.stepData.BRight_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -289,7 +289,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BBoth_Imponderability,
-              total: this.lastPlanData.BBoth_Imponderability||0,
+              total: this.lastPlanData.BBoth_Imponderability/this.stepData.BBoth_Imponderability||0,
               unit: "KG"
             }
           ]
@@ -305,7 +305,7 @@ export default {
             {
               name: "减重",
               step: this.stepData.BFRT_Imponderability,
-              total: this.lastPlanData.BFRT_Imponderability||0,
+              total: this.lastPlanData.BFRT_Imponderability/this.stepData.BFRT_Imponderability||0,
               unit: "KG"
             }
           ]

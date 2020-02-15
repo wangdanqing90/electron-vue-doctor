@@ -246,6 +246,7 @@ export default {
         patientid:this.patientid
       };
       apiGetplaninfo(params).then(res => {
+        this.lastPlanData = res.data;
         let data = res.data;
         if(res.data.Walk_Mode==0) this.active1Right = 1;
         else if(res.data.Walk_Mode==2) this.active1Right = 2;
@@ -355,7 +356,7 @@ export default {
       this.$router.push({
         path: "/trainingPlan",
         name: "trainingPlan",
-        query: {}
+         query: { 'planid': this.planid }
       });
     },
     backClick() {
@@ -443,7 +444,6 @@ export default {
     text-decoration: underline;
     cursor: pointer;
   }
-
   .inform-inner {
     box-sizing: border-box;
     padding: 10px;
