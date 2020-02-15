@@ -13,11 +13,14 @@
     <el-row>
       <el-card class="box-card">
         <el-col :span="24" class="inform-container">
-          <div v-for="item in planData" :key="item.value">
+         
+          <!-- <div v-for="item in planData" :key="item.value">
             <div
               class="inform display_flex justify-content_flex-justify align-items_center"
               :class="{'purpleFontColor':item.type==1,'pinkFontColor':item.type==2,'yellowFontColor':item.type==3,'greenFontColor':item.type==4}"
             >
+
+
               <div
                 class="left display_inline-flex flex-direction_column justify-content_flex-around align-items_center"
               >
@@ -58,8 +61,11 @@
                 <div>助力（n）</div>
                 <div>{{item.assistance}}</div>
               </div>
+
+
+              
             </div>
-          </div>
+          </div> -->
         </el-col>
       </el-card>
     </el-row>
@@ -78,6 +84,7 @@ export default {
   data() {
     return {
       leftImg: "",
+      planInfo:'',
       planData: [
         {
           type: 1,
@@ -115,9 +122,12 @@ export default {
     };
   },
   created() {
+    window.vue = this;
     this.leftImg = require("../../../images/logo.png");
-    this.title = "的本次训练计划（2019.7.16）";
-    this.titleName = "患者刘邦";
+    this.planInfo=this.$store.state.planInfo;
+    console.log(this.planInfo);
+    this.title = "的本次训练计划（"+this.planInfo.plandate+')';
+    this.titleName = this.$store.state.patientInfo.name;
   },
   methods: {
     backClick() {

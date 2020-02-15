@@ -66,68 +66,23 @@ export default {
       type: Boolean,
       default: true
     }, 
-//     stepData: {
-//       type: Object,
-//       default: function () {
-//         return {
-// WFollowing_Speed:70,
-// WInitiative_Force:5,
-// WResistance_Force:5,
-// WFollowing_FixedDistance:20,
-// WInitiative_FixedDistance:20,
-// WResistance_FixedDistance:20,
-// WFollowing_Imponderability:10,
-// WInitiative_Imponderability:10,
-// WResistance_Imponderability:10,
-// SFollowing_Count:10,
-// SFollowing_Speed:70,
-// SInitiative_Imponderability:10,
-// SInitiative_Count:10,
-// BFRT_Imponderability:10,
-// BBoth_Imponderability:10,
-// BLeft_Imponderability:10,
-// BRight_Imponderability:10
-
-//         }
-//     }
-//     }
+    stepData: {
+      type: Object,
+      default: function () {
+        return {}
+    }
+    }
   },
 
   data() {
     return {
-      config: {},
-      stepData: {
-     
-WFollowing_Speed:70,
-WInitiative_Force:5,
-WResistance_Force:5,
-WFollowing_FixedDistance:20,
-WInitiative_FixedDistance:20,
-WResistance_FixedDistance:20,
-WFollowing_Imponderability:10,
-WInitiative_Imponderability:10,
-WResistance_Imponderability:10,
-SFollowing_Count:10,
-SFollowing_Speed:70,
-SInitiative_Imponderability:10,
-SInitiative_Count:10,
-BFRT_Imponderability:10,
-BBoth_Imponderability:10,
-BLeft_Imponderability:10,
-BRight_Imponderability:10
-
-    }
+      config: {}
     };
   },
 
   created() {
     this.initData();
-     console.log(this.stepData)
   },
-  updated(){
-    //console.log(this.stepData)
-  },
-
   methods: {
     selectClick() {
       if (!this.disable) return;
@@ -137,7 +92,7 @@ BRight_Imponderability:10
     initData() {
       if (this.type === 1) {
         this.config = {
-          title: "行走跟随模式",
+          title: "跟随模式",
           imgsrc: require("@/../images/followmode_1.png"),
           imgsrcGray: require("@/../images/followmode_2.png"),
           width: "120px",
@@ -165,7 +120,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 2) {
         this.config = {
-          title: "行走主动模式",
+          title: "主动模式",
           imgsrc: require("@/../images/activemode_1.png"),
           imgsrcGray: require("@/../images/activemode_2.png"),
           width: "120px",
@@ -195,7 +150,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 3) {
         this.config = {
-          title: "行走阻力模式",
+          title: "阻力模式",
           imgsrc: require("@/../images/resistancemode_1.png"),
           imgsrcGray: require("@/../images/resistancemode_2.png"),
           width: "120px",
@@ -223,7 +178,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 4) {
         this.config = {
-          title: "坐站跟随模式",
+          title: "跟随模式",
           imgsrc: require("@/../images/followmode_0.png"),
           imgsrcGray: require("@/../images/followmode_2.png"),
           width: "120px",
@@ -245,7 +200,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 5) {
         this.config = {
-          title: "坐站主动模式",
+          title: "主动模式",
           imgsrc: require("@/../images/activemode_0.png"),
           imgsrcGray: require("@/../images/activemode_2.png"),
           width: "120px",
@@ -267,7 +222,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 6) {
         this.config = {
-          title: "游戏七巧板",
+          title: "七巧板",
           imgsrc: require("@/../images/Tangram_1.png"),
           imgsrcGray: require("@/../images/Tangram_2.png"),
           fontColor: "pinkFontColor",
@@ -275,7 +230,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 7) {
         this.config = {
-          title: "游戏太空飞行",
+          title: "太空飞行",
           imgsrc: require("@/../images/Spaceflight_1.png"),
           imgsrcGray: require("@/../images/Spaceflight_2.png"),
           fontColor: "greenFontColor",
@@ -283,7 +238,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 8) {
         this.config = {
-          title: "平衡左脚减重",
+          title: "左脚减重",
           imgsrc: require("@/../images/leftfoot_01.png"),
           imgsrcGray: require("@/../images/leftfoot_02.png"),
           width: "120px",
@@ -299,7 +254,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 9) {
         this.config = {
-          title: "平衡右脚减重",
+          title: "右脚减重",
           imgsrc: require("@/../images/rightfoot_01.png"),
           imgsrcGray: require("@/../images/rightfoot_02.png"),
           width: "120px",
@@ -315,7 +270,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 10) {
         this.config = {
-          title: "平衡双脚减重",
+          title: "双脚减重",
           imgsrc: require("@/../images/bothfoot_01.png"),
           imgsrcGray: require("@/../images/bothfoot_02.png"),
           width: "120px",
@@ -331,7 +286,7 @@ BRight_Imponderability:10
         };
       } else if (this.type === 11) {
         this.config = {
-          title: "平衡FRT减重",
+          title: "FRT减重",
           imgsrc: require("@/../images/frtmode_01.png"),
           imgsrcGray: require("@/../images/frtmode_02.png"),
           width: "120px",

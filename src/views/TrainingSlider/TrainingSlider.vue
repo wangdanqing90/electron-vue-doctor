@@ -110,7 +110,7 @@ export default {
     window.vue=this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练模式选择";
-    this.titleName = "刘邦";
+    this.titleName = this.$store.state.patientInfo.name;
   },
   computed: {
     walkValue: function() {
