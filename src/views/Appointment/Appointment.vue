@@ -83,6 +83,7 @@
             >
               <div
                 v-if="item.able>0||(item.timeID==lastTimeId&&tableData[index1].day == lastDate)"
+                :class="(item.timeID==lastTimeId&&tableData[index1].day == lastDate)?'lastselect':''"
                 @click="cellClick($event,item)"
               >{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
@@ -323,6 +324,9 @@ export default {
     }
     .right-table > div .cell:nth-last-child(1) {
       border-bottom: 1px solid #ebeef5;
+    }
+    .lastselect {
+      background: $purpleFontColor;
     }
     .cell {
       font-size: 14px;
