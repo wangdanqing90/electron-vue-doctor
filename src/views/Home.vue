@@ -22,17 +22,15 @@
       <el-row class="tableContainer">
         <el-col :span="24">
           <el-table :data="tableData" stripe max-height="700" style="width: 100%;">
-            <el-table-column
-        label="序号"
-        type="index"
-        width="100"
-        align="center">
-         <!-- 红1未审核 蓝0已审核 -->
-            <template slot-scope="scope">
-                     <span :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">{{(page - 1) * limit + scope.$index + 1}}</span>
-                 </template>
+            <el-table-column label="序号" type="index" width="100" align="center">
+              <!-- 红1未审核 蓝0已审核 -->
+              <template slot-scope="scope">
+                <span
+                  :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
+                >{{(page - 1) * limit + scope.$index + 1}}</span>
+              </template>
             </el-table-column>
-            <el-table-column prop="status" label="状态"  align="center">
+            <el-table-column prop="status" label="状态" align="center">
               <template slot-scope="scope">
                 <img v-if="!scope.row.status" src="@/../images/touxiang_01.png" class="stateImg" />
                 <img v-else src="@/../images/touxiang_03.png" class="stateImg" />
@@ -40,17 +38,25 @@
             </el-table-column>
             <el-table-column prop="name" label="姓名" align="center">
               <template slot-scope="scope">
-                <span :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">{{scope.row.name}}</span>
+                <span
+                  :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
+                >{{scope.row.name}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="sex" label="性别" align="center">
               <template slot-scope="scope">
-                <span :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">{{scope.row.sex}}</span>
+                <span
+                  v-if="scope.row.sex == 1"
+                  :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
+                >男</span>
+                <span v-else :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">女</span>
               </template>
             </el-table-column>
             <el-table-column prop="age" label="年龄" align="center">
               <template slot-scope="scope">
-                <span :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">{{scope.row.age}}</span>
+                <span
+                  :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
+                >{{scope.row.age}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="illness" label="病症" align="center">
@@ -62,7 +68,9 @@
             </el-table-column>
             <el-table-column prop="regdate" label="添加日期" align="center">
               <template slot-scope="scope">
-                <span :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">{{scope.row.regdate}}</span>
+                <span
+                  :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
+                >{{scope.row.regdate}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="operate1" label="患者信息" align="center">
@@ -110,7 +118,7 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiPatientlist } from '@/request/api.js';
+import { apiPatientlist } from "@/request/api.js";
 
 export default {
   name: "home",
@@ -131,11 +139,11 @@ export default {
     };
   },
   created() {
-     window.vue = this;
+    window.vue = this;
     this.leftImg = require("../../images/logo.png");
 
     console.log(this.$store.state.userInfo);
-    this.initPatientlist()
+    this.initPatientlist();
   },
   methods: {
     backClick() {
@@ -143,8 +151,8 @@ export default {
     },
     confirmClick() {
       this.leaveDialogVisible = false;
-      this.$store.commit('clearAll')
-       this.$router.push({
+      this.$store.commit("clearAll");
+      this.$router.push({
         path: "/login",
         name: "login"
       });
@@ -156,25 +164,25 @@ export default {
       this.initPatientlist();
     },
     //初始化患者列表
-    initPatientlist(){
-      var params={
-         'page': this.page,
-         'limit': this.limit,
-         'search':this.search
-      }
-      apiPatientlist(params).then(res => {               
-          this.tableData = res.data.items;  
-          this.totalSize = res.data.total ;
-      })  
+    initPatientlist() {
+      var params = {
+        page: this.page,
+        limit: this.limit,
+        search: this.search
+      };
+      apiPatientlist(params).then(res => {
+        this.tableData = res.data.items;
+        this.totalSize = res.data.total;
+      });
     },
-    searchClick(){
+    searchClick() {
       this.page = 1;
       this.initPatientlist();
     },
     //审核
     examineClick(index, row) {
-      var patientInfo =row;
-      this.$store.commit('savePatientInfo',row)
+      var patientInfo = row;
+      this.$store.commit("savePatientInfo", row);
       this.$router.push({
         path: "/detailInform",
         name: "detailInform",
@@ -183,11 +191,11 @@ export default {
     },
     //查看
     checkClick(index, row) {
-      var patientInfo =row;
-      this.$store.commit('savePatientInfo',row)
+      var patientInfo = row;
+      this.$store.commit("savePatientInfo", row);
       this.$router.push({
         path: "/trainingList",
-        name: "trainingList",
+        name: "trainingList"
       });
     },
 
