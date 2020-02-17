@@ -40,8 +40,8 @@
           :enable-cross="false"
           :height="100"
           :dot-options="dotOptions"
-                :min=0
-      :max=30
+          :min="0"
+          :max="30"
         >
           <template v-slot:process="{ start, end, style, index }">
             <div class="vue-slider-process" :style="style">
@@ -81,8 +81,8 @@ export default {
   data() {
     return {
       leftImg: "",
-      planid : this.$route.query.planid,
-      patientid : this.$store.state.patientInfo.id,
+      planid: this.$route.query.planid,
+      patientid: this.$store.state.patientInfo.id,
       value: [],
       process: val => [
         [val[0], val[1], { backgroundColor: "#8da1f2" }],
@@ -110,14 +110,14 @@ export default {
     };
   },
   created() {
-    window.vue=this;
+    window.vue = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的训练模式选择";
     this.titleName = this.$store.state.patientInfo.name;
     if (!this.common.isNullOrBlank(this.planid)) {
       this.initLastPlan();
-    }else{
-      this.value= [0, 8, 16, 24, 30];
+    } else {
+      this.value = [0, 8, 16, 24, 30];
     }
   },
   computed: {
@@ -135,21 +135,21 @@ export default {
     }
   },
   methods: {
-    initLastPlan(){
-       var params = {
+    initLastPlan() {
+      var params = {
         planid: this.planid,
-        patientid:this.patientid
+        patientid: this.patientid
       };
       apiGetplaninfo(params).then(res => {
         let data = res.data;
-        let wt =data.Walk_Time;
-        let st =data.SitAndStand_Time;
-        let gt =data.Gaming_Time;
-        let bt =data.Balance_Time;
-        this.value= [0];
+        let wt = data.details.Walk_Time;
+        let st = data.details.SitAndStand_Time;
+        let gt = data.details.Gaming_Time;
+        let bt = data.details.Balance_Time;
+        this.value = [0];
         this.value.push(wt);
-        this.value.push(wt+st);
-        this.value.push(wt+st+gt);
+        this.value.push(wt + st);
+        this.value.push(wt + st + gt);
         this.value.push(30);
       });
     },
@@ -158,29 +158,26 @@ export default {
       console.log(this.sitValue);
       console.log(this.gameValue);
       console.log(this.balanceValue);
-      var info={};
-      info['Walk_Time']=this.walkValue;
-      info['Gaming_Time']=this.gameValue;
-      info['Balance_Time']=this.balanceValue;
-      info['SitAndStand_Time']=this.sitValue;
-      this.$store.commit('savePlanInfo',info);
+      var info = {};
+      info["Walk_Time"] = this.walkValue;
+      info["Gaming_Time"] = this.gameValue;
+      info["Balance_Time"] = this.balanceValue;
+      info["SitAndStand_Time"] = this.sitValue;
+      this.$store.commit("savePlanInfo", info);
 
-       if (!this.common.isNullOrBlank(this.planid)) {
-           this.$router.push({
-            path: "/trainingAdjust",
-            name: "trainingAdjust",
-            query: { 'planid': this.planid }
-          });
-          }else{
-             this.$router.push({
-        path: "/trainingAdjust",
-        name: "trainingAdjust",
-        query: {}
-      });
-
-          }
-
-     
+      if (!this.common.isNullOrBlank(this.planid)) {
+        this.$router.push({
+          path: "/trainingAdjust",
+          name: "trainingAdjust",
+          query: { planid: this.planid }
+        });
+      } else {
+        this.$router.push({
+          path: "/trainingAdjust",
+          name: "trainingAdjust",
+          query: {}
+        });
+      }
     },
     backClick() {
       this.$router.go(-1);
@@ -341,7 +338,7 @@ export default {
   border-top-width: 0;
   border-bottom-color: #d8d8da;
 }
-.vue-slider-rail{
+.vue-slider-rail {
   border-radius: 0;
 }
 </style>

@@ -41,30 +41,33 @@
             v-show="this.activeClass == 0"
             class="right display_flex justify-content_flex-start align-items_center"
           >
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type1"
               :type="1"
               :disable="active1Right!=1"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type2"
               :type="2"
               :disable="active1Right!=2"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type3"
               :type="3"
               :disable="active1Right!=3"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -75,21 +78,23 @@
             v-show="this.activeClass == 1"
             class="right display_flex justify-content_flex-start align-items_center"
           >
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type4"
               :type="4"
               :disable="active2Right!=4"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type5"
               :type="5"
               :disable="active2Right!=5"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -100,19 +105,21 @@
             v-show="this.activeClass == 2"
             class="right display_flex justify-content_flex-start align-items_center"
           >
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type6"
               :type="6"
               :disable="active3Right!=6"
-              :lastPlanData='this.lastPlanData'
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type7"
               :type="7"
               :disable="active3Right!=7"
-              :lastPlanData='this.lastPlanData'
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="large"
             ></AdjustContiner>
@@ -123,39 +130,43 @@
             v-show="this.activeClass == 3"
             class="right display_flex justify-content_flex-justify align-items_center"
           >
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type8"
               :type="8"
               :disable="active4Right!=8"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type9"
               :type="9"
               :disable="active4Right!=9"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type10"
               :type="10"
               :disable="active4Right!=10"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
-            <AdjustContiner v-if="flag&&flag1"
+            <AdjustContiner
+              v-if="flag&&flag1"
               ref="type11"
               :type="11"
               :disable="active4Right!=11"
-              :stepData='this.stepData'
-              :lastPlanData='this.lastPlanData'
+              :stepData="this.stepData"
+              :lastPlanData="this.lastPlanData"
               @selectRightClick="selectRightClick"
               class="small"
             ></AdjustContiner>
@@ -170,7 +181,7 @@
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import AdjustContiner from "@/components/Adjust/AdjustContiner.vue";
-import { apiGetStepdetails,apiGetplaninfo } from "@/request/api.js";
+import { apiGetStepdetails, apiGetplaninfo } from "@/request/api.js";
 export default {
   name: "trainingPlan",
   components: {
@@ -181,16 +192,16 @@ export default {
     return {
       vm: "",
       leftImg: "",
-      planid : this.$route.query.planid,
-      patientid : this.$store.state.patientInfo.id,
+      planid: this.$route.query.planid,
+      patientid: this.$store.state.patientInfo.id,
       activeClass: 0,
       active1Right: 1,
       active2Right: 4,
       active3Right: 6,
       active4Right: 8,
-      lastPlanData:{},
-      stepData:{},
-      flag: false,//解决props异步问题
+      lastPlanData: {},
+      stepData: {},
+      flag: false, //解决props异步问题
       flag1: false,
       tagList: [
         {
@@ -233,130 +244,156 @@ export default {
 
     if (!this.common.isNullOrBlank(this.planid)) {
       this.initLastPlan();
-    }else{
+    } else {
       this.flag1 = true;
     }
     this.initStep();
   },
   methods: {
     //获取之前的计划
-    initLastPlan(){
-       var params = {
+    initLastPlan() {
+      var params = {
         planid: this.planid,
-        patientid:this.patientid
+        patientid: this.patientid
       };
       apiGetplaninfo(params).then(res => {
-        this.lastPlanData = res.data;
+        this.lastPlanData = res.data.details;
         let data = res.data;
-        if(res.data.Walk_Mode==0) this.active1Right = 1;
-        else if(res.data.Walk_Mode==2) this.active1Right = 2;
-        else if(res.data.Walk_Mode==1) this.active1Right = 3;
-        if(res.data.SitAndStand_Mode==0) this.active2Right = 4;
-        else if(res.data.SitAndStand_Mode==2) this.active2Right = 5;
-        if(res.data.Gaming_Mode==3) this.active3Right = 6;
-        else if(res.data.Gaming_Mode==4) this.active3Right = 7;
-        if(res.data.Balance_Mode==5) this.active4Right = 8;
-        else if(res.data.Balance_Mode==6) this.active4Right = 9;
-        else if(res.data.Balance_Mode==7) this.active4Right = 10;
-        else if(res.data.Balance_Mode==8) this.active4Right = 11;
-
+        if (res.data.details.Walk_Mode == 0) this.active1Right = 1;
+        else if (res.data.details.Walk_Mode == 2) this.active1Right = 2;
+        else if (res.data.details.Walk_Mode == 1) this.active1Right = 3;
+        if (res.data.details.SitAndStand_Mode == 0) this.active2Right = 4;
+        else if (res.data.details.SitAndStand_Mode == 2) this.active2Right = 5;
+        if (res.data.details.Gaming_Mode == 3) this.active3Right = 6;
+        else if (res.data.details.Gaming_Mode == 4) this.active3Right = 7;
+        if (res.data.details.Balance_Mode == 5) this.active4Right = 8;
+        else if (res.data.details.Balance_Mode == 6) this.active4Right = 9;
+        else if (res.data.details.Balance_Mode == 7) this.active4Right = 10;
+        else if (res.data.details.Balance_Mode == 8) this.active4Right = 11;
         this.flag1 = true;
       });
     },
-     initStep(){
+    initStep() {
       apiGetStepdetails().then(res => {
-        this.stepData=res.data;
-        this.flag=true;
+        this.stepData = res.data;
+        this.flag = true;
       });
     },
     okClick() {
-      let obj={};
+      let obj = {};
       this.$refs.type1.config.adjusts.forEach((item, index) => {
-        console.log('行走训练：跟随模式：' + item.name + item.total);
-        if(index == 0) obj['WFollowing_Imponderability']=item.total*this.stepData.WFollowing_Imponderability;
-        if(index == 1) obj['WFollowing_FixedDistance']=item.total*this.stepData.WFollowing_FixedDistance;
-        if(index == 2) obj['WFollowing_Speed']=item.total*this.stepData.WFollowing_Speed;
+        console.log("行走训练：跟随模式：" + item.name + item.total);
+        if (index == 0)
+          obj["WFollowing_Imponderability"] =
+            item.total * this.stepData.WFollowing_Imponderability;
+        if (index == 1)
+          obj["WFollowing_FixedDistance"] =
+            item.total * this.stepData.WFollowing_FixedDistance;
+        if (index == 2)
+          obj["WFollowing_Speed"] = item.total * this.stepData.WFollowing_Speed;
       });
       this.$refs.type2.config.adjusts.forEach((item, index) => {
-        console.log('行走训练：主动模式：'+ item.name + item.total);
-        if(index == 0) obj['WInitiative_Imponderability']=item.total*this.stepData.WInitiative_Imponderability;
-        if(index == 1) obj['WInitiative_Force']=item.total*this.stepData.WInitiative_Force;
-        if(index == 2) obj['WInitiative_FixedDistance']=item.total*this.stepData.WInitiative_FixedDistance;
+        console.log("行走训练：主动模式：" + item.name + item.total);
+        if (index == 0)
+          obj["WInitiative_Imponderability"] =
+            item.total * this.stepData.WInitiative_Imponderability;
+        if (index == 1)
+          obj["WInitiative_Force"] =
+            item.total * this.stepData.WInitiative_Force;
+        if (index == 2)
+          obj["WInitiative_FixedDistance"] =
+            item.total * this.stepData.WInitiative_FixedDistance;
       });
 
       console.log("方向限定" + this.$refs.type2.config.switch);
       console.log("方向" + this.$refs.type2.config.tabActive);
-      obj['WInitiative_Direction']=this.$refs.type2.config.tabActive;
+      obj["WInitiative_Direction"] = this.$refs.type2.config.tabActive;
 
       this.$refs.type3.config.adjusts.forEach((item, index) => {
-         console.log('行走训练：阻力模式：'+ item.name + item.total);
-        if(index == 0) obj['WResistance_Imponderability']=item.total*this.stepData.WResistance_Imponderability;
-        if(index == 1) obj['WResistance_Force']=item.total*this.stepData.WResistance_Force;
-        if(index == 2) obj['WResistance_FixedDistance']=item.total*this.stepData.WResistance_FixedDistance;
+        console.log("行走训练：阻力模式：" + item.name + item.total);
+        if (index == 0)
+          obj["WResistance_Imponderability"] =
+            item.total * this.stepData.WResistance_Imponderability;
+        if (index == 1)
+          obj["WResistance_Force"] =
+            item.total * this.stepData.WResistance_Force;
+        if (index == 2)
+          obj["WResistance_FixedDistance"] =
+            item.total * this.stepData.WResistance_FixedDistance;
       });
       this.$refs.type4.config.adjusts.forEach((item, index) => {
-        console.log('坐站训练：跟随模式：'+ item.name + item.total);
-        if(index == 0) obj['SFollowing_Speed']=item.total*this.stepData.SFollowing_Speed;
-        if(index == 1) obj['SFollowing_Count']=item.total*this.stepData.SFollowing_Count;
+        console.log("坐站训练：跟随模式：" + item.name + item.total);
+        if (index == 0)
+          obj["SFollowing_Speed"] = item.total * this.stepData.SFollowing_Speed;
+        if (index == 1)
+          obj["SFollowing_Count"] = item.total * this.stepData.SFollowing_Count;
       });
       this.$refs.type5.config.adjusts.forEach((item, index) => {
-        console.log('坐站训练：主动模式：'+ item.name + item.total);
-        if(index == 0) obj['SInitiative_Imponderability']=item.total*this.stepData.SInitiative_Imponderability;
-        if(index == 1) obj['SInitiative_Count']=item.total*this.stepData.SInitiative_Count;
+        console.log("坐站训练：主动模式：" + item.name + item.total);
+        if (index == 0)
+          obj["SInitiative_Imponderability"] =
+            item.total * this.stepData.SInitiative_Imponderability;
+        if (index == 1)
+          obj["SInitiative_Count"] =
+            item.total * this.stepData.SInitiative_Count;
       });
       console.log("七巧板" + this.$refs.type6.config.radio);
-      obj['GWall_Intensity']=this.$refs.type6.config.radio;
+      obj["GWall_Intensity"] = this.$refs.type6.config.radio;
       console.log("太空飞行" + this.$refs.type7.config.radio);
-      obj['GPlane_Intensity']=this.$refs.type7.config.radio;
+      obj["GPlane_Intensity"] = this.$refs.type7.config.radio;
       this.$refs.type8.config.adjusts.forEach((item, index) => {
-        console.log('平衡训练：左脚：' + item.name + item.total);
-        obj['BLeft_Imponderability']=item.total*this.stepData.BLeft_Imponderability;
+        console.log("平衡训练：左脚：" + item.name + item.total);
+        obj["BLeft_Imponderability"] =
+          item.total * this.stepData.BLeft_Imponderability;
       });
       this.$refs.type9.config.adjusts.forEach((item, index) => {
-        console.log('平衡训练：右脚：' + item.name + item.total);
-        obj['BRight_Imponderability']=item.total*this.stepData.BRight_Imponderability;
+        console.log("平衡训练：右脚：" + item.name + item.total);
+        obj["BRight_Imponderability"] =
+          item.total * this.stepData.BRight_Imponderability;
       });
       this.$refs.type10.config.adjusts.forEach((item, index) => {
-        console.log('平衡训练：双脚：' + item.name + item.total);
-         obj['BBoth_Imponderability']=item.total*this.stepData.BBoth_Imponderability;
+        console.log("平衡训练：双脚：" + item.name + item.total);
+        obj["BBoth_Imponderability"] =
+          item.total * this.stepData.BBoth_Imponderability;
       });
       this.$refs.type11.config.adjusts.forEach((item, index) => {
-        console.log('平衡训练：FRT：' + item.name + item.total);
-         obj['BFRT_Imponderability']=item.total*this.stepData.BFRT_Imponderability;
+        console.log("平衡训练：FRT：" + item.name + item.total);
+        obj["BFRT_Imponderability"] =
+          item.total * this.stepData.BFRT_Imponderability;
       });
 
-      if(this.active1Right==1){
-        obj['Walk_Mode']=0;
-      }else if(this.active1Right==2){
-        obj['Walk_Mode']=2;
-      }else if(this.active1Right==3){
-        obj['Walk_Mode']=1;
+      if (this.active1Right == 1) {
+        obj["Walk_Mode"] = 0;
+      } else if (this.active1Right == 2) {
+        obj["Walk_Mode"] = 2;
+      } else if (this.active1Right == 3) {
+        obj["Walk_Mode"] = 1;
       }
-      if(this.active2Right==4){
-        obj['SitAndStand_Mode']=0;
-      }else if(this.active2Right==5){
-        obj['SitAndStand_Mode']=2;
+      if (this.active2Right == 4) {
+        obj["SitAndStand_Mode"] = 0;
+      } else if (this.active2Right == 5) {
+        obj["SitAndStand_Mode"] = 2;
       }
-      if(this.active3Right==6){
-        obj['Gaming_Mode']=3;
-      }else if(this.active3Right==7){
-        obj['Gaming_Mode']=4;
+      if (this.active3Right == 6) {
+        obj["Gaming_Mode"] = 3;
+      } else if (this.active3Right == 7) {
+        obj["Gaming_Mode"] = 4;
       }
-      if(this.active4Right==8){
-        obj['Balance_Mode']=5;
-      }else if(this.active4Right==9){
-        obj['Balance_Mode']=6;
-      }else if(this.active4Right==10){
-        obj['Balance_Mode']=7;
-      }else if(this.active4Right==11){
-        obj['Balance_Mode']=8;
+      if (this.active4Right == 8) {
+        obj["Balance_Mode"] = 5;
+      } else if (this.active4Right == 9) {
+        obj["Balance_Mode"] = 6;
+      } else if (this.active4Right == 10) {
+        obj["Balance_Mode"] = 7;
+      } else if (this.active4Right == 11) {
+        obj["Balance_Mode"] = 8;
       }
       // debugger;
-      this.$store.commit('savePlanInfo',obj);
+      this.$store.commit("savePlanInfo", obj);
       this.$router.push({
         path: "/trainingPlan",
         name: "trainingPlan",
-         query: { 'planid': this.planid }
+        query: { planid: this.planid }
       });
     },
     backClick() {

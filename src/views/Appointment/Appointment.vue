@@ -37,16 +37,15 @@
           <div>
             <div class="cell">时间</div>
           </div>
-          <div  v-for="(item,index) in tableData" :key="index" > 
+          <div v-for="(item,index) in tableData" :key="index">
             <div class="title cell">
-              
-               <div v-if='index == 0'>Monday</div>
-                <div v-if='index == 1'>Tuesday</div>
-                 <div v-if='index == 2'>Wednesday</div>
-                  <div v-if='index == 3'>Thursday</div>
-                   <div v-if='index == 4'>Friday</div>
-                    <div v-if='index == 5'>Saturday</div>
-                    <div v-if='index == 6'>Sunday</div>
+              <div v-if="index == 0">Monday</div>
+              <div v-if="index == 1">Tuesday</div>
+              <div v-if="index == 2">Wednesday</div>
+              <div v-if="index == 3">Thursday</div>
+              <div v-if="index == 4">Friday</div>
+              <div v-if="index == 5">Saturday</div>
+              <div v-if="index == 6">Sunday</div>
               <div>{{tableData[index].day}}</div>
             </div>
           </div>
@@ -75,11 +74,20 @@
           </div>
 
           <div v-for="(item1,index1) in tableData" :key="index1" :day="item1.day">
-            <div v-for="(item,index) in tableData[index1].list" :key="index" class="cell" :timeID="item.timeID" :day="item1.day">
-              <div v-if="item.able>0" @click="cellClick($event,item)">{{item.able}}/{{total}}</div>
+            <div
+              v-for="(item,index) in tableData[index1].list"
+              :key="index"
+              class="cell"
+              :timeID="item.timeID"
+              :day="item1.day"
+            >
+              <div
+                v-if="item.able>0||(item.timeID==lastTimeId&&tableData[index1].day == lastDate)"
+                @click="cellClick($event,item)"
+              >{{item.able}}/{{total}}</div>
               <div v-else class="pinkBackColor"></div>
             </div>
-          </div>      
+          </div>
         </div>
       </div>
     </div>
@@ -89,7 +97,7 @@
 <script>
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiGetplanlist } from "@/request/api.js";
+import { apiGetplanlist, apiGetplaninfo } from "@/request/api.js";
 
 export default {
   name: "Appointment",
@@ -101,258 +109,122 @@ export default {
     return {
       vm: "",
       leftImg: "",
+      planid: this.$route.query.planid,
+      patientid: this.$store.state.patientInfo.id,
       dateValue: new Date(),
-      total:0,
-      tableData: [
-        // {
-        //   type: "sun",
-        //   day: "01",
-        //   list: [
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 5
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     }
-        //   ]
-        // },
-        //  {
-        //   type: "mon",
-        //   day: "02",
-        //   list: [
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 5
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     },
-        //     {
-        //       timeID: 1,
-        //       able: 1
-        //     }
-        //   ]
-        // }
-      ]
+      total: 0,
+      tableData: [],
+      lastTimeId: "",
+      lastDate: ""
     };
   },
   created() {
     this.vm = this;
-    window.vue=this;
+    window.vue = this;
     this.leftImg = require("../../../images/logo.png");
     this.title = "的时间预约计划表";
-    this.titleName =this.$store.state.patientInfo.name; 
-    this.initList( this.common.getNowFormatDate());
+    this.titleName = this.$store.state.patientInfo.name;
+    //this.initList(this.common.getNowFormatDate());
+
+    if (!this.common.isNullOrBlank(this.planid)) {
+      this.initLastPlan();
+    } else {
+      this.initList(this.common.getNowFormatDate());
+    }
   },
   methods: {
-    initList(day){
-      this.tableData=[];
-       var params = {
-        plandate: day,
+    initLastPlan() {
+      let _this = this;
+      var params = {
+        planid: this.planid,
+        patientid: this.patientid
+      };
+      apiGetplaninfo(params).then(res => {
+        let data = res.data;
+        this.lastTimeId = res.data.timeid;
+        this.lastDate = res.data.plandate;
+
+        _this.initList(this.common.getNowFormatDate());
+      });
+    },
+    initList(day) {
+      this.tableData = [];
+      var params = {
+        plandate: day
       };
       apiGetplanlist(params).then(res => {
-        this.total=res.data.total;
-        var items =res.data.items;
+        this.total = res.data.total;
+        var items = res.data.items;
         for (let item in items) {
-            var newObj={};
-            newObj.day=item;
-           var list=[];  
-           var objs=JSON.parse(items[item]);
-           for (let item1 in objs) {
-             var re = {};
-             re.timeID = item1;
-             re.able = this.total- objs[item1];
-             list.push(re);
-           }   
-          newObj.list=list;
-          this.tableData.push(newObj)
+          var newObj = {};
+          newObj.day = item;
+          var list = [];
+          var objs = JSON.parse(items[item]);
+          for (let item1 in objs) {
+            var re = {};
+            re.timeID = item1;
+            re.able = this.total - objs[item1];
+            list.push(re);
+          }
+          newObj.list = list;
+          this.tableData.push(newObj);
         }
-        console.log(this.tableData);     
-      });   
+        console.log(this.tableData);
+      });
     },
     backClick() {
       this.$router.go(-1);
     },
     //选择日期
     calendarSelect(data) {
-      this.initList(data.day)
+      this.initList(data.day);
     },
-    cellClick(event,item) {
-      var _this=this;
-      let day = event.target.parentNode.getAttribute('day')
+    cellClick(event, item) {
+      var _this = this;
+      let day = event.target.parentNode.getAttribute("day");
 
-      if(this.compareDate(day)){
-              this.$confirm("您是否确认预约该时间？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          var info={};
-          info['timeid']=item.timeID;
-          info['plandate']=day;
-          
-          _this.$store.commit('savePlanInfo',info);
-          let planid = this.$route.query.planid;
-          if (!this.common.isNullOrBlank(planid)) {
-           this.$router.push({
-            path: "/trainingSlider",
-            name: "trainingSlider",
-            query: { 'planid': planid }
-          });
-          }else{
-             this.$router.push({
-            path: "/trainingSlider",
-            name: "trainingSlider"
-          });
-
-          }
-         
+      if (this.compareDate(day)) {
+        this.$confirm("您是否确认预约该时间？", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          confirmButtonClass: "el-button purple"
         })
-        .catch(() => {});
+          .then(() => {
+            var info = {};
+            info["timeid"] = item.timeID;
+            info["plandate"] = day;
 
-      }else{
-        this.$alert('请选择今天以后的日期', '', {
-          confirmButtonText: '确定',
-          showClose:false     
+            _this.$store.commit("savePlanInfo", info);
+
+            if (!this.common.isNullOrBlank(this.planid)) {
+              this.$router.push({
+                path: "/trainingSlider",
+                name: "trainingSlider",
+                query: { planid: this.planid }
+              });
+            } else {
+              this.$router.push({
+                path: "/trainingSlider",
+                name: "trainingSlider"
+              });
+            }
+          })
+          .catch(() => {});
+      } else {
+        this.$alert("请选择今天以后的日期", "", {
+          confirmButtonText: "确定",
+          showClose: false
         });
       }
     },
     //比较日期
-    compareDate(day){
+    compareDate(day) {
       var oDate1 = new Date(day);
       let now = new Date();
-      if(oDate1 >= now){
-        return true
+      if (oDate1 >= now) {
+        return true;
       } else {
-        return false
+        return false;
       }
     }
   }
