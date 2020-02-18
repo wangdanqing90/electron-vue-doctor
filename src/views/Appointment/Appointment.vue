@@ -19,16 +19,6 @@
             >{{ data.day.split('-').slice(2).join('-') }} {{ data.isSelected ? '✔️' : ''}}</p>
           </template>
         </el-calendar>
-        <div class="top">
-          <div>
-            <span></span>
-            <span>不可预约</span>
-            <span></span>
-            <span>可预约</span>
-          </div>
-
-          <div>设备使用情况：可预约/总设备数</div>
-        </div>
       </div>-->
       <el-row :gutter="5" class="margin-bottom-20">
         <el-col :span="10" class="text-left">
@@ -115,9 +105,10 @@
                   :day="item1.day"
                 >
                   <div
-                    v-if="item.able>0||(item.timeID==lastTimeId&&tableData[index1].day == lastDate)"
+                    v-if="item.able>0"
                     :class="(item.timeID==lastTimeId&&tableData[index1].day == lastDate)?'lastselect':''"
                     @click="cellClick($event,item)"
+                    @contextmenu.prevent="openMenu($event,item)"
                   >{{item.able}}/{{total}}</div>
                   <div v-else class="pinkBackColor"></div>
                 </el-row>
@@ -127,6 +118,13 @@
         </el-col>
       </el-row>
     </el-card>
+    <div v-show="menuVisible" style="z-index: 999;">
+      <ul id="menu" class="menu">
+        <li class="menu_item">平级添加</li>
+        <li class="menu_item">下级添加</li>
+        <li class="menu_item">删除</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -151,7 +149,13 @@ export default {
       total: 0,
       tableData: [],
       lastTimeId: "",
-      lastDate: ""
+      lastDate: "",
+      menuVisible: false,
+      productTypes: [],
+      defaultProps: {
+        children: "children",
+        label: "name"
+      }
     };
   },
   created() {
@@ -199,6 +203,7 @@ export default {
             var re = {};
             re.timeID = item1;
             re.able = this.total - objs[item1];
+            re.day = item;
             list.push(re);
           }
           newObj.list = list;
@@ -261,12 +266,63 @@ export default {
       } else {
         return false;
       }
+    },
+
+    //右键点击
+    openMenu(MouseEvent, item) {
+      // 鼠标右击触发事件
+      this.menuVisible = false; // 先把模态框关死，目的是 第二次或者第n次右键鼠标的时候 它默认的是true
+      this.menuVisible = true; // 显示模态窗口，跳出自定义菜单栏
+      var menu = document.querySelector("#menu");
+      document.addEventListener("click", this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
+      menu.style.display = "block";
+
+      if (window.screen.height - MouseEvent.pageY <= 100) {
+        menu.style.top = MouseEvent.pageY - 100 + "px";
+      } else {
+        menu.style.top = MouseEvent.pageY + 10 + "px";
+      }
+
+      console.log(document.body.clientWidth);
+      console.log(MouseEvent.clientX);
+      console.log(document.body.clientWidth - MouseEvent.clientX);
+      if (document.body.clientWidth - MouseEvent.clientX <= 100) {
+        menu.style.left = MouseEvent.pageX - 80 + "px";
+      } else {
+        menu.style.left = MouseEvent.pageX + 10 + "px";
+      }
+
+      //console.log(item);
+      // console.log(window.screen.height);
+      // console.log("left" + menu.style.left + "top" + menu.style.top);
+    },
+    foo() {
+      // 取消鼠标监听事件 菜单栏
+      this.menuVisible = false;
+      document.removeEventListener("click", this.foo); // 要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
     }
-  }
+  },
+  watch: {}
 };
 </script>
 
 <style scoped lang="scss">
+.menu {
+  height: 100px;
+  width: 80px;
+  position: absolute;
+  border-radius: 10px;
+  border: 1px solid #999999;
+  background-color: #f4f4f4;
+}
+
+li:hover {
+  background-color: #1790ff;
+  color: white;
+}
+li {
+  font-size: 15px;
+}
 .header {
   .header-right {
     img {
