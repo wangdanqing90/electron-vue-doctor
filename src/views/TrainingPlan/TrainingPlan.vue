@@ -339,7 +339,10 @@ export default {
     this.planInfo = this.$store.state.planInfo;
     this.planid = this.$route.query.planid;
     console.log(this.planInfo);
-    this.title = "的本次训练计划（" + this.planInfo.plandate + ")";
+    var time = this.common.timeType(this.planInfo.timeid);
+    this.title =
+      "的本次训练计划（" + this.planInfo.plandate + "\xa0\xa0\xa0" + time + ")";
+
     this.titleName = this.$store.state.patientInfo.name;
   },
   methods: {

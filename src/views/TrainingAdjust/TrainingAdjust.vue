@@ -12,8 +12,6 @@
     <el-card class="box-card">
       <div class="inform-container">
         <div class="inform-inner display_flex justify-content_flex-start align-items_center">
-          <!-- 下一步 -->
-          <div v-if="this.activeClass<3" class="next purpleFontColor" @click="nextClick()">下一步</div>
           <!-- 左边tab -->
           <div
             class="left display_inline-flex flex-direction_column justify-content_flex-start align-items_center hand"
@@ -472,11 +470,6 @@ export default {
     },
     backClick() {
       this.$router.go(-1);
-    },
-    nextClick() {
-      if (this.activeClass < 3) {
-        this.activeClass++;
-      }
     },
     getItem(index) {
       this.activeClass = index; // 把当前点击元素的index，赋值给activeClass
