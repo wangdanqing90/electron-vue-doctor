@@ -11,31 +11,82 @@
 
     <el-card class="box-card">
       <div class="inform-container">
-        <div class="inform-inner display_flex justify-content_flex-justify align-items_center">
+        <div class="inform-inner display_flex justify-content_flex-start align-items_center">
           <!-- 下一步 -->
           <div v-if="this.activeClass<3" class="next purpleFontColor" @click="nextClick()">下一步</div>
           <!-- 左边tab -->
           <div
-            class="left display_inline-flex flex-direction_column justify-content_flex-justify align-items_center hand"
+            class="left display_inline-flex flex-direction_column justify-content_flex-start align-items_center hand"
           >
             <div
               class="left-inner"
-              :class="activeClass == index ? 'active':''"
-              v-for="(item,index) in tagList"
-              :key="index"
-              @click="getItem(index)"
+              :class="activeClass == 0 ? 'active':''"
+              @click="getItem(0)"
+              v-if="tagList[0].visible"
             >
               <div
                 class="left-inner-inner display_flex justify-content_flex-around align-items_center"
               >
-                <img :src="item.imgsrc" />
-                <div :class="item.colorClass">
-                  <div>{{item.name}}</div>
-                  <div>{{item.namebottom}}</div>
+                <img :src="tagList[0].imgsrc" />
+                <div :class="tagList[0].colorClass">
+                  <div>{{tagList[0].name}}</div>
+                  <div>{{tagList[0].namebottom}}</div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="left-inner"
+              :class="activeClass == 1 ? 'active':''"
+              @click="getItem(1)"
+              v-if="tagList[1].visible"
+            >
+              <div
+                class="left-inner-inner display_flex justify-content_flex-around align-items_center"
+              >
+                <img :src="tagList[1].imgsrc" />
+                <div :class="tagList[1].colorClass">
+                  <div>{{tagList[1].name}}</div>
+                  <div>{{tagList[1].namebottom}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="left-inner"
+              :class="activeClass == 2 ? 'active':''"
+              @click="getItem(2)"
+              v-if="tagList[2].visible"
+            >
+              <div
+                class="left-inner-inner display_flex justify-content_flex-around align-items_center"
+              >
+                <img :src="tagList[2].imgsrc" />
+                <div :class="tagList[2].colorClass">
+                  <div>{{tagList[2].name}}</div>
+                  <div>{{tagList[2].namebottom}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="left-inner"
+              :class="activeClass == 3 ? 'active':''"
+              :key="3"
+              @click="getItem(3)"
+              v-if="tagList[3].visible"
+            >
+              <div
+                class="left-inner-inner display_flex justify-content_flex-around align-items_center"
+              >
+                <img :src="tagList[3].imgsrc" />
+                <div :class="tagList[3].colorClass">
+                  <div>{{tagList[3].name}}</div>
+                  <div>{{tagList[3].namebottom}}</div>
                 </div>
               </div>
             </div>
           </div>
+
           <!-- 行走训练右边 -->
           <div
             v-show="this.activeClass == 0"
@@ -209,28 +260,32 @@ export default {
           namebottom: "训练",
           id: 1,
           imgsrc: require("@/../images/walkingtraining.png"),
-          colorClass: "purpleFontColor"
+          colorClass: "purpleFontColor",
+          visible: false
         },
         {
           name: "坐站",
           namebottom: "训练",
           id: 2,
           imgsrc: require("@/../images/stationtraining.png"),
-          colorClass: "pinkFontColor"
+          colorClass: "pinkFontColor",
+          visible: false
         },
         {
           name: "游戏",
           namebottom: "训练",
           id: 3,
           imgsrc: require("@/../images/gametraining.png"),
-          colorClass: "yellowFontColor"
+          colorClass: "yellowFontColor",
+          visible: false
         },
         {
           name: "平衡",
           namebottom: "测定",
           id: 4,
           imgsrc: require("@/../images/balancedetermination.png"),
-          colorClass: "greenFontColor"
+          colorClass: "greenFontColor",
+          visible: false
         }
       ]
     };
@@ -248,8 +303,26 @@ export default {
       this.flag1 = true;
     }
     this.initStep();
+    this.initLeft();
   },
   methods: {
+    initLeft() {
+      let planInfo = this.$store.state.planInfo;
+      if (planInfo.Walk_Time != 0) this.tagList[0].visible = true;
+      if (planInfo.SitAndStand_Time != 0) this.tagList[1].visible = true;
+      if (planInfo.Gaming_Time != 0) this.tagList[2].visible = true;
+      if (planInfo.Balance_Time != 0) this.tagList[3].visible = true;
+
+      if (this.tagList[0].visible) {
+        this.activeClass = 0;
+      } else if (this.tagList[1].visible) {
+        this.activeClass = 1;
+      } else if (this.tagList[2].visible) {
+        this.activeClass = 2;
+      } else {
+        this.activeClass = 3;
+      }
+    },
     //获取之前的计划
     initLastPlan() {
       var params = {
@@ -259,6 +332,7 @@ export default {
       apiGetplaninfo(params).then(res => {
         this.lastPlanData = res.data.details;
         let data = res.data;
+
         if (res.data.details.Walk_Mode == 0) this.active1Right = 1;
         else if (res.data.details.Walk_Mode == 2) this.active1Right = 2;
         else if (res.data.details.Walk_Mode == 1) this.active1Right = 3;
@@ -432,6 +506,8 @@ export default {
         });
       } else if (this.activeClass == 2) {
         //第三行
+        this.vm.$set(this.$refs.type7.config, "radio", 0);
+        this.vm.$set(this.$refs.type6.config, "radio", 0);
         this.active3Right = index;
       } else if (this.activeClass == 3) {
         //第四行
@@ -451,6 +527,7 @@ export default {
       }
     }
   },
+  computed: {},
   watch: {}
 };
 </script>
@@ -495,6 +572,7 @@ export default {
         width: 100%;
         border-radius: 10px 0 0 10px;
         background: #eeeeee;
+        margin-bottom: 9px;
         .left-inner-inner {
           height: 80px;
           margin: 10px 0 10px 10px;
@@ -508,8 +586,8 @@ export default {
         border-top: 1px solid #e7e7e7;
         border-left: 1px solid #e7e7e7;
         border-bottom: 1px solid #e7e7e7;
-        width: 156px;
-        margin-right: -6px;
+        // width: 156px;
+        // margin-right: -6px;
         .left-inner-inner {
           border-right: 1px solid #e7e7e7;
         }

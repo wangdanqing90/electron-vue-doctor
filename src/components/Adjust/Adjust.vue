@@ -45,7 +45,6 @@ export default {
   },
 
   created() {
-    //console.log(this.adjust);
     if (this.fontColor == "purpleFontColor") {
       this.reduceImg = require("@/../images/subtract_1.png");
       this.addImg = require("@/../images/add_1.png");

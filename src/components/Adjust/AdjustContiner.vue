@@ -40,9 +40,16 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <el-radio-group v-model="config.radio">
-        <el-radio :label="0" text-color="#E6A23C" fill="#E6A23C">易</el-radio>
+    <div v-else-if="type==6">
+      <el-radio-group v-model="config.radio" :disabled="disable">
+        <el-radio :label="0">易</el-radio>
+        <el-radio :label="1">中</el-radio>
+        <el-radio :label="2">难</el-radio>
+      </el-radio-group>
+    </div>
+    <div v-else-if="type==7">
+      <el-radio-group v-model="config.radio" :disabled="disable">
+        <el-radio :label="0">易</el-radio>
         <el-radio :label="1">中</el-radio>
         <el-radio :label="2">难</el-radio>
       </el-radio-group>
@@ -126,7 +133,7 @@ export default {
               total:
                 this.lastPlanData.WFollowing_Speed /
                   this.stepData.WFollowing_Speed || 0,
-              unit: "MM/s"
+              unit: "M/min"
             }
           ]
         };
@@ -214,7 +221,7 @@ export default {
               total:
                 this.lastPlanData.SFollowing_Speed /
                   this.stepData.SFollowing_Speed || 0,
-              unit: "MM/s"
+              unit: "M/min"
             },
             {
               name: "计数",
