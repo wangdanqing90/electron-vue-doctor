@@ -191,7 +191,8 @@ import TrainingPlanTemp from "@/views/TrainingPlan/TrainingPlanTemp.vue";
 import {
   apiGetplanlist,
   apiGetplaninfo,
-  apiGetPatientplanlistperweek
+  apiGetPatientplanlistperweek,
+  apiDeleteplaninfo
 } from "@/request/api.js";
 
 export default {
@@ -319,42 +320,42 @@ export default {
       this.patientplanlistperweek(day);
       //this.initList(day);
     },
-    cellClick(event, item) {
-      var _this = this;
-      let day = event.target.parentNode.getAttribute("day");
+    // cellClick(event, item) {
+    //   var _this = this;
+    //   let day = event.target.parentNode.getAttribute("day");
 
-      if (this.compareDate(day)) {
-        this.$confirm("您是否确认预约该时间？", "", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          confirmButtonClass: "el-button purple"
-        })
-          .then(() => {
-            var info = {};
-            info["timeid"] = item.timeID;
-            info["plandate"] = day;
-            _this.$store.commit("savePlanInfo", info);
-            if (!this.common.isNullOrBlank(this.planid)) {
-              this.$router.push({
-                path: "/trainingSlider",
-                name: "trainingSlider",
-                query: { planid: this.planid }
-              });
-            } else {
-              this.$router.push({
-                path: "/trainingSlider",
-                name: "trainingSlider"
-              });
-            }
-          })
-          .catch(() => {});
-      } else {
-        this.$alert("请选择今天以后的日期", "", {
-          confirmButtonText: "确定",
-          showClose: false
-        });
-      }
-    },
+    //   if (this.compareDate(day)) {
+    //     this.$confirm("您是否确认预约该时间？", "", {
+    //       confirmButtonText: "确定",
+    //       cancelButtonText: "取消",
+    //       confirmButtonClass: "el-button purple"
+    //     })
+    //       .then(() => {
+    //         var info = {};
+    //         info["timeid"] = item.timeID;
+    //         info["plandate"] = day;
+    //         _this.$store.commit("savePlanInfo", info);
+    //         if (!this.common.isNullOrBlank(this.planid)) {
+    //           this.$router.push({
+    //             path: "/trainingSlider",
+    //             name: "trainingSlider",
+    //             query: { planid: this.planid }
+    //           });
+    //         } else {
+    //           this.$router.push({
+    //             path: "/trainingSlider",
+    //             name: "trainingSlider"
+    //           });
+    //         }
+    //       })
+    //       .catch(() => {});
+    //   } else {
+    //     this.$alert("请选择今天以后的日期", "", {
+    //       confirmButtonText: "确定",
+    //       showClose: false
+    //     });
+    //   }
+    // },
     //比较日期
     compareDate(day) {
       var oDate1 = new Date(day);
@@ -403,15 +404,82 @@ export default {
       this.dialogTrainingVisible = true;
     },
     //编辑
-    editClick() {},
+    editClick() {
+      var _this = this;
+      var info = {};
+      info["timeid"] = this.selectInfo.timeid;
+      info["plandate"] = this.selectInfo.day;
+      _this.$store.commit("savePlanInfo", info);
+      this.$router.push({
+        path: "/trainingSlider",
+        name: "trainingSlider",
+        query: { planid: this.selectInfo.planid }
+      });
+    },
     //删除
-    deleteClick() {},
+    deleteClick() {
+      this.$confirm("您确定要删除该计划？", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        confirmButtonClass: "el-button purple"
+      }).then(() => {
+        this.deleteClickCallback();
+      });
+    },
+    deleteClickCallback() {
+      var _this = this;
+      var params = {
+        planid: this.selectInfo.planid
+      };
+      apiDeleteplaninfo(params).then(res => {
+        if (res.message == "success") {
+          this.$alert("删除成功", "", {
+            confirmButtonText: "确定",
+            showClose: false,
+            callback: action => {
+              _this.patientplanlistperweek(this.selectInfo.day);
+            }
+          });
+        } else {
+          this.$alert(res.message, "", {
+            confirmButtonText: "确定",
+            showClose: false
+          });
+        }
+      });
+    },
     //报告
     reportClick() {
       this.dialogTableVisible = true;
     },
     //新建
-    newClick() {}
+    newClick() {
+      var _this = this;
+      if (this.compareDate(this.selectInfo.day)) {
+        this.$confirm("您是否确认预约该时间？", "", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          confirmButtonClass: "el-button purple"
+        })
+          .then(() => {
+            var info = {};
+            info["timeid"] = this.selectInfo.timeid;
+            info["plandate"] = this.selectInfo.day;
+            _this.$store.commit("savePlanInfo", info);
+
+            this.$router.push({
+              path: "/trainingSlider",
+              name: "trainingSlider"
+            });
+          })
+          .catch(() => {});
+      } else {
+        this.$alert("请选择今天以后的日期", "", {
+          confirmButtonText: "确定",
+          showClose: false
+        });
+      }
+    }
   },
   watch: {}
 };
