@@ -1,20 +1,9 @@
 <template>
-  <div class="container">
-    <HeaderDoctor :leftImg="leftImg" :title="title" :titleName="titleName">
-      <template v-slot:right>
-        <div
-          class="header-right-div display_flex justify-content_flex-center align-items_center"
-        >
-          <img src="@/../images/back.png" @click="backClick" />
-        </div>
-      </template>
-    </HeaderDoctor>
+  <div class="mycontainer">
     <el-card class="box-card">
       <div class="out-continer">
         <div class="inform-continer text-left">
-          <div class="title">
-            基本信息
-          </div>
+          <div class="title">基本信息</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
             <div class="detail">
@@ -32,9 +21,7 @@
           </div>
         </div>
         <div class="inform-continer text-left">
-          <div class="title">
-            行走训练
-          </div>
+          <div class="title">行走训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
             <div class="detail">
@@ -45,23 +32,17 @@
             </div>
             <div class="detail">
               <div class="piece">总步数：{{ reportData.WSteps }}步</div>
-              <div class="piece">
-                平均步频：{{ reportData.WAvgFrequency }}个/min
-              </div>
+              <div class="piece">平均步频：{{ reportData.WAvgFrequency }}个/min</div>
               <div class="piece">平均步数：{{ reportData.WSteps }}87mm/s</div>
             </div>
             <div class="detail">
-              <div class="piece">
-                平均步态周期：{{ reportData.WAvgGaitPeriod }}s
-              </div>
+              <div class="piece">平均步态周期：{{ reportData.WAvgGaitPeriod }}s</div>
               <div class="piece">阻力：{{ reportData.WForce }}N</div>
             </div>
           </div>
         </div>
         <div class="inform-continer text-left">
-          <div class="title">
-            坐站训练
-          </div>
+          <div class="title">坐站训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
             <div class="detail">
@@ -71,20 +52,14 @@
               <div class="piece">总个数：{{ reportData.SNumber }}个</div>
             </div>
             <div class="detail">
-              <div class="piece">
-                单个最短坐站时间：{{ reportData.SMinTime }}s
-              </div>
-              <div class="piece">
-                单个最长坐站时间：{{ reportData.SMaxTime }}s
-              </div>
+              <div class="piece">单个最短坐站时间：{{ reportData.SMinTime }}s</div>
+              <div class="piece">单个最长坐站时间：{{ reportData.SMaxTime }}s</div>
               <div class="piece">平均坐站时间：{{ reportData.SAvgTime }}s</div>
             </div>
           </div>
         </div>
         <div class="inform-continer text-left">
-          <div class="title">
-            游戏训练
-          </div>
+          <div class="title">游戏训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
             <div class="detail">
@@ -100,9 +75,7 @@
           </div>
         </div>
         <div class="inform-continer text-left">
-          <div class="title">
-            平衡训练
-          </div>
+          <div class="title">平衡训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
             <div class="detail">
@@ -111,22 +84,14 @@
               <div class="piece">总时间：{{ reportData.BTime }}min</div>
             </div>
             <div class="detail">
-              <div class="piece">
-                最大前倾：{{ reportData.BMaxFrontLean }}mm
-              </div>
+              <div class="piece">最大前倾：{{ reportData.BMaxFrontLean }}mm</div>
               <div class="piece">最大左顷：{{ reportData.BMaxLeftLean }}mm</div>
-              <div class="piece">
-                轨迹面积：{{ reportData.BTrajectoryArea }}mm²
-              </div>
+              <div class="piece">轨迹面积：{{ reportData.BTrajectoryArea }}mm²</div>
             </div>
             <div class="detail">
               <div class="piece">最大后倾：{{ reportData.BMaxBackLean }}mm</div>
-              <div class="piece">
-                最大右顷：{{ reportData.BMaxRightLean }}mm
-              </div>
-              <div class="piece">
-                轨迹长度：{{ reportData.BTrajectoryLength }}mm²
-              </div>
+              <div class="piece">最大右顷：{{ reportData.BMaxRightLean }}mm</div>
+              <div class="piece">轨迹长度：{{ reportData.BTrajectoryLength }}mm²</div>
             </div>
           </div>
         </div>
@@ -136,43 +101,35 @@
 </template>
 
 <script>
-import Vue from "vue";
-import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import { apiReportinfo, apiGetPatientinfo } from "@/request/api.js";
 
 export default {
-  name: "summaryReport",
-  components: {
-    HeaderDoctor
-  },
+  name: "SummaryReport",
+  components: {},
   data() {
     return {
-      leftImg: "",
       patientid: "",
-      reportid: this.$route.query.planid,
+      reportid: "",
       reportData: [],
       patientInfo: []
     };
   },
+  props: {
+    selectInfo: {
+      type: Object,
+      default: () => {}
+    }
+  },
   created() {
     window.vue = this;
-    this.leftImg = require("../../../images/logo.png");
-    this.title = "训练报告一览表";
-    this.titleName = this.$store.state.patientInfo.name;
+    debugger;
     this.patientid = this.$store.state.patientInfo.id;
+    this.reportid = this.selectInfo.planid;
+    debugger;
     this.initPatientInfo();
     this.initReport();
   },
   methods: {
-    next() {
-      this.$router.push({
-        path: "/trainingList",
-        name: "trainingList"
-      });
-    },
-    backClick() {
-      this.$router.go(-1);
-    },
     initPatientInfo() {
       var params = {
         patientid: this.patientid
@@ -232,9 +189,10 @@ export default {
     },
     GDifficultyVal: function() {
       var val;
-      if (this.reportData.GDifficulty == 0) val = "简单";
-      if (this.reportData.GDifficulty == 1) val = "普通";
-      else if (this.reportData.GDifficulty == 2) val = "困难";
+      if (this.reportData.GDifficulty == 1) val = "简单";
+      if (this.reportData.GDifficulty == 2) val = "普通";
+      else if (this.reportData.GDifficulty == 3) val = "困难";
+      debugger;
       return val;
     }
   }
@@ -250,7 +208,14 @@ export default {
     }
   }
 }
-.container {
+.mycontainer {
+  width: 880px;
+  min-height: 100%;
+  margin: 0 auto;
+  background: #fcfcfe;
+  padding: 0 20px;
+}
+.mycontainer {
   height: 100%;
   .box-card {
     height: calc(100% - 160px);

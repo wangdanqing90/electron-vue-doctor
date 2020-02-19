@@ -1,15 +1,19 @@
-
 /**   
  * api接口统一管理
  */
-import { get, post,put,deletefun} from './http'
+import {
+    get,
+    post,
+    put,
+    deletefun
+} from './http'
 export const apiAddress = p => post('https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13816946233', p);
 
 export const apiget = () => get('/api/cc/json/mobile_tel_segment.htm?tel=13816946233');
 //登录
 export const apiLogin = p => post('/api/login/', p);
 //获取用户信息
-export const apigetUserInfo = p => get('/api/user/info/?token='+p);
+export const apigetUserInfo = p => get('/api/user/info/?token=' + p);
 //获取手机验证码
 export const apiPhoneCode = p => post('/api/phonecode/', p)
 
@@ -18,21 +22,21 @@ export const apiVerifyCode = p => post('/api/verifycode/', p)
 //修改密码
 export const apiModifypassword = p => post('/api/modifypassword/', p)
 //获取医院列表
-export const apiHospitallist= () => get('/api/hospitallist/')
+export const apiHospitallist = () => get('/api/hospitallist/')
 //获取科室列表
-export const apiDepartment= p => get('/api/department/', p)
+export const apiDepartment = p => get('/api/department/', p)
 //获取医生列表
-export const apiDoctorlist= p => get('/api/doctorlist/', p)
+export const apiDoctorlist = p => get('/api/doctorlist/', p)
 //医生注册
-export const apiRegister= p => post('/api/register/', p)
+export const apiRegister = p => post('/api/register/', p)
 //获取患者列表
-export const apiPatientlist= (p) => get('/api/patientlist/?page='+p.page+'&limit='+p.limit+'&search='+p.search)
+export const apiPatientlist = (p) => get('/api/patientlist/?page=' + p.page + '&limit=' + p.limit + '&search=' + p.search)
 //获取医生信息
-export const apiDoctorinfo= () => get('/api/doctorinfo/')
+export const apiDoctorinfo = () => get('/api/doctorinfo/')
 //修改医生信息
-export const apichangeDoctorinfo= p => put('/api/doctorinfo/', p)
+export const apichangeDoctorinfo = p => put('/api/doctorinfo/', p)
 //获取患者信息
-export const apiGetPatientinfo= (p) =>get('/api/patientinfo/?patientid='+p.patientid)
+export const apiGetPatientinfo = (p) => get('/api/patientinfo/?patientid=' + p.patientid)
 //新增患者
 export const apiAddPatientinfo = p => post('/api/patientinfo/', p)
 //修改患者
@@ -63,5 +67,5 @@ export const apiGetaskinfo = (p) => get('/api/askinfo/', p)
 export const apiPostaskinfo = p => post('/api/askinfo/', p)
 //获取计划表步长
 export const apiGetStepdetails = () => get('/api/stepdetails/')
-
-
+//获取该患者本周计划
+export const apiGetPatientplanlistperweek = (p) => get('/api/patientplanlistperweek/', p)

@@ -212,9 +212,9 @@
               class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center item"
             >
               <div>难易度</div>
-              <div class="font" v-if="planInfo.GWall_Intensity == 0">易</div>
-              <div class="font" v-else-if="planInfo.GWall_Intensity == 1">中</div>
-              <div class="font" v-else-if="planInfo.GWall_Intensity == 2">难</div>
+              <div class="font" v-if="planInfo.GWall_Intensity == 1">易</div>
+              <div class="font" v-else-if="planInfo.GWall_Intensity == 2">中</div>
+              <div class="font" v-else-if="planInfo.GWall_Intensity == 3">难</div>
             </div>
             <!-- 太空模式 -->
             <div
@@ -229,9 +229,9 @@
               class="right display_inline-flex flex-direction_column justify-content_flex-around align-items_center item"
             >
               <div>难易度</div>
-              <div class="font" v-if="planInfo.GPlane_Intensity == 0">易</div>
-              <div class="font" v-else-if="planInfo.GPlane_Intensity == 1">中</div>
-              <div class="font" v-else-if="planInfo.GPlane_Intensity == 2">难</div>
+              <div class="font" v-if="planInfo.GPlane_Intensity == 1">易</div>
+              <div class="font" v-else-if="planInfo.GPlane_Intensity == 2">中</div>
+              <div class="font" v-else-if="planInfo.GPlane_Intensity == 3">难</div>
             </div>
           </div>
 

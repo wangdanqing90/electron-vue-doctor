@@ -21,7 +21,7 @@
         </el-calendar>
       </div>-->
       <el-row :gutter="5" class="margin-bottom-20">
-        <el-col :span="10" class="text-left">
+        <el-col :span="4" class="text-left">
           <el-date-picker
             v-model="dateValue"
             type="date"
@@ -31,7 +31,7 @@
           ></el-date-picker>
         </el-col>
 
-        <el-col :span="14" class="text-right">
+        <el-col :span="20" class="text-right">
           <div class="top">
             <div>
               <span class="red"></span>
@@ -41,7 +41,9 @@
               <span class="yellow"></span>
               <span>未完成</span>
               <span class="green"></span>
-              <span>待完成</span>
+              <span>待完成(可修改)</span>
+              <span class="blue"></span>
+              <span>待完成(不可修改)</span>
               <span class="purple"></span>
               <span>完成</span>
             </div>
@@ -104,12 +106,37 @@
                   :timeID="item.timeID"
                   :day="item1.day"
                 >
+                  <!-- 已完成 -->
                   <div
-                    v-if="item.able>0"
-                    @click="cellClick($event,item)"
-                    @contextmenu.prevent="openMenu1($event,item)"
+                    v-if="item.planid&&item.status==1"
+                    class="purpleBackColor"
+                    @contextmenu.prevent="openMenu($event,item)"
+                  ></div>
+                  <!-- 未完成 -->
+                  <div
+                    v-else-if="item.planid&&item.status==2"
+                    class="yellowBackColor"
+                    @contextmenu.prevent="openMenu($event,item)"
+                  ></div>
+                  <!-- 待完成（可修改） -->
+                  <div
+                    v-else-if="item.planid&&item.status==0&&item.modify == 0"
+                    class="greenBackColor"
+                    @contextmenu.prevent="openMenu($event,item)"
+                  ></div>
+                  <!-- 待完成（不可修改） -->
+                  <div
+                    v-else-if="item.planid&&item.status==0&&item.modify == 1"
+                    class="blueBackColor"
+                    @contextmenu.prevent="openMenu($event,item)"
+                  ></div>
+                  <!-- 可预约 -->
+                  <div
+                    v-else-if="item.able>0"
+                    @contextmenu.prevent="openMenu($event,item)"
                   >{{item.able}}/{{total}}</div>
-                  <div v-else class="pinkBackColor"></div>
+                  <!-- 不可预约 -->
+                  <div v-else class="pinkBackColor" @contextmenu.prevent></div>
                 </el-row>
               </el-col>
             </el-row>
@@ -120,39 +147,53 @@
     <!-- 右击 -->
     <div v-show="menuVisible" style="z-index: 999;">
       <ul id="menu" class="menu">
-        <li class="menu_item hand" @click="detailClick">
-          <i class="el-icon-delete"></i>查看
+        <li class="menu_item hand" @click="detailClick" v-if="selectInfo.planid">
+          <i class="el-icon-document-copy"></i>查看
         </li>
-        <li class="menu_item hand" @click="editClick">
+        <li
+          class="menu_item hand"
+          @click="editClick"
+          v-if="selectInfo.status==0&&selectInfo.modify==0"
+        >
           <i class="el-icon-edit"></i>编辑
         </li>
-        <li class="menu_item hand" @click="deleteClick">
+        <li
+          class="menu_item hand"
+          @click="deleteClick"
+          v-if="selectInfo.status==0&&selectInfo.modify==0"
+        >
           <i class="el-icon-delete"></i>删除
         </li>
-        <li class="menu_item hand" @click="reportClick">
+        <li class="menu_item hand" @click="reportClick" v-if="selectInfo.status==1">
           <i class="el-icon-document-copy"></i>报告
         </li>
-      </ul>
-    </div>
-    <div v-show="menuVisible1" style="z-index: 999;">
-      <ul id="menu1" class="menu1">
-        <li class="menu_item hand" @click="newClick">
+        <li class="menu_item hand" @click="newClick" v-if="!selectInfo.planid">
           <i class="el-icon-circle-plus-outline"></i>新建
         </li>
       </ul>
     </div>
+
+    <el-dialog :visible.sync="dialogTableVisible">
+      <SummaryReport :selectInfo="selectInfo"></SummaryReport>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiGetplanlist, apiGetplaninfo } from "@/request/api.js";
+import SummaryReport from "@/views/SummaryReport/SummaryReport.vue";
+import {
+  apiGetplanlist,
+  apiGetplaninfo,
+  apiGetPatientplanlistperweek
+} from "@/request/api.js";
 
 export default {
   name: "Appointment",
   components: {
-    HeaderDoctor
+    HeaderDoctor,
+    SummaryReport
   },
 
   data() {
@@ -174,7 +215,9 @@ export default {
         label: "name"
       },
       //右击选择的信息
-      selectInfo: {}
+      selectInfo: {},
+      dialogTableVisible: false,
+      planlistperweek: {}
     };
   },
   created() {
@@ -187,7 +230,8 @@ export default {
     if (!this.common.isNullOrBlank(this.planid)) {
       this.initLastPlan();
     } else {
-      this.initList(this.common.getNowFormatDate());
+      this.patientplanlistperweek(this.common.getNowFormatDate());
+      // this.initList(this.common.getNowFormatDate());
     }
   },
   methods: {
@@ -201,8 +245,32 @@ export default {
         let data = res.data;
         // this.lastTimeId = res.data.timeid;
         // this.lastDate = res.data.plandate;
-        _this.initList(this.common.getNowFormatDate());
+        _this.patientplanlistperweek(this.common.getNowFormatDate());
+        //_this.initList(this.common.getNowFormatDate());
       });
+    },
+    patientplanlistperweek(day) {
+      var params = {
+        plandate: day,
+        patientid: this.patientid
+      };
+      apiGetPatientplanlistperweek(params).then(res => {
+        this.planlistperweek = res.data;
+        this.initList(day);
+      });
+    },
+    //根据日期和timeid获取planid
+    getPlan(day, timeid) {
+      for (var item of this.planlistperweek.items) {
+        if (item.plandate == day && item.timeid == timeid) {
+          var plan = {};
+          plan["planid"] = item.planid;
+          plan["status"] = item.status;
+          plan["modify"] = item.modify;
+          break;
+        }
+      }
+      return plan;
     },
     initList(day) {
       this.tableData = [];
@@ -222,6 +290,12 @@ export default {
             re.timeID = item1;
             re.able = this.total - objs[item1];
             re.day = item;
+            var plan = this.getPlan(re.day, re.timeID);
+            if (plan) {
+              re.planid = plan.planid;
+              re.status = plan.status;
+              re.modify = plan.modify;
+            }
             list.push(re);
           }
           newObj.list = list;
@@ -235,7 +309,8 @@ export default {
     },
     //选择日期
     getMyDateTime(day) {
-      this.initList(day);
+      this.patientplanlistperweek(day);
+      //this.initList(day);
     },
     cellClick(event, item) {
       var _this = this;
@@ -286,6 +361,14 @@ export default {
 
     //右键点击
     openMenu(MouseEvent, item) {
+      let day = MouseEvent.target.parentNode.getAttribute("day");
+      this.selectInfo["day"] = day;
+      this.selectInfo["timeid"] = item.timeID;
+      this.selectInfo["planid"] = item.planid;
+      this.selectInfo["status"] = item.status;
+      this.selectInfo["modify"] = item.modify;
+      console.log(this.selectInfo);
+
       // 鼠标右击触发事件
       this.menuVisible = false; // 先把模态框关死，目的是 第二次或者第n次右键鼠标的时候 它默认的是true
       this.menuVisible = true; // 显示模态窗口，跳出自定义菜单栏
@@ -297,52 +380,16 @@ export default {
       } else {
         menu.style.top = MouseEvent.pageY + 10 + "px";
       }
-      // console.log(document.body.clientWidth);
-      // console.log(MouseEvent.clientX);
-      // console.log(document.body.clientWidth - MouseEvent.clientX);
       if (document.body.clientWidth - MouseEvent.clientX <= 100) {
         menu.style.left = MouseEvent.pageX - 80 + "px";
       } else {
         menu.style.left = MouseEvent.pageX + 10 + "px";
       }
-      //console.log(item);
-      // console.log(window.screen.height);
-      // console.log("left" + menu.style.left + "top" + menu.style.top);
     },
     foo() {
       // 取消鼠标监听事件 菜单栏
       this.menuVisible = false;
       document.removeEventListener("click", this.foo); // 要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
-    },
-    //右键点击
-    openMenu1(MouseEvent, item) {
-      // 鼠标右击触发事件
-      this.menuVisible1 = false; // 先把模态框关死，目的是 第二次或者第n次右键鼠标的时候 它默认的是true
-      this.menuVisible1 = true; // 显示模态窗口，跳出自定义菜单栏
-      var menu1 = document.querySelector("#menu1");
-      document.addEventListener("click", this.foo1); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
-      menu1.style.display = "block";
-      if (window.screen.height - MouseEvent.pageY <= 100) {
-        menu1.style.top = MouseEvent.pageY - 20 + "px";
-      } else {
-        menu1.style.top = MouseEvent.pageY + 10 + "px";
-      }
-      // console.log(document.body.clientWidth);
-      // console.log(MouseEvent.clientX);
-      // console.log(document.body.clientWidth - MouseEvent.clientX);
-      if (document.body.clientWidth - MouseEvent.clientX <= 100) {
-        menu1.style.left = MouseEvent.pageX - 80 + "px";
-      } else {
-        menu1.style.left = MouseEvent.pageX + 10 + "px";
-      }
-      //console.log(item);
-      // console.log(window.screen.height);
-      // console.log("left" + menu.style.left + "top" + menu.style.top);
-    },
-    foo1() {
-      // 取消鼠标监听事件 菜单栏
-      this.menuVisible1 = false;
-      document.removeEventListener("click", this.foo1); // 要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
     },
     //查看
     detailClick() {},
@@ -351,7 +398,9 @@ export default {
     //删除
     deleteClick() {},
     //报告
-    reportClick() {},
+    reportClick() {
+      this.dialogTableVisible = true;
+    },
     //新建
     newClick() {}
   },
@@ -361,7 +410,6 @@ export default {
 
 <style scoped lang="scss">
 .menu {
-  height: 100px;
   width: 80px;
   position: absolute;
   border: 1px solid #999999;
@@ -436,6 +484,14 @@ li {
       margin-right: 10px;
       margin-left: 20px;
     }
+    .blue {
+      width: 30px;
+      height: 30px;
+      background: #2020ff;
+      vertical-align: middle;
+      margin-right: 10px;
+      margin-left: 20px;
+    }
     .yellow {
       width: 30px;
       height: 30px;
@@ -452,12 +508,39 @@ li {
       margin-right: 10px;
       margin-left: 20px;
     }
+
     div:nth-child(2) {
       height: 30px;
       line-height: 30px;
       font-size: 14px;
       vertical-align: middle;
     }
+  }
+  .greenBackColor {
+    width: 100%;
+    height: 100%;
+    background: #a6e3dd;
+  }
+  .blueBackColor {
+    width: 100%;
+    height: 100%;
+    background: #2020ff;
+  }
+  .yellowBackColor {
+    width: 100%;
+    height: 100%;
+    background: #fec85a;
+  }
+  .purpleBackColor {
+    width: 100%;
+    height: 100%;
+    background: #8da1f2;
+  }
+  .pinkBackColor {
+    width: 100%;
+    height: 100%;
+    cursor: default;
+    background: $pinkFontColor;
   }
   .cell {
     font-size: 14px;
@@ -466,12 +549,6 @@ li {
     border-left: 1px solid #ebeef5;
     border-top: 1px solid #ebeef5;
     cursor: pointer;
-  }
-
-  .pinkBackColor {
-    width: 100%;
-    height: 100%;
-    cursor: default;
   }
 
   .right-table-title {
@@ -494,68 +571,6 @@ li {
       div {
         height: 20px;
         line-height: 30px;
-      }
-    }
-  }
-}
-
-.inform-container {
-  box-sizing: border-box;
-  margin: 0 auto;
-  font-size: 12px;
-  border-radius: 10px;
-  width: 100%;
-  position: relative;
-  padding: 10px;
-
-  .left {
-    float: left;
-    width: 300px;
-    position: absolute;
-    border: 1px solid #e7e7e7;
-    .el-calendar-table .el-calendar-day {
-      height: 40px;
-    }
-  }
-  #Saturday {
-    border-right: 1px solid #ebeef5;
-  }
-  .right {
-    float: right;
-    width: 866px;
-
-    .right-table-title {
-      .cell {
-        height: 60px;
-        line-height: 60px;
-        background: #ededed;
-      }
-      .title {
-        div {
-          height: 30px;
-          line-height: 30px;
-        }
-      }
-    }
-    .right-table {
-      height: 600px;
-      overflow: scroll;
-    }
-    .right-table > div .cell:nth-last-child(1) {
-      border-bottom: 1px solid #ebeef5;
-    }
-    .cell {
-      font-size: 14px;
-      width: 105px;
-      height: 40px;
-      line-height: 40px;
-      border-left: 1px solid #ebeef5;
-      border-top: 1px solid #ebeef5;
-      cursor: pointer;
-      .pinkBackColor {
-        width: 100%;
-        height: 100%;
-        cursor: default;
       }
     }
   }

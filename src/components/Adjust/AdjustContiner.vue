@@ -42,16 +42,16 @@
     </div>
     <div v-else-if="type==6">
       <el-radio-group v-model="config.radio" :disabled="disable">
-        <el-radio :label="0">易</el-radio>
-        <el-radio :label="1">中</el-radio>
-        <el-radio :label="2">难</el-radio>
+        <el-radio :label="1">易</el-radio>
+        <el-radio :label="2">中</el-radio>
+        <el-radio :label="3">难</el-radio>
       </el-radio-group>
     </div>
     <div v-else-if="type==7">
       <el-radio-group v-model="config.radio" :disabled="disable">
-        <el-radio :label="0">易</el-radio>
-        <el-radio :label="1">中</el-radio>
-        <el-radio :label="2">难</el-radio>
+        <el-radio :label="1">易</el-radio>
+        <el-radio :label="2">中</el-radio>
+        <el-radio :label="3">难</el-radio>
       </el-radio-group>
     </div>
   </div>

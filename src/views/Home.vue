@@ -86,7 +86,10 @@
 
             <el-table-column prop="message" label="消息" align="center">
               <template slot-scope="scope">
-                <img v-if="scope.row.message" src="@/../images/xinxi.png" class="meaasgeImg" />
+                <span class="meaasgeSpan">
+                  <img src="@/../images/xinxi.png" class="meaasgeImg" />
+                  <i v-if="scope.row.message"></i>
+                </span>
               </template>
             </el-table-column>
           </el-table>
@@ -235,10 +238,24 @@ export default {
     vertical-align: middle;
     width: 16px;
   }
-  .meaasgeImg {
-    vertical-align: middle;
-    width: 25px;
+  .meaasgeSpan {
+    position: relative;
+    i {
+      display: block;
+      background: #f00;
+      border-radius: 50%;
+      width: 0.4em;
+      height: 0.4em;
+      top: -2px;
+      right: -0.2em;
+      position: absolute;
+    }
+    .meaasgeImg {
+      vertical-align: middle;
+      width: 25px;
+    }
   }
+
   .purpleFontColor {
     color: $purpleFontColor;
   }
