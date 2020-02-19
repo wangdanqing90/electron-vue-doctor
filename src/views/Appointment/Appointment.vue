@@ -176,6 +176,10 @@
     <el-dialog :visible.sync="dialogTableVisible">
       <SummaryReport :selectInfo="selectInfo"></SummaryReport>
     </el-dialog>
+
+    <el-dialog :visible.sync="dialogTrainingVisible">
+      <TrainingPlanTemp :selectInfo="selectInfo"></TrainingPlanTemp>
+    </el-dialog>
   </div>
 </template>
 
@@ -183,6 +187,7 @@
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import SummaryReport from "@/views/SummaryReport/SummaryReport.vue";
+import TrainingPlanTemp from "@/views/TrainingPlan/TrainingPlanTemp.vue";
 import {
   apiGetplanlist,
   apiGetplaninfo,
@@ -193,7 +198,8 @@ export default {
   name: "Appointment",
   components: {
     HeaderDoctor,
-    SummaryReport
+    SummaryReport,
+    TrainingPlanTemp
   },
 
   data() {
@@ -217,6 +223,7 @@ export default {
       //右击选择的信息
       selectInfo: {},
       dialogTableVisible: false,
+      dialogTrainingVisible: false,
       planlistperweek: {}
     };
   },
@@ -392,7 +399,9 @@ export default {
       document.removeEventListener("click", this.foo); // 要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
     },
     //查看
-    detailClick() {},
+    detailClick() {
+      this.dialogTrainingVisible = true;
+    },
     //编辑
     editClick() {},
     //删除
@@ -454,6 +463,7 @@ li {
 }
 
 .main {
+  margin: 0 auto 20px auto;
   .top {
     background: #ededed;
     display: inline-block;

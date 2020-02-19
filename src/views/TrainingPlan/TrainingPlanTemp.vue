@@ -1,15 +1,6 @@
 /* eslint-disable vue/no-unused-vars */
 <template>
-  <div class="container">
-    <HeaderDoctor :leftImg="leftImg" :title="title" :titleName="titleName">
-      <template v-slot:right>
-        <div class="header-right-div display_flex justify-content_flex-center align-items_center">
-          <img src="@/../images/certain.png" @click="okClick()" />
-          <img src="@/../images/back.png" @click="backClick" />
-        </div>
-      </template>
-    </HeaderDoctor>
-
+  <div class="mycontainer">
     <el-row>
       <el-card class="box-card">
         <el-col :span="24" class="inform-container">
@@ -320,12 +311,10 @@
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiAddPlaninfo, apiVerifyplaninfo } from "@/request/api.js";
+import { apiGetplaninfo } from "@/request/api.js";
 export default {
-  name: "trainingPlan",
-  components: {
-    HeaderDoctor
-  },
+  name: "trainingPlanTemp",
+  components: {},
 
   data() {
     return {
@@ -333,101 +322,32 @@ export default {
       planInfo: ""
     };
   },
-  created() {
-    window.vue = this;
-    this.leftImg = require("../../../images/logo.png");
-    this.planInfo = this.$store.state.planInfo;
-    this.planid = this.$route.query.planid;
-    console.log(this.planInfo);
-    var time = this.common.timeType(this.planInfo.timeid);
-    this.title =
-      "的本次训练计划（" + this.planInfo.plandate + "\xa0\xa0\xa0" + time + ")";
-    this.titleName = this.$store.state.patientInfo.name;
-  },
-  methods: {
-    backClick() {
-      this.$router.go(-1);
-    },
-    okClick() {
-      this.$confirm("您是否确认信息？", "", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          this.okNextClick();
-        })
-        .catch(() => {});
-    },
-    okNextClick() {
-      if (this.common.isNullOrBlank(this.planid)) {
-        //新建计划
-        let patientid = this.$store.state.patientInfo.id;
-        let obj = { patientid: patientid };
-        let params = { ...this.planInfo, ...obj };
-        apiAddPlaninfo(params).then(res => {
-          if (res.message == "success") {
-            this.$alert("添加计划成功", "", {
-              confirmButtonText: "确定",
-              showClose: false,
-              callback: action => {
-                this.okNextClickCallback();
-              }
-            });
-          } else {
-            this.$alert(res.message, "", {
-              confirmButtonText: "确定",
-              showClose: false
-            });
-          }
-        });
-      } else {
-        //修改计划
-        let patientid = this.$store.state.patientInfo.id;
-        let obj = { patientid: patientid, type: 0, planid: this.planid };
-        let params = { ...this.planInfo, ...obj };
-        apiVerifyplaninfo(params).then(res => {
-          if (res.message == "success") {
-            this.$alert("修改计划成功", "", {
-              confirmButtonText: "确定",
-              showClose: false,
-              callback: action => {
-                this.okNextClickCallback();
-              }
-            });
-          } else {
-            this.$alert(res.message, "", {
-              confirmButtonText: "确定",
-              showClose: false
-            });
-          }
-        });
-      }
-    },
-    okNextClickCallback() {
-      this.$router.push({
-        path: "/",
-        name: "home",
-        query: {}
-      });
+  props: {
+    selectInfo: {
+      type: Object,
+      default: () => {}
     }
   },
+  created() {
+    window.vue = this;
+    this.patientid = this.$store.state.patientInfo.id;
+    this.planid = this.selectInfo.planid;
+
+    var params = {
+      planid: this.planid,
+      patientid: this.patientid
+    };
+    apiGetplaninfo(params).then(res => {
+      this.planInfo = res.data.details;
+    });
+  },
+  methods: {},
   watch: {}
 };
 </script>
 
 <style scoped lang="scss">
-.header {
-  .header-right {
-    img {
-      width: 50px;
-      margin-left: 20px;
-    }
-  }
-}
 .inform-container {
-  padding: 0 250px;
-  margin: 100px auto 100px auto;
   font-size: 12px;
   .inform {
     height: 100px;

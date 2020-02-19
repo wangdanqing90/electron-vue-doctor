@@ -20,7 +20,7 @@
             </div>
           </div>
         </div>
-        <div class="inform-continer text-left">
+        <div class="inform-continer text-left" v-if="reportData.WTime">
           <div class="title">行走训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="inform-continer text-left">
+        <div class="inform-continer text-left" v-if="reportData.STime">
           <div class="title">坐站训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
@@ -58,7 +58,7 @@
             </div>
           </div>
         </div>
-        <div class="inform-continer text-left">
+        <div class="inform-continer text-left" v-if="reportData.GTime">
           <div class="title">游戏训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="inform-continer text-left">
+        <div class="inform-continer text-left" v-if="reportData.BTime">
           <div class="title">平衡训练</div>
           <div class="line"></div>
           <div class="inform display_flex justify-content_flex-start">
@@ -122,10 +122,8 @@ export default {
   },
   created() {
     window.vue = this;
-    debugger;
     this.patientid = this.$store.state.patientInfo.id;
     this.reportid = this.selectInfo.planid;
-    debugger;
     this.initPatientInfo();
     this.initReport();
   },
