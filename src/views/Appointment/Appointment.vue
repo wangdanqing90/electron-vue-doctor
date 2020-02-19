@@ -106,9 +106,8 @@
                 >
                   <div
                     v-if="item.able>0"
-                    :class="(item.timeID==lastTimeId&&tableData[index1].day == lastDate)?'lastselect':''"
                     @click="cellClick($event,item)"
-                    @contextmenu.prevent="openMenu($event,item)"
+                    @contextmenu.prevent="openMenu1($event,item)"
                   >{{item.able}}/{{total}}</div>
                   <div v-else class="pinkBackColor"></div>
                 </el-row>
@@ -118,11 +117,28 @@
         </el-col>
       </el-row>
     </el-card>
+    <!-- 右击 -->
     <div v-show="menuVisible" style="z-index: 999;">
       <ul id="menu" class="menu">
-        <li class="menu_item">平级添加</li>
-        <li class="menu_item">下级添加</li>
-        <li class="menu_item">删除</li>
+        <li class="menu_item hand" @click="detailClick">
+          <i class="el-icon-delete"></i>查看
+        </li>
+        <li class="menu_item hand" @click="editClick">
+          <i class="el-icon-edit"></i>编辑
+        </li>
+        <li class="menu_item hand" @click="deleteClick">
+          <i class="el-icon-delete"></i>删除
+        </li>
+        <li class="menu_item hand" @click="reportClick">
+          <i class="el-icon-document-copy"></i>报告
+        </li>
+      </ul>
+    </div>
+    <div v-show="menuVisible1" style="z-index: 999;">
+      <ul id="menu1" class="menu1">
+        <li class="menu_item hand" @click="newClick">
+          <i class="el-icon-circle-plus-outline"></i>新建
+        </li>
       </ul>
     </div>
   </div>
@@ -151,11 +167,14 @@ export default {
       lastTimeId: "",
       lastDate: "",
       menuVisible: false,
+      menuVisible1: false,
       productTypes: [],
       defaultProps: {
         children: "children",
         label: "name"
-      }
+      },
+      //右击选择的信息
+      selectInfo: {}
     };
   },
   created() {
@@ -180,9 +199,8 @@ export default {
       };
       apiGetplaninfo(params).then(res => {
         let data = res.data;
-        this.lastTimeId = res.data.timeid;
-        this.lastDate = res.data.plandate;
-
+        // this.lastTimeId = res.data.timeid;
+        // this.lastDate = res.data.plandate;
         _this.initList(this.common.getNowFormatDate());
       });
     },
@@ -233,9 +251,7 @@ export default {
             var info = {};
             info["timeid"] = item.timeID;
             info["plandate"] = day;
-
             _this.$store.commit("savePlanInfo", info);
-
             if (!this.common.isNullOrBlank(this.planid)) {
               this.$router.push({
                 path: "/trainingSlider",
@@ -276,22 +292,19 @@ export default {
       var menu = document.querySelector("#menu");
       document.addEventListener("click", this.foo); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
       menu.style.display = "block";
-
-      if (window.screen.height - MouseEvent.pageY <= 100) {
+      if (window.screen.height - MouseEvent.pageY <= 170) {
         menu.style.top = MouseEvent.pageY - 100 + "px";
       } else {
         menu.style.top = MouseEvent.pageY + 10 + "px";
       }
-
-      console.log(document.body.clientWidth);
-      console.log(MouseEvent.clientX);
-      console.log(document.body.clientWidth - MouseEvent.clientX);
+      // console.log(document.body.clientWidth);
+      // console.log(MouseEvent.clientX);
+      // console.log(document.body.clientWidth - MouseEvent.clientX);
       if (document.body.clientWidth - MouseEvent.clientX <= 100) {
         menu.style.left = MouseEvent.pageX - 80 + "px";
       } else {
         menu.style.left = MouseEvent.pageX + 10 + "px";
       }
-
       //console.log(item);
       // console.log(window.screen.height);
       // console.log("left" + menu.style.left + "top" + menu.style.top);
@@ -300,7 +313,47 @@ export default {
       // 取消鼠标监听事件 菜单栏
       this.menuVisible = false;
       document.removeEventListener("click", this.foo); // 要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
-    }
+    },
+    //右键点击
+    openMenu1(MouseEvent, item) {
+      // 鼠标右击触发事件
+      this.menuVisible1 = false; // 先把模态框关死，目的是 第二次或者第n次右键鼠标的时候 它默认的是true
+      this.menuVisible1 = true; // 显示模态窗口，跳出自定义菜单栏
+      var menu1 = document.querySelector("#menu1");
+      document.addEventListener("click", this.foo1); // 给整个document添加监听鼠标事件，点击任何位置执行foo方法
+      menu1.style.display = "block";
+      if (window.screen.height - MouseEvent.pageY <= 100) {
+        menu1.style.top = MouseEvent.pageY - 20 + "px";
+      } else {
+        menu1.style.top = MouseEvent.pageY + 10 + "px";
+      }
+      // console.log(document.body.clientWidth);
+      // console.log(MouseEvent.clientX);
+      // console.log(document.body.clientWidth - MouseEvent.clientX);
+      if (document.body.clientWidth - MouseEvent.clientX <= 100) {
+        menu1.style.left = MouseEvent.pageX - 80 + "px";
+      } else {
+        menu1.style.left = MouseEvent.pageX + 10 + "px";
+      }
+      //console.log(item);
+      // console.log(window.screen.height);
+      // console.log("left" + menu.style.left + "top" + menu.style.top);
+    },
+    foo1() {
+      // 取消鼠标监听事件 菜单栏
+      this.menuVisible1 = false;
+      document.removeEventListener("click", this.foo1); // 要及时关掉监听，不关掉的是一个坑，不信你试试，虽然前台显示的时候没有啥毛病，加一个alert你就知道了
+    },
+    //查看
+    detailClick() {},
+    //编辑
+    editClick() {},
+    //删除
+    deleteClick() {},
+    //报告
+    reportClick() {},
+    //新建
+    newClick() {}
   },
   watch: {}
 };
@@ -311,9 +364,29 @@ export default {
   height: 100px;
   width: 80px;
   position: absolute;
-  border-radius: 10px;
   border: 1px solid #999999;
   background-color: #f4f4f4;
+  .menu_item {
+    height: 25px;
+    line-height: 25px;
+    i {
+      margin-right: 10px;
+    }
+  }
+}
+.menu1 {
+  height: 25px;
+  width: 80px;
+  position: absolute;
+  border: 1px solid #999999;
+  background-color: #f4f4f4;
+  .menu_item {
+    height: 25px;
+    line-height: 25px;
+    i {
+      margin-right: 10px;
+    }
+  }
 }
 
 li:hover {
@@ -400,9 +473,7 @@ li {
     height: 100%;
     cursor: default;
   }
-  .lastselect {
-    background: $purpleFontColor;
-  }
+
   .right-table-title {
     .cell {
       height: 52px;
