@@ -21,14 +21,14 @@
       <!-- table表格 -->
       <el-row class="tableContainer">
         <el-col :span="24">
-          <el-table :data="tableData" stripe max-height="700" style="width: 100%;">
-            <el-table-column
-              label="序号"
-              type="index"
-              width="100"
-              align="center"
-              @sort-change="changeTableSort"
-            >
+          <el-table
+            :data="tableData"
+            stripe
+            max-height="700"
+            style="width: 100%;"
+            @sort-change="changeTableSort"
+          >
+            <el-table-column label="序号" type="index" width="100" align="center">
               <!-- 红1未审核 蓝0已审核 -->
               <template slot-scope="scope">
                 <span
@@ -58,7 +58,7 @@
                 <span v-else :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'">女</span>
               </template>
             </el-table-column>
-            <el-table-column prop="age" label="年龄" align="center">
+            <el-table-column prop="age" label="年龄" align="center" :sortable="'custom'">
               <template slot-scope="scope">
                 <span
                   :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
@@ -143,6 +143,8 @@ export default {
       page: 1,
       limit: 10,
       totalSize: 0,
+      type: 0, //0、默认，1、性别，2、年龄，3、姓名，4、注册时间
+      desc: 0, //0、默认（正序），1、倒序
       tableData: []
     };
   },
@@ -176,7 +178,9 @@ export default {
       var params = {
         page: this.page,
         limit: this.limit,
-        search: this.search
+        search: this.search,
+        type: this.type,
+        desc: this.desc
       };
       apiPatientlist(params).then(res => {
         this.tableData = res.data.items;
@@ -224,25 +228,24 @@ export default {
     changeTableSort(column) {
       console.log(column);
 
-      //获取字段名称和排序类型
-      var fieldName = column.prop;
-      var sortingType = column.order;
+      var fieldName = column.prop; //名称
+      var sortingType = column.order; //排序类型
+      if (column.prop == "name") this.type = 3;
+      else if (column.prop == "sex") this.type = 1;
+      else if (column.prop == "age") this.type = 2;
+      else if (column.prop == "regdate") this.type = 4;
 
       //按照降序排序
       if (sortingType == "descending") {
-        // this.tableData = this.tableData.sort(
-        //   (a, b) => b[fieldName] - a[fieldName]
-        // );
+        this.desc = 1;
       }
       //按照升序排序
       else {
-        // this.tableData = this.tableData.sort(
-        //   (a, b) => a[fieldName] - b[fieldName]
-        // );
+        this.desc = 0;
       }
 
-      //  this.page = 1;
-      // this.initPatientlist();
+      this.page = 1;
+      this.initPatientlist();
     }
   }
 };

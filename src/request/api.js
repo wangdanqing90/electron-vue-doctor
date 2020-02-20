@@ -30,7 +30,7 @@ export const apiDoctorlist = p => get('/api/doctorlist/', p)
 //医生注册
 export const apiRegister = p => post('/api/register/', p)
 //获取患者列表
-export const apiPatientlist = (p) => get('/api/patientlist/?page=' + p.page + '&limit=' + p.limit + '&search=' + p.search)
+export const apiPatientlist = (p) => get('/api/patientlist/', p)
 //获取医生信息
 export const apiDoctorinfo = () => get('/api/doctorinfo/')
 //修改医生信息
