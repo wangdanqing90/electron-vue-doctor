@@ -167,6 +167,9 @@
         <li class="menu_item hand" @click="reportClick" v-if="selectInfo.status==1">
           <i class="el-icon-document-copy"></i>报告
         </li>
+        <li class="menu_item hand" @click="adviceClick" v-if="selectInfo.planid">
+          <i class="el-icon-circle-plus-outline"></i>医嘱
+        </li>
         <li class="menu_item hand" @click="newClick" v-if="!selectInfo.planid">
           <i class="el-icon-circle-plus-outline"></i>新建
         </li>
@@ -180,6 +183,10 @@
     <el-dialog :visible.sync="dialogTrainingVisible">
       <TrainingPlanTemp :selectInfo="selectInfo"></TrainingPlanTemp>
     </el-dialog>
+
+    <el-dialog :visible.sync="dialogAdviceVisible">
+      <DoctorAdvice :selectInfo="selectInfo" @closeAdvice="dialogAdviceVisible=false"></DoctorAdvice>
+    </el-dialog>
   </div>
 </template>
 
@@ -188,6 +195,8 @@ import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
 import SummaryReport from "@/views/SummaryReport/SummaryReport.vue";
 import TrainingPlanTemp from "@/views/TrainingPlan/TrainingPlanTemp.vue";
+import DoctorAdvice from "@/views/DoctorAdvice/DoctorAdvice.vue";
+
 import {
   apiGetplanlist,
   apiGetplaninfo,
@@ -200,7 +209,8 @@ export default {
   components: {
     HeaderDoctor,
     SummaryReport,
-    TrainingPlanTemp
+    TrainingPlanTemp,
+    DoctorAdvice
   },
 
   data() {
@@ -225,6 +235,7 @@ export default {
       selectInfo: {},
       dialogTableVisible: false,
       dialogTrainingVisible: false,
+      dialogAdviceVisible: false,
       planlistperweek: {}
     };
   },
@@ -320,42 +331,6 @@ export default {
       this.patientplanlistperweek(day);
       //this.initList(day);
     },
-    // cellClick(event, item) {
-    //   var _this = this;
-    //   let day = event.target.parentNode.getAttribute("day");
-
-    //   if (this.compareDate(day)) {
-    //     this.$confirm("您是否确认预约该时间？", "", {
-    //       confirmButtonText: "确定",
-    //       cancelButtonText: "取消",
-    //       confirmButtonClass: "el-button purple"
-    //     })
-    //       .then(() => {
-    //         var info = {};
-    //         info["timeid"] = item.timeID;
-    //         info["plandate"] = day;
-    //         _this.$store.commit("savePlanInfo", info);
-    //         if (!this.common.isNullOrBlank(this.planid)) {
-    //           this.$router.push({
-    //             path: "/trainingSlider",
-    //             name: "trainingSlider",
-    //             query: { planid: this.planid }
-    //           });
-    //         } else {
-    //           this.$router.push({
-    //             path: "/trainingSlider",
-    //             name: "trainingSlider"
-    //           });
-    //         }
-    //       })
-    //       .catch(() => {});
-    //   } else {
-    //     this.$alert("请选择今天以后的日期", "", {
-    //       confirmButtonText: "确定",
-    //       showClose: false
-    //     });
-    //   }
-    // },
     //比较日期
     compareDate(day) {
       var oDate1 = new Date(day);
@@ -370,11 +345,11 @@ export default {
     //右键点击
     openMenu(MouseEvent, item) {
       let day = MouseEvent.target.parentNode.getAttribute("day");
-      this.selectInfo["day"] = day;
-      this.selectInfo["timeid"] = item.timeID;
-      this.selectInfo["planid"] = item.planid;
-      this.selectInfo["status"] = item.status;
-      this.selectInfo["modify"] = item.modify;
+      this.$set(this.selectInfo, "day", day);
+      this.$set(this.selectInfo, "timeid", item.timeID);
+      this.$set(this.selectInfo, "planid", item.planid);
+      this.$set(this.selectInfo, "status", item.status);
+      this.$set(this.selectInfo, "modify", item.modify);
       console.log(this.selectInfo);
 
       // 鼠标右击触发事件
@@ -451,6 +426,9 @@ export default {
     //报告
     reportClick() {
       this.dialogTableVisible = true;
+    },
+    adviceClick() {
+      this.dialogAdviceVisible = true;
     },
     //新建
     newClick() {

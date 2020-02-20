@@ -499,8 +499,8 @@ export default {
         });
       } else if (this.activeClass == 2) {
         //第三行
-        this.vm.$set(this.$refs.type7.config, "radio", 0);
-        this.vm.$set(this.$refs.type6.config, "radio", 0);
+        this.vm.$set(this.$refs.type7.config, "radio", 1);
+        this.vm.$set(this.$refs.type6.config, "radio", 1);
         this.active3Right = index;
       } else if (this.activeClass == 3) {
         //第四行

@@ -34,16 +34,16 @@
                 <div class="imgs">
                   项目:
                   <span v-if="inform.content&&inform.content.indexOf('1')!= -1">
-                    <img src="@/../images/walkingtraining_a.png"/>
+                    <img src="@/../images/walkingtraining_a.png" />
                   </span>
-                   <span v-if="inform.content&&inform.content.indexOf('2')!= -1">
-                    <img src="@/../images/stationtraining_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('2')!= -1">
+                    <img src="@/../images/stationtraining_a.png" />
                   </span>
-                   <span v-if="inform.content&&inform.content.indexOf('3')!= -1">
-                    <img src="@/../images/gametraining_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('3')!= -1">
+                    <img src="@/../images/gametraining_a.png" />
                   </span>
-                   <span v-if="inform.content&&inform.content.indexOf('4')!= -1">
-                    <img src="@/../images/balancedetermination_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('4')!= -1">
+                    <img src="@/../images/balancedetermination_a.png" />
                   </span>
                 </div>
               </div>
@@ -58,17 +58,17 @@
                 </div>
                 <div class="imgs">
                   项目:
-                   <span v-if="inform.content&&inform.content.indexOf('1')!= -1">
-                    <img src="@/../images/walkingtraining_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('1')!= -1">
+                    <img src="@/../images/walkingtraining_a.png" />
                   </span>
-                   <span v-if="inform.content&&inform.content.indexOf('2')!= -1">
-                    <img src="@/../images/stationtraining_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('2')!= -1">
+                    <img src="@/../images/stationtraining_a.png" />
                   </span>
-                   <span v-if="inform.content&&inform.content.indexOf('3')!= -1">
-                    <img src="@/../images/gametraining_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('3')!= -1">
+                    <img src="@/../images/gametraining_a.png" />
                   </span>
-                   <span v-if="inform.content&&inform.content.indexOf('4')!= -1">
-                    <img src="@/../images/balancedetermination_a.png"/>
+                  <span v-if="inform.content&&inform.content.indexOf('4')!= -1">
+                    <img src="@/../images/balancedetermination_a.png" />
                   </span>
                 </div>
               </div>
@@ -80,8 +80,13 @@
                 <div>修改理由:</div>
                 <div>{{inform.reson}}</div>
               </div>
+              <div class="reason">
+                <div>所选时间可否修改:</div>
+                <div v-if="inform.status == 0">可以修改</div>
+                <div v-else>不可修改</div>
+              </div>
               <div>
-                <el-button class="purple" @click="passClick()">通过</el-button>
+                <el-button class="purple" v-if="inform.status == 0" @click="passClick()">通过</el-button>
                 <el-button @click="refuseClick()">拒绝</el-button>
               </div>
             </div>
@@ -94,7 +99,7 @@
               <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="textarea"></el-input>
             </div>
           </el-card>
-        </div> -->
+        </div>-->
       </div>
     </el-card>
   </div>
@@ -103,7 +108,7 @@
 <script>
 import Vue from "vue";
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiGetModifyplan,apiVerifyplaninfo } from "@/request/api.js";
+import { apiGetModifyplan, apiVerifyplaninfo } from "@/request/api.js";
 let _this;
 
 export default {
@@ -115,12 +120,12 @@ export default {
   data() {
     return {
       leftImg: "",
-      patientid : this.$store.state.patientInfo.id,
+      patientid: this.$store.state.patientInfo.id,
       planid: this.$route.query.planid,
       time: "2019/12/12 12:12:12",
       reason: "子女探望，希望能延迟一天",
       textarea: "",
-      inform:{ },
+      inform: {}
     };
   },
   created() {
@@ -140,13 +145,13 @@ export default {
     backClick() {
       this.$router.go(-1);
     },
-    initModifyplan(){
+    initModifyplan() {
       var params = {
         planid: this.planid
       };
       apiGetModifyplan(params).then(res => {
         this.inform = res.data;
-       });
+      });
     },
     passClick() {
       this.$confirm("您确定要通过申请？", "", {
@@ -158,7 +163,7 @@ export default {
           _this.passClickCallback();
         })
         .catch(() => {});
-    }, 
+    },
     refuseClick() {
       this.$confirm("您确定要拒绝申请？", "", {
         confirmButtonText: "确定",
@@ -169,55 +174,55 @@ export default {
           _this.refuseClickCallback();
         })
         .catch(() => {});
-    }, 
+    },
     //通过
     passClickCallback() {
       var params = {
         planid: this.planid,
-        plandate:this.inform.after.substring(0,10),
-        timeid:this.inform.timeid,
-        type:1
+        plandate: this.inform.after.substring(0, 10),
+        timeid: this.inform.timeid,
+        type: 1
       };
       apiVerifyplaninfo(params).then(res => {
-        if(res.message=='success'){
-          this.$alert('操作成功', '', {
-          confirmButtonText: '确定',
-          showClose:false,
-          callback: action => {
-            this.next();
-          }
-        });
-        } else{
-          this.$alert(res.message, '', {
-          confirmButtonText: '确定',
-          showClose:false,
-        });
-        }    
+        if (res.message == "success") {
+          this.$alert("操作成功", "", {
+            confirmButtonText: "确定",
+            showClose: false,
+            callback: action => {
+              this.next();
+            }
+          });
+        } else {
+          this.$alert(res.message, "", {
+            confirmButtonText: "确定",
+            showClose: false
+          });
+        }
       });
     },
     //拒绝
     refuseClickCallback() {
       var params = {
         planid: this.planid,
-        plandate:this.inform.after.substring(0,10),
-        timeid:this.inform.timeid,
-        type:2
+        plandate: this.inform.after.substring(0, 10),
+        timeid: this.inform.timeid,
+        type: 2
       };
       apiVerifyplaninfo(params).then(res => {
-        if(res.message=='success'){
-          this.$alert('操作成功', '', {
-          confirmButtonText: '确定',
-          showClose:false,
-          callback: action => {
-            this.next();
-          }
-        });
-        } else{
-          this.$alert(res.message, '', {
-          confirmButtonText: '确定',
-          showClose:false,
-        });
-        }    
+        if (res.message == "success") {
+          this.$alert("操作成功", "", {
+            confirmButtonText: "确定",
+            showClose: false,
+            callback: action => {
+              this.next();
+            }
+          });
+        } else {
+          this.$alert(res.message, "", {
+            confirmButtonText: "确定",
+            showClose: false
+          });
+        }
       });
     }
   }

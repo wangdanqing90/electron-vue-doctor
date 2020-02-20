@@ -3,46 +3,55 @@
     <HeaderDoctor :leftImg="leftImg" :title="title" :titleName="titleName">
       <template v-slot:right>
         <div class="header-right-div display_flex justify-content_flex-center align-items_center">
-          <el-button class="purple" @click="addClick()">添加训练</el-button>
-          <el-button class="purple" @click="headModifyClick()">修改患者</el-button>
+          <!-- <el-button class="purple" @click="addClick()">添加训练</el-button>
+          <el-button class="purple" @click="headModifyClick()">修改患者</el-button>-->
           <img src="@/../images/back.png" @click="backClick" />
         </div>
       </template>
     </HeaderDoctor>
     <el-card class="box-card">
-      <!-- <el-row>
-        <el-col :span="24">
-          <div class="search">
-            <el-input placeholder="请输入搜索内容" v-model="search" class="input-with-select">
-              <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-          </div>
-        </el-col>
-      </el-row> -->
       <!-- table表格 -->
       <el-row class="tableContainer">
         <el-col :span="24">
           <el-table :data="tableData" stripe max-height="700" style="width: 100%;" align="center">
-            <el-table-column type="selection" width="55"></el-table-column>
+            <!-- <el-table-column type="selection" width="55"></el-table-column>
 
             <el-table-column prop="number" label="序号" width="80" align="center">
               <template slot-scope="scope">
                 <span
-                 :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}"
+                  :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}"
                 >{{(page - 1) * limit + scope.$index + 1}}</span>
               </template>
-            </el-table-column>
-            <el-table-column prop="plandate" label="日期" sortable align="center">
+            </el-table-column>-->
+            <el-table-column prop="plandate" label="日期" sortable align="center" width="300">
               <template slot-scope="scope">
-                <span :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}">{{scope.row.plandate}}</span>
+                <span
+                  :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}"
+                >{{scope.row.plandate}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="content" label="训练内容" align="center">
               <template slot-scope="scope">
-                <img v-if="scope.row.content.indexOf('1')!= -1" src="@/../images/walkingtraining_a.png" class="statusImg" />
-                <img v-if="scope.row.content.indexOf('2')!= -1" src="@/../images/stationtraining_a.png" class="statusImg" />               
-                <img v-if="scope.row.content.indexOf('3')!= -1" src="@/../images/gametraining_a.png" class="statusImg" />
-                <img v-if="scope.row.content.indexOf('4')!= -1" src="@/../images/balancedetermination_a.png" class="statusImg" />               
+                <img
+                  v-if="scope.row.content.indexOf('1')!= -1"
+                  src="@/../images/walkingtraining_a.png"
+                  class="statusImg"
+                />
+                <img
+                  v-if="scope.row.content.indexOf('2')!= -1"
+                  src="@/../images/stationtraining_a.png"
+                  class="statusImg"
+                />
+                <img
+                  v-if="scope.row.content.indexOf('3')!= -1"
+                  src="@/../images/gametraining_a.png"
+                  class="statusImg"
+                />
+                <img
+                  v-if="scope.row.content.indexOf('4')!= -1"
+                  src="@/../images/balancedetermination_a.png"
+                  class="statusImg"
+                />
               </template>
             </el-table-column>
             <el-table-column prop="status" label="完成状态" sortable align="center">
@@ -52,7 +61,7 @@
                 <span v-else-if="scope.row.status==2" class="pinkFontColor">未完成</span>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="当次报告" align="center">
+            <!-- <el-table-column prop="status" label="当次报告" align="center">
               <template slot-scope="scope">
                 <span
                   :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}"
@@ -102,7 +111,7 @@
                   <span v-else class="margin-left-15">--</span>
                 </span>
               </template>
-            </el-table-column>
+            </el-table-column>-->
 
             <el-table-column prop="askfor" label="申请" align="center">
               <template slot-scope="scope">
@@ -118,7 +127,7 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="advice" label="医嘱（备注）" align="center">
+            <!-- <el-table-column prop="advice" label="医嘱（备注）" align="center">
               <template slot-scope="scope">
                 <span
                   :class="{'greenFontColor':scope.row.status==0,'purpleFontColor':scope.row.status==1,'pinkFontColor':scope.row.status==2}"
@@ -131,7 +140,7 @@
                   <span v-else class="hand" @click="adviceClick(scope.$index, scope.row)">填写</span>
                 </span>
               </template>
-            </el-table-column>
+            </el-table-column>-->
           </el-table>
         </el-col>
       </el-row>
@@ -147,16 +156,16 @@
         ></el-pagination>
       </el-row>
 
-      <el-row class="text-left padding-bottom-50">
+      <!-- <el-row class="text-left padding-bottom-50">
         <el-button class="purple" @click="generateReportClick()">生成汇总报告</el-button>
-      </el-row>
+      </el-row>-->
     </el-card>
   </div>
 </template> 
 
 <script>
 import HeaderDoctor from "@/components/HeaderDoctor/HeaderDoctor.vue";
-import { apiPatientplanlist,apiDeleteplaninfo } from "@/request/api.js";
+import { apiPatientplanlist, apiDeleteplaninfo } from "@/request/api.js";
 
 export default {
   name: "trainingList",
@@ -167,7 +176,7 @@ export default {
   data() {
     return {
       leftImg: "",
-      title: "的训练信息",
+      title: "的消息列表",
       titleName: this.$store.state.patientInfo.name,
       leaveDialogVisible: false,
       search: "",
@@ -191,11 +200,11 @@ export default {
         query: {}
       });
     },
-    initPatientplanlist(){
-       var params = {
+    initPatientplanlist() {
+      var params = {
         patientid: this.patientid,
-        page:this.page,
-        limit:this.limit
+        page: this.page,
+        limit: this.limit
       };
       apiPatientplanlist(params).then(res => {
         this.tableData = res.data.items;
@@ -225,8 +234,8 @@ export default {
     adviceClick(index, row) {
       this.$router.push({
         path: "/doctorAdvice",
-        name: "doctorAdvice",     
-        query:{planid: row.planid}
+        name: "doctorAdvice",
+        query: { planid: row.planid }
       });
     },
     //申请
@@ -235,15 +244,15 @@ export default {
       this.$router.push({
         path: "/patientApplication",
         name: "patientApplication",
-        query: { 'planid': row.planid }
+        query: { planid: row.planid }
       });
     },
     //修改
     modifyClick(index, row) {
-       this.$router.push({
+      this.$router.push({
         path: "/appointment",
         name: "appointment",
-        query: { 'planid': row.planid }
+        query: { planid: row.planid }
       });
     },
     //删除
@@ -252,35 +261,31 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         confirmButtonClass: "el-button purple"
-      })
-        .then(() => {
-          this.deleteClickCallback(row.planid)
-        });
+      }).then(() => {
+        this.deleteClickCallback(row.planid);
+      });
     },
-    deleteClickCallback(planid){
-       var params = {
+    deleteClickCallback(planid) {
+      var params = {
         planid: planid
       };
       apiDeleteplaninfo(params).then(res => {
-
-        if(res.message=='success'){
-          this.$alert('删除成功', '', {
-          confirmButtonText: '确定',
-          showClose:false,
-          callback: action => {
-            this.page=1;
-            this.initPatientplanlist();
-          }
-        });
-
-        } else{
-          this.$alert(res.message, '', {
-          confirmButtonText: '确定',
-          showClose:false,
-        });
-        }  
+        if (res.message == "success") {
+          this.$alert("删除成功", "", {
+            confirmButtonText: "确定",
+            showClose: false,
+            callback: action => {
+              this.page = 1;
+              this.initPatientplanlist();
+            }
+          });
+        } else {
+          this.$alert(res.message, "", {
+            confirmButtonText: "确定",
+            showClose: false
+          });
+        }
       });
-
     },
     //生成汇总报告
     generateReportClick() {
@@ -294,7 +299,7 @@ export default {
       this.$router.push({
         path: "/detailInform",
         name: "detailInform",
-        query: { type: "patientModify"}
+        query: { type: "patientModify" }
       });
     },
     //添加训练

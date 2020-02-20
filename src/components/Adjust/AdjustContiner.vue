@@ -265,7 +265,7 @@ export default {
           imgsrc: require("@/../images/Tangram_1.png"),
           imgsrcGray: require("@/../images/Tangram_2.png"),
           fontColor: "pinkFontColor",
-          radio: this.lastPlanData.GWall_Intensity || 0
+          radio: this.lastPlanData.GWall_Intensity || 1
         };
       } else if (this.type === 7) {
         this.config = {
@@ -273,7 +273,7 @@ export default {
           imgsrc: require("@/../images/Spaceflight_1.png"),
           imgsrcGray: require("@/../images/Spaceflight_2.png"),
           fontColor: "greenFontColor",
-          radio: this.lastPlanData.GPlane_Intensity || 0
+          radio: this.lastPlanData.GPlane_Intensity || 1
         };
       } else if (this.type === 8) {
         this.config = {

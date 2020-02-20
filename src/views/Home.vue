@@ -30,12 +30,12 @@
                 >{{(page - 1) * limit + scope.$index + 1}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="状态" align="center">
+            <!-- <el-table-column prop="status" label="状态" align="center">
               <template slot-scope="scope">
                 <img v-if="!scope.row.status" src="@/../images/touxiang_01.png" class="stateImg" />
                 <img v-else src="@/../images/touxiang_03.png" class="stateImg" />
               </template>
-            </el-table-column>
+            </el-table-column>-->
             <el-table-column prop="name" label="姓名" align="center">
               <template slot-scope="scope">
                 <span
@@ -86,9 +86,8 @@
 
             <el-table-column prop="message" label="消息" align="center">
               <template slot-scope="scope">
-                <span class="meaasgeSpan">
-                  <img src="@/../images/xinxi.png" class="meaasgeImg" />
-                  <i v-if="scope.row.message"></i>
+                <span class="meaasgeSpan" @click="checkClick(scope.$index, scope.row)">
+                  <img v-if="scope.row.message" src="@/../images/xinxi.png" class="meaasgeImg" />
                 </span>
               </template>
             </el-table-column>
@@ -197,9 +196,14 @@ export default {
       var patientInfo = row;
       this.$store.commit("savePatientInfo", row);
       this.$router.push({
-        path: "/trainingList",
-        name: "trainingList"
+        path: "/appointment",
+        name: "appointment"
       });
+      //
+      // this.$router.push({
+      //   path: "/trainingList",
+      //   name: "trainingList"
+      // });
     },
 
     addClick() {

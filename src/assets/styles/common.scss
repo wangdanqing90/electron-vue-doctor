@@ -85,7 +85,10 @@
   box-shadow: 0 2px 12px 0 rgba(240, 240, 240, 0.1)
 }
 
-.el-button--primary, .el-button--primary:active, .el-button--primary:focus, .el-button--primary:hover {
+.el-button--primary,
+.el-button--primary:active,
+.el-button--primary:focus,
+.el-button--primary:hover {
   color: white;
   background-color: #8c69e7;
   border: none;
@@ -98,12 +101,12 @@
 .el-dialog {
   border-radius: 10px;
 
-  .el-dialog__body {
-    .purple {
-      color: $purpleFontColor;
-      font-size: 20px;
-    }
-  }
+  // .el-dialog__body {
+  //   .purple {
+  //     color: $purpleFontColor;
+  //     font-size: 20px;
+  //   }
+  // }
 }
 
 .el-form-item__label {
