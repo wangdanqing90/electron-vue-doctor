@@ -22,7 +22,13 @@
       <el-row class="tableContainer">
         <el-col :span="24">
           <el-table :data="tableData" stripe max-height="700" style="width: 100%;">
-            <el-table-column label="序号" type="index" width="100" align="center">
+            <el-table-column
+              label="序号"
+              type="index"
+              width="100"
+              align="center"
+              @sort-change="changeTableSort"
+            >
               <!-- 红1未审核 蓝0已审核 -->
               <template slot-scope="scope">
                 <span
@@ -36,14 +42,14 @@
                 <img v-else src="@/../images/touxiang_03.png" class="stateImg" />
               </template>
             </el-table-column>-->
-            <el-table-column prop="name" label="姓名" align="center">
+            <el-table-column prop="name" label="姓名" align="center" :sortable="'custom'">
               <template slot-scope="scope">
                 <span
                   :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
                 >{{scope.row.name}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="sex" label="性别" align="center">
+            <el-table-column prop="sex" label="性别" align="center" :sortable="'custom'">
               <template slot-scope="scope">
                 <span
                   v-if="scope.row.sex == 1"
@@ -66,7 +72,7 @@
                 >{{scope.row.illness}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="regdate" label="添加日期" align="center">
+            <el-table-column prop="regdate" label="添加日期" align="center" :sortable="'custom'">
               <template slot-scope="scope">
                 <span
                   :class="!scope.row.status? 'purpleFontColor':'pinkFontColor'"
@@ -194,6 +200,7 @@ export default {
     //查看
     checkClick(index, row) {
       var patientInfo = row;
+      this.$store.commit("clearPlanInfo");
       this.$store.commit("savePatientInfo", row);
       this.$router.push({
         path: "/appointment",
@@ -212,6 +219,30 @@ export default {
         name: "detailInform",
         query: { type: "patient" }
       });
+    },
+    //选择指定列进行排序
+    changeTableSort(column) {
+      console.log(column);
+
+      //获取字段名称和排序类型
+      var fieldName = column.prop;
+      var sortingType = column.order;
+
+      //按照降序排序
+      if (sortingType == "descending") {
+        // this.tableData = this.tableData.sort(
+        //   (a, b) => b[fieldName] - a[fieldName]
+        // );
+      }
+      //按照升序排序
+      else {
+        // this.tableData = this.tableData.sort(
+        //   (a, b) => a[fieldName] - b[fieldName]
+        // );
+      }
+
+      //  this.page = 1;
+      // this.initPatientlist();
     }
   }
 };

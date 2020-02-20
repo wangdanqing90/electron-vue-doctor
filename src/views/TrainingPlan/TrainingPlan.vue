@@ -15,6 +15,7 @@
         <el-col :span="24" class="inform-container">
           <!-- 行走模式 -->
           <div
+            v-if="planInfo.Walk_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center purpleFontColor"
           >
             <div
@@ -122,6 +123,7 @@
 
           <!-- 坐站训练 -->
           <div
+            v-if="planInfo.SitAndStand_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center pinkFontColor"
           >
             <div
@@ -185,6 +187,7 @@
 
           <!-- 游戏训练 -->
           <div
+            v-if="planInfo.Gaming_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center yellowFontColor"
           >
             <div
@@ -237,6 +240,7 @@
 
           <!-- 平衡测定 -->
           <div
+            v-if="planInfo.Balance_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center greenFontColor"
           >
             <div
@@ -337,7 +341,7 @@ export default {
     window.vue = this;
     this.leftImg = require("../../../images/logo.png");
     this.planInfo = this.$store.state.planInfo;
-    this.planid = this.$route.query.planid;
+    this.planid = this.planInfo.planid;
     console.log(this.planInfo);
     var time = this.common.timeType(this.planInfo.timeid);
     this.title =
@@ -406,9 +410,8 @@ export default {
     },
     okNextClickCallback() {
       this.$router.push({
-        path: "/",
-        name: "home",
-        query: {}
+        path: "/appointment",
+        name: "appointment"
       });
     }
   },

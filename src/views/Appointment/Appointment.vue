@@ -245,13 +245,7 @@ export default {
     this.leftImg = require("../../../images/logo.png");
     this.title = "的时间预约计划表";
     this.titleName = this.$store.state.patientInfo.name;
-
-    if (!this.common.isNullOrBlank(this.planid)) {
-      this.initLastPlan();
-    } else {
-      this.patientplanlistperweek(this.common.getNowFormatDate());
-      // this.initList(this.common.getNowFormatDate());
-    }
+    this.initLastPlan();
   },
   methods: {
     initLastPlan() {
@@ -262,10 +256,12 @@ export default {
       };
       apiGetplaninfo(params).then(res => {
         let data = res.data;
-        // this.lastTimeId = res.data.timeid;
-        // this.lastDate = res.data.plandate;
-        _this.patientplanlistperweek(this.common.getNowFormatDate());
-        //_this.initList(this.common.getNowFormatDate());
+        var lastday = _this.$store.state.planInfo.plandate;
+        if (lastday) {
+          _this.patientplanlistperweek(lastday);
+        } else {
+          _this.patientplanlistperweek(this.common.getNowFormatDate());
+        }
       });
     },
     patientplanlistperweek(day) {
@@ -324,21 +320,84 @@ export default {
       });
     },
     backClick() {
-      this.$router.go(-1);
+      this.$router.push({
+        path: "/home",
+        name: "home"
+      });
     },
     //选择日期
     getMyDateTime(day) {
       this.patientplanlistperweek(day);
-      //this.initList(day);
     },
-    //比较日期
-    compareDate(day) {
-      var oDate1 = new Date(day);
-      let now = new Date();
-      if (oDate1 >= now) {
+
+    //计算时间差（相差分钟）
+    timeDifference(selectday) {
+      var endTime;
+      selectday = selectday.replace(/-/g, "/");
+      if (this.selectInfo.timeid == 0) {
+        endTime = selectday + " 08:00";
+      } else if (this.selectInfo.timeid == 1) {
+        endTime = selectday + " 08:30";
+      } else if (this.selectInfo.timeid == 2) {
+        endTime = selectday + " 09:00";
+      } else if (this.selectInfo.timeid == 3) {
+        endTime = selectday + " 09:30";
+      } else if (this.selectInfo.timeid == 4) {
+        endTime = selectday + " 10:00";
+      } else if (this.selectInfo.timeid == 5) {
+        endTime = selectday + " 10:30";
+      } else if (this.selectInfo.timeid == 6) {
+        endTime = selectday + " 11:00";
+      } else if (this.selectInfo.timeid == 7) {
+        endTime = selectday + " 11:30";
+      } else if (this.selectInfo.timeid == 8) {
+        endTime = selectday + " 12:00";
+      } else if (this.selectInfo.timeid == 9) {
+        endTime = selectday + " 12:30";
+      } else if (this.selectInfo.timeid == 10) {
+        endTime = selectday + " 13:00";
+      } else if (this.selectInfo.timeid == 11) {
+        endTime = selectday + " 13:30";
+      } else if (this.selectInfo.timeid == 12) {
+        endTime = selectday + " 14:00";
+      } else if (this.selectInfo.timeid == 13) {
+        endTime = selectday + " 14:30";
+      } else if (this.selectInfo.timeid == 14) {
+        endTime = selectday + " 15:00";
+      } else if (this.selectInfo.timeid == 15) {
+        endTime = selectday + " 15:30";
+      } else if (this.selectInfo.timeid == 16) {
+        endTime = selectday + " 16:00";
+      } else if (this.selectInfo.timeid == 17) {
+        endTime = selectday + " 16:30";
+      }
+
+      var date1 = new Date();
+      var date2 = new Date(endTime);
+      var s1 = date1.getTime(),
+        s2 = date2.getTime();
+      var total = (s2 - s1) / 1000;
+
+      //计算现在时间和所选时间差值
+      var day = parseInt(total / (24 * 60 * 60)); //计算整数天数
+      var afterDay = total - day * 24 * 60 * 60; //取得算出天数后剩余的秒数
+      var hour = parseInt(afterDay / (60 * 60)); //计算整数小时数
+      var afterHour = total - day * 24 * 60 * 60 - hour * 60 * 60; //取得算出小时数后剩余的秒数
+      var min = parseInt(afterHour / 60); //计算整数分
+
+      if (day < 0) {
+        //选的日期太早
+        return false;
+      } else if (day > 0) {
+        //选的日期在后面，正确
         return true;
       } else {
-        return false;
+        if (hour >= 1) {
+          return true;
+        } else {
+          //不合格
+          return false;
+        }
       }
     },
 
@@ -433,7 +492,7 @@ export default {
     //新建
     newClick() {
       var _this = this;
-      if (this.compareDate(this.selectInfo.day)) {
+      if (this.timeDifference(this.selectInfo.day)) {
         this.$confirm("您是否确认预约该时间？", "", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -444,7 +503,6 @@ export default {
             info["timeid"] = this.selectInfo.timeid;
             info["plandate"] = this.selectInfo.day;
             _this.$store.commit("savePlanInfo", info);
-
             this.$router.push({
               path: "/trainingSlider",
               name: "trainingSlider"
@@ -452,7 +510,7 @@ export default {
           })
           .catch(() => {});
       } else {
-        this.$alert("请选择今天以后的日期", "", {
+        this.$alert("请选择正确的的日期", "", {
           confirmButtonText: "确定",
           showClose: false
         });
@@ -603,7 +661,6 @@ li {
     line-height: 25px;
     text-align: center;
     border-left: 1px solid #ebeef5;
-    border-top: 1px solid #ebeef5;
     cursor: pointer;
   }
 

@@ -6,6 +6,7 @@
         <el-col :span="24" class="inform-container">
           <!-- 行走模式 -->
           <div
+            v-if="planInfo.Walk_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center purpleFontColor"
           >
             <div
@@ -113,6 +114,7 @@
 
           <!-- 坐站训练 -->
           <div
+            v-if="planInfo.SitAndStand_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center pinkFontColor"
           >
             <div
@@ -176,6 +178,7 @@
 
           <!-- 游戏训练 -->
           <div
+            v-if="planInfo.Gaming_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center yellowFontColor"
           >
             <div
@@ -228,6 +231,7 @@
 
           <!-- 平衡测定 -->
           <div
+            v-if="planInfo.Balance_Time>0"
             class="inform display_flex justify-content_flex-start align-items_center greenFontColor"
           >
             <div
